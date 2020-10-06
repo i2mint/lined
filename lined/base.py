@@ -39,6 +39,8 @@ class Pipeline:
         >>> p([2, 3])
         '5'
 
+        A still quite simple example:
+
         >>> def first(a, b=1):
         ...     return a * b
         >>>
