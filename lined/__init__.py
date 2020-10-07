@@ -1,1 +1,1 @@
-from lined.base import Pipeline, mk_multi_func
+from lined.base import Pipeline, mk_multi_func, LayeredPipeline

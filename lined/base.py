@@ -12,15 +12,17 @@
 >>> assert my_pipe({'a': (1, 2), 'b': (3, 4)}) == {'a': '3', 'b': [12, 12, 12]}
 """
 
-from typing import Callable, Dict, Iterable, Optional
+from typing import Callable, Dict, Iterable, Optional, Union
 from inspect import Signature, signature
 
 # MultiFuncSpec = Dict[str, Callable]
 MultiFunc = Callable[[Dict], Dict]
+Funcs = Union[Iterable[Callable], Callable]
+LayeredFuncs = Iterable[Funcs]
 
 
 class Pipeline:
-    def __init__(self, *funcs: Iterable[Callable]):
+    def __init__(self, *funcs: Funcs, name=None):
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
         For example, if `f`, `h`, and `g` are three functions, the function
@@ -71,6 +73,8 @@ class Pipeline:
         assert len(self.funcs) > 0, "You need to specify at least one function!"
 
         self.__signature__ = _signature_of_pipeline(*self.funcs)
+        if name is not None:
+            self.__name__ = name
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
@@ -78,6 +82,20 @@ class Pipeline:
         for func in other_funcs:
             out = func(out)
         return out
+
+
+class LayeredPipeline(Pipeline):
+    def __init__(self, *funcs: LayeredFuncs, name=None):
+        def _funcs():
+            for func in funcs:
+                if isinstance(func, Callable):
+                    yield func
+                elif isinstance(func, (list, tuple, set)):
+                    yield LayeredPipeline(*func)
+                else:
+                    raise ValueError(f"Don't know how to deal with this func: {func}")
+
+        super().__init__(*_funcs(), name=name)
 
 
 def _signature_of_pipeline(*funcs):
