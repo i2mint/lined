@@ -1,5 +1,5 @@
 from functools import partial, wraps
-
+from lined.util import func_name
 
 def keys_extractor(keys):
     def extract(x):
@@ -15,8 +15,6 @@ def items(mapping):
 
 # Function transformers ###################################################################
 
-def func_name(func, dflt_name='no_name'):
-    return getattr(func, '__name__', dflt_name)
 
 
 def extra_wraps(func, name=None, doc_prefix=""):

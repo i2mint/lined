@@ -12,14 +12,25 @@
 >>> assert my_pipe({'a': (1, 2), 'b': (3, 4)}) == {'a': '3', 'b': [12, 12, 12]}
 """
 
+from functools import wraps
 from typing import Callable, Dict, Iterable, Optional, Union
 from inspect import Signature, signature
 from itertools import starmap
+from lined.util import unnamed_pipeline, func_name
 
 # MultiFuncSpec = Dict[str, Callable]
 MultiFunc = Callable[[Dict], Dict]
 Funcs = Union[Iterable[Callable], Callable]
 LayeredFuncs = Iterable[Funcs]
+
+
+def fnode(func, name=None):
+    @wraps(func)
+    def func_node(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    func_node.__name__ = name or func_name(func)
+    return func_node
 
 
 class Pipeline:
@@ -72,12 +83,16 @@ class Pipeline:
 
         # really, it would make sense that this is the identity, but we'll implement only when needed
         assert len(self.funcs) > 0, "You need to specify at least one function!"
-
+        self.funcs = tuple(map(fnode, self.funcs))
         self.__signature__ = _signature_of_pipeline(*self.funcs)
         if name is not None:
             self.__name__ = name
         else:
-            self.__name__ = 'Pipeline'
+            self.__name__ = unnamed_pipeline()
+
+    def __repr__(self):
+        funcs_str = ', '.join((f.__name__ for f in self.funcs))
+        return f"{self.__class__.__name__}({funcs_str}, name='{self.__name__}')"
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
@@ -104,6 +119,23 @@ class Pipeline:
             return self.__class__(*funcs, name=f"{self.__name__}[item_str]")
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
+
+    # def dot_digraph(self):
+    #     prefix = ''
+    #     if len(self.funcs) <= 7:
+    #         prefix = 'rankdir="LR"'
+    #
+    #     def gen():
+    #         for f in self.funcs:
+    #
+    #
+    #     import graphviz
+
+
+def inject_names_if_missing(funcs):
+    for func in funcs:
+        func.__name__ = func_name(func)
+    return funcs
 
 
 def stack(*funcs):
