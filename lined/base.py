@@ -14,6 +14,7 @@
 
 from typing import Callable, Dict, Iterable, Optional, Union
 from inspect import Signature, signature
+from itertools import starmap
 
 # MultiFuncSpec = Dict[str, Callable]
 MultiFunc = Callable[[Dict], Dict]
@@ -75,6 +76,8 @@ class Pipeline:
         self.__signature__ = _signature_of_pipeline(*self.funcs)
         if name is not None:
             self.__name__ = name
+        else:
+            self.__name__ = 'Pipeline'
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
@@ -82,6 +85,38 @@ class Pipeline:
         for func in other_funcs:
             out = func(out)
         return out
+
+    def __len__(self):
+        return len(self.funcs)
+
+    def __getitem__(self, k):
+        """Get a sub-pipeline"""
+        if isinstance(k, (int, slice)):
+            item_str = ""
+            funcs = ()
+            if isinstance(k, int):
+                funcs = (self.funcs[k],)
+                item_str = str(k)
+            elif isinstance(k, slice):
+                assert k.step is None, f"slices with steps are not handled: {k}"
+                funcs = self.funcs[k]
+                item_str = f'{k.start}:{k.stop}'
+            return self.__class__(*funcs, name=f"{self.__name__}[item_str]")
+        else:
+            raise TypeError(f"Don't know how to handle that type of key: {k}")
+
+
+def stack(*funcs):
+    def call(func, arg):
+        return func(arg)
+
+    def stacked_funcs(input_tuple):
+        assert len(funcs) == len(input_tuple), \
+            "the length of input_tuple ({len(input_tuple)} should be the same length" \
+            " (len{funcs}) as the funcs: {input_tuple}"
+        return tuple(starmap(call, zip(funcs, input_tuple)))
+
+    return stacked_funcs
 
 
 class LayeredPipeline(Pipeline):
@@ -156,3 +191,50 @@ def mk_multi_func(named_funcs_dict: Optional[Dict] = None, /, **named_funcs) -> 
         return dict(gen())
 
     return multi_func
+
+
+from collections import defaultdict
+
+
+# Class to represent a graph
+class Digraph:
+    def __init__(self, nodes_adjacent_to=None):
+        nodes_adjacent_to = nodes_adjacent_to or dict()
+        self.nodes_adjacent_to = defaultdict(list, nodes_adjacent_to)  # adjacency list (look it up)
+        # self.n_vertices = vertices  # No. of vertices
+
+    # function to add an edge to graph
+    def add_edge(self, u, v):
+        self.nodes_adjacent_to[u].append(v)
+
+        # A recursive function used by topologicalSort
+
+    def _helper(self, v, visited, stack):
+
+        # Mark the current node as visited.
+        visited[v] = True
+
+        # Recur for all the vertices adjacent to this vertex
+        for i in self.nodes_adjacent_to[v]:
+            if visited[i] == False:
+                self._helper(i, visited, stack)
+
+                # Push current vertex to stack which stores result
+        stack.insert(0, v)
+
+        # The function to do Topological Sort. It uses recursive
+
+    # topologicalSortUtil()
+    def topological_sort(self):
+        # Mark all the vertices as not visited
+        visited = [False] * self.n_vertices
+        stack = []
+
+        # Call the recursive helper function to store Topological
+        # Sort starting from all vertices one by one
+        for i in range(self.n_vertices):
+            if visited[i] == False:
+                self._helper(i, visited, stack)
+
+                # Print contents of stack
+        return stack
