@@ -16,6 +16,8 @@ from functools import wraps
 from typing import Callable, Dict, Iterable, Optional, Union
 from inspect import Signature, signature
 from itertools import starmap
+from dataclasses import dataclass
+
 from lined.util import unnamed_pipeline, func_name
 
 # MultiFuncSpec = Dict[str, Callable]
@@ -24,13 +26,31 @@ Funcs = Union[Iterable[Callable], Callable]
 LayeredFuncs = Iterable[Funcs]
 
 
-def fnode(func, name=None):
-    @wraps(func)
-    def func_node(*args, **kwargs):
-        return func(*args, **kwargs)
+#
+# def fnode(func, name=None):
+#     @wraps(func)
+#     def func_node(*args, **kwargs):
+#         return func(*args, **kwargs)
+#
+#     func_node.__name__ = name or func_name(func)
+#     return func_node
 
-    func_node.__name__ = name or func_name(func)
-    return func_node
+
+@dataclass
+class Fnode:
+    func: Callable
+    __name__: Optional[str] = None
+
+    def __post_init__(self):
+        wraps(self.func)(self)
+        self.__name__ = self.__name__ or func_name(self.func)
+
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
+
+
+def fnode(func, name=None):
+    return Fnode(func, name)
 
 
 class Pipeline:
@@ -78,6 +98,13 @@ class Pipeline:
 
         >>> same_as_first = Pipeline(first)
         >>> assert same_as_first(42) == first(42)
+
+
+        >>> from functools import partial
+        >>> pipe = Pipeline(sum, str, print, name='MyPipeline', input_name='x', output_name='y')
+        >>> pipe
+        Pipeline(sum, str, print, name='MyPipeline', input_name='x', output_name='y')
+
         """
         self.funcs = funcs
         self.input_name = input_name
