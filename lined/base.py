@@ -34,7 +34,7 @@ def fnode(func, name=None):
 
 
 class Pipeline:
-    def __init__(self, *funcs: Funcs, name=None):
+    def __init__(self, *funcs: Funcs, name=None, input_name=None, output_name=None):
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
         For example, if `f`, `h`, and `g` are three functions, the function
@@ -80,7 +80,8 @@ class Pipeline:
         >>> assert same_as_first(42) == first(42)
         """
         self.funcs = funcs
-
+        self.input_name = input_name
+        self.output_name = output_name
         # really, it would make sense that this is the identity, but we'll implement only when needed
         assert len(self.funcs) > 0, "You need to specify at least one function!"
         self.funcs = tuple(map(fnode, self.funcs))
@@ -92,7 +93,12 @@ class Pipeline:
 
     def __repr__(self):
         funcs_str = ', '.join((f.__name__ for f in self.funcs))
-        return f"{self.__class__.__name__}({funcs_str}, name='{self.__name__}')"
+        suffix = ''
+        if self.input_name is not None:
+            suffix += f", input_name='{self.input_name}'"
+        if self.output_name is not None:
+            suffix += f", output_name='{self.output_name}'"
+        return f"{self.__class__.__name__}({funcs_str}, name='{self.__name__}'{suffix})"
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
@@ -120,16 +126,39 @@ class Pipeline:
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
-    # def dot_digraph(self):
-    #     prefix = ''
-    #     if len(self.funcs) <= 7:
-    #         prefix = 'rankdir="LR"'
-    #
-    #     def gen():
-    #         for f in self.funcs:
-    #
-    #
-    #     import graphviz
+    def dot_digraph_body(self, prefix=None, **kwargs):
+        fnode_shape = kwargs.get('fnode_shape', "box")
+        vnode_shape = kwargs.get('fnode_shape', "oval")
+
+        if prefix is None:
+            if len(self.funcs) <= 7:
+                yield 'rankdir="LR"'
+        else:
+            yield prefix
+
+        if self.input_name is not None:
+            yield f'{self.input_name} [shape="circle"]'
+            yield f'{self.input_name} -> {self.funcs[0].__name__}'
+
+        for f in self.funcs:
+            yield f'{f.__name__} [shape="{fnode_shape}"]'
+
+        for f, ff in zip(self.funcs[:-1], self.funcs[1:]):
+            yield f'{f.__name__} -> {ff.__name__}'
+
+        if self.output_name is not None:
+            yield f'{self.output_name} [shape="{vnode_shape}"]'
+            yield f'{self.funcs[-1].__name__} -> {self.output_name}'
+
+    def dot_digraph(self, prefix=None, **kwargs):
+        try:
+            import graphviz
+        except (ModuleNotFoundError, ImportError) as e:
+            raise ModuleNotFoundError(f"{e}\nYou may not have graphviz installed. "
+                                      f"See https://pypi.org/project/graphviz/.")
+
+        body = list(self.dot_digraph_body(prefix=prefix, **kwargs))
+        return graphviz.Digraph(body=body)
 
 
 def inject_names_if_missing(funcs):
