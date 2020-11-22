@@ -1,6 +1,7 @@
 from functools import partial, wraps
 from lined.util import func_name
 
+
 def keys_extractor(keys):
     def extract(x):
         return tuple((x[i] for i in keys))
@@ -16,7 +17,6 @@ def items(mapping):
 # Function transformers ###################################################################
 
 
-
 def extra_wraps(func, name=None, doc_prefix=""):
     func.__name__ = name or func_name(func)
     func.__doc__ = doc_prefix + getattr(func, '__name__', '')
@@ -30,11 +30,23 @@ def mywraps(func, name=None, doc_prefix=""):
     return wrapper
 
 
-def generator_version(func, name=None):
-    """"""
+def iterize(func, name=None):
+    """From an Input->Ouput function, makes a Iterator[Input]->Itertor[Output]
+    Some call this "vectorization", but it's not really a vector, but an iterable, thus the name.
+
+    >>> f = lambda x: x * 10
+    >>> f(2)
+    20
+    >>> iterized_f = iterize(f)
+    >>> list(iterized_f(iter([1,2,3])))
+    [10, 20, 30]
+    """
     wrapper = mywraps(func, name=name,
                       doc_prefix=f"generator version of {func_name(func)}:\n")
     return wrapper(partial(map, func))
+
+
+generator_version = iterize  # back compatibility alias
 
 
 def singularize_arg_input(func):
