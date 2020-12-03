@@ -24,11 +24,11 @@ config = ConfigParser()
 config.read_file(open(config_file, 'r'))
 
 project = config['metadata']['name']
-copyright = config['metadata']['copyright']
-author = config['metadata']['author']
+copyright = config['metadata'].get('copyright', '')
+author = config['metadata'].get('author', '')
 
 # The full version, including alpha/beta/rc tags
-release = config['metadata']['version']
+release = config['metadata'].get('version', '')
 
 # -- General configuration ---------------------------------------------------
 
