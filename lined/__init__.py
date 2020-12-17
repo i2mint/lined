@@ -3,5 +3,6 @@ from lined.tools import (
     keys_extractor,
     items,
     iterize,
-    singularize_arg_input
+    singularize_arg_input,
+    BufferStats,
 )
