@@ -3,6 +3,7 @@
 
 Building simple pipelines, simply.
 
+And lightly too! No dependencies. All with pure builtin python.
 
 A really simple example:
 
@@ -105,4 +106,108 @@ pipe.dot_digraph()
 
 
 
+
+# Tools
+
+
+## iterize and iterate
+
+
+```python
+from lined import Pipeline
+
+pipe = Pipeline(lambda x: x * 2, 
+                lambda x: f"hello {x}")
+pipe(1)
+```
+
+
+
+
+    'hello 2'
+
+
+
+But what if you wanted to use the pipeline on a "stream" of data. The following wouldn't work:
+
+
+```python
+try:
+    pipe(iter([1,2,3]))
+except TypeError as e:
+    print(f"{type(e).__name__}: {e}")
+```
+
+    TypeError: unsupported operand type(s) for *: 'list_iterator' and 'int'
+
+
+Remember that error: You'll surely encounter it at some point. 
+
+The solution to it is (often): `iterize`, which transforms a function that is meant to be applied to a single object, into a function that is meant to be applied to an array, or any iterable of such objects. 
+(You might be familiar (if you use `numpy` for example) with the related concept of "vectorization", or [array programming](https://en.wikipedia.org/wiki/Array_programming).)
+
+
+
+```python
+from lined import Pipeline, iterize
+from typing import Iterable
+
+pipe = Pipeline(iterize(lambda x: x * 2), 
+                iterize(lambda x: f"hello {x}"))
+iterable = pipe([1, 2, 3])
+assert isinstance(iterable, Iterable)  # see that the result is an iterable
+list(iterable)  # consume the iterable and gather it's items
+```
+
+
+
+
+    ['hello 2', 'hello 4', 'hello 6']
+
+
+
+Instead of just computing the string, say that the last step actually printed the string (called a "callback" function whose result was less important than it's effect -- like storing something, etc.).
+
+
+```python
+from lined import Pipeline, iterize, iterate
+
+pipe = Pipeline(iterize(lambda x: x * 2), 
+                iterize(lambda x: print(f"hello {x}")),
+               )
+
+for _ in pipe([1, 2, 3]):
+    pass
+```
+
+    hello 2
+    hello 4
+    hello 6
+
+
+It could be a bit awkward to have to "consume" the iterable to have it take effect. 
+
+Just doing a 
+```python
+pipe([1, 2, 3])
+```
+to get those prints seems like a more natural way. 
+
+This is where you can use `iterate`. It basically "launches" that consuming loop for you.
+
+
+```python
+from lined import Pipeline, iterize, iterate
+
+pipe = Pipeline(iterize(lambda x: x * 2), 
+                iterize(lambda x: print(f"hello {x}")),
+                iterate
+               )
+
+pipe([1, 2, 3])
+```
+
+    hello 2
+    hello 4
+    hello 6
 

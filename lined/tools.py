@@ -1,6 +1,6 @@
 from functools import partial, wraps
 from collections import deque
-from typing import Union, Callable
+from typing import Union, Callable, Iterable
 
 from lined.util import func_name
 
@@ -15,6 +15,42 @@ def keys_extractor(keys):
 def items(mapping):
     """Get an items generator from a mapping"""
     return mapping.items()
+
+
+def iterate(iterable: Iterable):
+    """Just iterate through a iterable
+    Use this to "consume" or "run" an iterator automatically.
+
+    For example, consider the following:
+
+    >>> from lined import Pipeline, iterize, iterate
+    >>> pipe = Pipeline(iterize(lambda x: x * 2),
+    ...                 iterize(lambda x: print(f"hello {x}")),
+    ...            )
+    >>>
+    >>> for _ in pipe([1, 2, 3]):
+    ...     pass
+    hello 2
+    hello 4
+    hello 6
+
+    It could be a bit awkward to have to "consume" the iterable to have it take effect.
+    Just calling  ``pipe([1, 2, 3])`` to get those prints seems like a more natural way.
+    This is where you can use `iterate`. It basically "launches" that consuming loop for you.
+
+    >>> pipe = Pipeline(iterize(lambda x: x * 2),
+    ...                iterize(lambda x: print(f"hello {x}")),
+    ...                iterate
+    ...               )
+    >>>
+    >>> pipe([1, 2, 3])
+    hello 2
+    hello 4
+    hello 6
+
+    """
+    for _ in iterable:
+        pass
 
 
 # Function transformers ###################################################################
