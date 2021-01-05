@@ -79,6 +79,44 @@ def iterize(func, name=None):
     >>> iterized_f = iterize(f)
     >>> list(iterized_f(iter([1,2,3])))
     [10, 20, 30]
+
+    Consider the following pipeline:
+
+    >>> from lined import Pipeline
+    >>>
+    >>> pipe = Pipeline(lambda x: x * 2,
+    ...                 lambda x: f"hello {x}")
+    >>> pipe(1)
+    'hello 2'
+
+    But what if you wanted to use the pipeline on a "stream" of data. The following wouldn't work:
+
+    >>> try:
+    ...     pipe(iter([1,2,3]))
+    ... except TypeError as e:
+    ...     print(f"{type(e).__name__}: {e}")
+    ...
+    ...
+    TypeError: unsupported operand type(s) for *: 'list_iterator' and 'int'
+
+    Remember that error: You'll surely encounter it at some point.
+
+    The solution to it is (often): ``iterize``,
+    which transforms a function that is meant to be applied to a single object,
+    into a function that is meant to be applied to an array, or any iterable of such objects.
+    (You might be familiar (if you use `numpy` for example) with the related concept of "vectorization",
+    or [array programming](https://en.wikipedia.org/wiki/Array_programming).)
+
+
+    >>> from lined import Pipeline, iterize
+    >>> from typing import Iterable
+    >>>
+    >>> pipe = Pipeline(iterize(lambda x: x * 2),
+    ...                 iterize(lambda x: f"hello {x}"))
+    >>> iterable = pipe([1, 2, 3])
+    >>> assert isinstance(iterable, Iterable)  # see that the result is an iterable
+    >>> list(iterable)  # consume the iterable and gather it's items
+    ['hello 2', 'hello 4', 'hello 6']
     """
     wrapper = mywraps(func, name=name,
                       doc_prefix=f"generator version of {func_name(func)}:\n")
