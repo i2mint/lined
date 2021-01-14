@@ -26,7 +26,6 @@ Funcs = Union[Iterable[Callable], Callable]
 LayeredFuncs = Iterable[Funcs]
 
 
-#
 # def fnode(func, name=None):
 #     @wraps(func)
 #     def func_node(*args, **kwargs):
@@ -67,6 +66,10 @@ class Pipeline:
         ```
         (assuming the functions are deterministic of course).
 
+        :param funcs: The functions of the pipeline
+        :param name: The name of the pipeline
+        :param input_name: The name of an input
+        :param output_name: The name of an output
         A really simple example:
 
         >>> p = Pipeline(sum, str)
@@ -186,6 +189,101 @@ class Pipeline:
 
         body = list(self.dot_digraph_body(prefix=prefix, **kwargs))
         return graphviz.Digraph(body=body)
+
+
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass
+class Sentinel:
+    """To make sentinels holding an optional value"""
+    val: Any = None
+
+    @classmethod
+    def this_is_not(cls, obj):
+        return not isinstance(obj, cls)
+
+    @classmethod
+    def filter_in(cls, condition, sentinel_val=None):
+        assert isinstance(condition, Callable), f"condition need to be callable, but was {condition}"
+
+        def filt(x):
+            if condition(x):
+                return x
+            else:
+                return cls(sentinel_val)
+
+        return filt
+
+    @classmethod
+    def filter_out(cls, condition, sentinel_val=None):
+        assert isinstance(condition, Callable), f"condition need to be callable, but was {condition}"
+
+        def filt(x):
+            if not condition(x):
+                return x
+            else:
+                return cls(sentinel_val)
+
+        return filt
+
+
+class Conditions:
+    @staticmethod
+    def excluded_val(excluded_val):
+        def condition(x):
+            return x == excluded_val
+
+        return condition
+
+    @staticmethod
+    def exclude_type(excluded_type):
+        def condition(x):
+            return not isinstance(x, excluded_type)
+
+        return condition
+
+    @staticmethod
+    def include_type(excluded_type):
+        def condition(x):
+            return isinstance(x, excluded_type)
+
+        return condition
+
+
+class SentineledPipeline(Pipeline):
+    """A pipeline that can be interrupted by a sentinel.
+
+    Sentinels are useful to interrupt the pipeline computation.
+
+    Say, for example, you know if the length of an input iterable divided by three is 1 or 2.
+    You wouldn't want to divide by 0 or have a loop choke on an input that doesn't have a length.
+    So you do this:
+
+    >>> pipe = SentineledPipeline(
+    ...     lambda x: (hasattr(x, '__len__') and x) or Sentinel('no length'), # returns x if it has a length, and None if not
+    ...     len,
+    ...     lambda x: x % 3,
+    ... )
+    >>> pipe([1,2,3,4])
+    1
+    >>> pipe(1)
+    Sentinel(val='no length')
+    >>> # which allows us to do things like:
+    >>> list(filter(Sentinel.this_is_not, map(pipe, [[1,2,3,4], None, 1, [1,2,3]])))
+    [1, 0]
+    """
+
+    def __call__(self, *args, **kwargs):
+        first_func, *other_funcs = self.funcs
+        out = first_func(*args, **kwargs)
+        if not isinstance(out, Sentinel):
+            for func in other_funcs:
+                out = func(out)
+                if isinstance(out, Sentinel):
+                    break
+        return out
 
 
 def inject_names_if_missing(funcs):
