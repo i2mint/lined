@@ -52,7 +52,7 @@ def fnode(func, name=None):
     return Fnode(func, name)
 
 
-class Pipeline:
+class Line:
     def __init__(self, *funcs: Funcs, name=None, input_name=None, output_name=None):
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
@@ -190,6 +190,8 @@ class Pipeline:
         body = list(self.dot_digraph_body(prefix=prefix, **kwargs))
         return graphviz.Digraph(body=body)
 
+
+Pipeline = Line  # for back-compatibility
 
 from dataclasses import dataclass
 from typing import Any
