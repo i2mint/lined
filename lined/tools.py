@@ -126,14 +126,23 @@ def iterize(func, name=None):
 generator_version = iterize  # back compatibility alias
 
 
-def singularize_arg_input(func):
-    """Make a func(args) function out of a func(*args) one"""
+def map_star(func):
+    """Make a func(args) function out of a func(*args) one.
+    Also known as singularize_arg_input.
+
+    >>> def foo(a, b):
+    ...     return a + b
+    >>> 
+    """
 
     @mywraps(func, doc_prefix=f"singularize_arg_input version of {func_name(func)}")
     def func_with_single_arg_input(args):
         return func(*args)
 
     return func_with_single_arg_input
+
+
+singularize_arg_input = map_star  # alias
 
 
 class BufferStats(deque):
