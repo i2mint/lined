@@ -211,3 +211,49 @@ pipe([1, 2, 3])
     hello 4
     hello 6
 
+
+# Ramblings
+
+## Decorating
+
+Toddlers write lines of code. 
+Grown-ups write functions. Plenty of them. 
+
+Why break lines of code into small functions? Where to start...
+- It's called modularity, and that's good
+- You can reuse functions (and no, copy/paste isn't D.R.Y. -- 
+and if you don't know what D.R.Y. is, 
+[grow up](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself!)
+- Because [7+-2](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two), 
+a.k.a [chunking](https://en.wikipedia.org/wiki/Chunking_(psychology)) or Miller's Law.
+- You can [decorate](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Decorators)
+functions, not lines of code.
+
+`lined` sets you up to take advantage of these goodies. 
+
+Note this line (currently 117) of lined/base.py , in the init of Line:
+
+    self.funcs = tuple(map(fnode, self.funcs))
+
+That is, every function is cast to with `fnode`.
+
+`fnode` is:
+
+    def fnode(func, name=None):
+        return Fnode(func, name)
+        
+and `Fnode` is just a class that "transparently" wraps the function. 
+This is so that we can then use `Fnode` to do all kinds of things to the function 
+(without actually touching the function itself).
+
+    @dataclass
+    class Fnode:
+        func: Callable
+        __name__: Optional[str] = None
+
+    def __post_init__(self):
+        wraps(self.func)(self)
+        self.__name__ = self.__name__ or func_name(self.func)
+
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)

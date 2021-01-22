@@ -4,6 +4,7 @@ from lined.tools import (
     items,
     iterize,
     iterate,
-    singularize_arg_input,
+    map_star,
+    singularize_arg_input,  # old alias of map_star
     BufferStats,
 )
