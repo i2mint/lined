@@ -8,7 +8,7 @@ And lightly too! No dependencies. All with pure builtin python.
 A really simple example:
 
 ```pydocstring
->>> p = Pipeline(sum, str)
+>>> p = Line(sum, str)
 >>> p([2, 3])
 '5'
 ```
@@ -22,7 +22,7 @@ A still quite simple example:
 >>> def last(c) -> float:
 ...     return c + 10
 >>>
->>> f = Pipeline(first, last)
+>>> f = Line(first, last)
 >>>
 >>> assert f(2) == 12
 >>> assert f(2, 10) == 30
@@ -41,7 +41,7 @@ Let's check out the signature of f:
 Border case: One function only
 
 ```pydocstring
->>> same_as_first = Pipeline(first)
+>>> same_as_first = Line(first)
 >>> assert same_as_first(42) == first(42)
 ```
 
@@ -51,17 +51,17 @@ Border case: One function only
 
 ## string and dot digraph representations
 
-Pipeline's string representation (`__repr__`) and how it deals with callables that don't have a `__name__` (hint: it makes one up):
+Line's string representation (`__repr__`) and how it deals with callables that don't have a `__name__` (hint: it makes one up):
 
 ```python
-from lined.base import Pipeline
+from lined.base import Line
 from functools import partial
 
-pipe = Pipeline(sum, np.log, str, print, partial(map, str), name='some_name')
+pipe = Line(sum, np.log, str, print, partial(map, str), name='some_name')
 pipe
 ```
 ```
-Pipeline(sum, log, str, print, unnamed_func_001, name='some_name')
+Line(sum, log, str, print, unnamed_func_001, name='some_name')
 ```
 
 If you have [graphviz](https://pypi.org/project/graphviz/) installed, you can also do this:
@@ -92,11 +92,11 @@ Optionally, a pipeline can have an `input_name` and/or an `output_name`.
 These will be used in the string representation and the dot digraph.
 
 ```python
-pipe = Pipeline(sum, np.log, str, print, partial(map, str), input_name='x', output_name='y')
+pipe = Line(sum, np.log, str, print, partial(map, str), input_name='x', output_name='y')
 str(pipe)
 ```
 ```
-"Pipeline(sum, log, str, print, unnamed_func_001, name='some_name')"
+"Line(sum, log, str, print, unnamed_func_001, name='some_name')"
 ```
 
 ```python
@@ -114,10 +114,10 @@ pipe.dot_digraph()
 
 
 ```python
-from lined import Pipeline
+from lined import Line
 
-pipe = Pipeline(lambda x: x * 2, 
-                lambda x: f"hello {x}")
+pipe = Line(lambda x: x * 2, 
+            lambda x: f"hello {x}")
 pipe(1)
 ```
 
@@ -149,11 +149,11 @@ The solution to it is (often): `iterize`, which transforms a function that is me
 
 
 ```python
-from lined import Pipeline, iterize
+from lined import Line, iterize
 from typing import Iterable
 
-pipe = Pipeline(iterize(lambda x: x * 2), 
-                iterize(lambda x: f"hello {x}"))
+pipe = Line(iterize(lambda x: x * 2), 
+            iterize(lambda x: f"hello {x}"))
 iterable = pipe([1, 2, 3])
 assert isinstance(iterable, Iterable)  # see that the result is an iterable
 list(iterable)  # consume the iterable and gather it's items
@@ -170,11 +170,11 @@ Instead of just computing the string, say that the last step actually printed th
 
 
 ```python
-from lined import Pipeline, iterize, iterate
+from lined import Line, iterize, iterate
 
-pipe = Pipeline(iterize(lambda x: x * 2), 
-                iterize(lambda x: print(f"hello {x}")),
-               )
+pipe = Line(iterize(lambda x: x * 2), 
+            iterize(lambda x: print(f"hello {x}")),
+            )
 
 for _ in pipe([1, 2, 3]):
     pass
@@ -197,12 +197,12 @@ This is where you can use `iterate`. It basically "launches" that consuming loop
 
 
 ```python
-from lined import Pipeline, iterize, iterate
+from lined import Line, iterize, iterate
 
-pipe = Pipeline(iterize(lambda x: x * 2), 
-                iterize(lambda x: print(f"hello {x}")),
-                iterate
-               )
+pipe = Line(iterize(lambda x: x * 2), 
+            iterize(lambda x: print(f"hello {x}")),
+            iterate
+            )
 
 pipe([1, 2, 3])
 ```

@@ -1,15 +1,6 @@
 """
 
->>> chunkers = {'a': lambda x: x[0] + x[1],
-...             'b': lambda x: x[0] * x[1]}
->>> featurizers = {'a': lambda z: str(z),
-...                'b': lambda z: [z] * 3}
->>> multi_chunker = mk_multi_func(**chunkers)
->>> assert multi_chunker({'a': (1, 2), 'b': (3, 4)}) == {'a': 3, 'b': 12}
->>> multi_featurizer = mk_multi_func(**featurizers)
->>> assert multi_featurizer({'a': 3, 'b': 12}) == {'a': '3', 'b': [12, 12, 12]}
->>> my_pipe = Pipeline(multi_chunker, multi_featurizer)
->>> assert my_pipe({'a': (1, 2), 'b': (3, 4)}) == {'a': '3', 'b': [12, 12, 12]}
+
 """
 
 from functools import wraps
@@ -52,8 +43,22 @@ def fnode(func, name=None):
     return Fnode(func, name)
 
 
+_line_init_reserved_names = {'name', 'input_name', 'output_name'}
+
+
+def _merge_funcs_and_named_funcs(funcs, named_funcs):
+    """Add the funcs of named_funcs to funcs tuple and visa versa, making two aligned collections of functions."""
+    assert _line_init_reserved_names.isdisjoint(named_funcs), (
+        f"Can't name a function with any of the following strings: {', '.join(_line_init_reserved_names)}")
+    funcs_obtained_from_named_funcs = tuple(named_funcs.values())
+    named_funcs_obtained_from_funcs = {func_name(func): func for func in funcs}
+    assert named_funcs_obtained_from_funcs.keys().isdisjoint(named_funcs), (
+        f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}")
+    return funcs + funcs_obtained_from_named_funcs, dict(named_funcs_obtained_from_funcs, **named_funcs)
+
+
 class Line:
-    def __init__(self, *funcs: Funcs, name=None, input_name=None, output_name=None):
+    def __init__(self, *funcs: Funcs, pipeline_name=None, input_name=None, output_name=None, **named_funcs):
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
         For example, if `f`, `h`, and `g` are three functions, the function
@@ -67,12 +72,12 @@ class Line:
         (assuming the functions are deterministic of course).
 
         :param funcs: The functions of the pipeline
-        :param name: The name of the pipeline
+        :param pipeline_name: The name of the pipeline
         :param input_name: The name of an input
         :param output_name: The name of an output
         A really simple example:
 
-        >>> p = Pipeline(sum, str)
+        >>> p = Line(sum, str)
         >>> p([2, 3])
         '5'
 
@@ -84,7 +89,7 @@ class Line:
         >>> def last(c) -> float:
         ...     return c + 10
         >>>
-        >>> f = Pipeline(first, last)
+        >>> f = Line(first, last)
         >>>
         >>> assert f(2) == 12
         >>> assert f(2, 10) == 30
@@ -104,20 +109,22 @@ class Line:
 
 
         >>> from functools import partial
-        >>> pipe = Pipeline(sum, str, print, name='MyPipeline', input_name='x', output_name='y')
+        >>> pipe = Line(sum, str, print, pipeline_name='MyPipeline', input_name='x', output_name='y')
         >>> pipe
-        Pipeline(sum, str, print, name='MyPipeline', input_name='x', output_name='y')
+        Line(sum, str, print, name='MyPipeline', input_name='x', output_name='y')
 
         """
-        self.funcs = funcs
+        funcs, named_funcs = _merge_funcs_and_named_funcs(funcs, named_funcs)
+
         self.input_name = input_name
         self.output_name = output_name
         # really, it would make sense that this is the identity, but we'll implement only when needed
-        assert len(self.funcs) > 0, "You need to specify at least one function!"
-        self.funcs = tuple(map(fnode, self.funcs))
+        assert len(funcs) > 0, "You need to specify at least one function!"
+        self.funcs = tuple(fnode(func, name) for name, func in named_funcs.items())
+        self.named_funcs = {name: fnode_func for name, fnode_func in zip(named_funcs, funcs)}
         self.__signature__ = _signature_of_pipeline(*self.funcs)
-        if name is not None:
-            self.__name__ = name
+        if pipeline_name is not None:
+            self.__name__ = pipeline_name
         else:
             self.__name__ = unnamed_pipeline()
 
@@ -254,7 +261,7 @@ class Conditions:
         return condition
 
 
-class SentineledPipeline(Pipeline):
+class SentineledPipeline(Line):
     """A pipeline that can be interrupted by a sentinel.
 
     Sentinels are useful to interrupt the pipeline computation.
@@ -307,8 +314,9 @@ def stack(*funcs):
     return stacked_funcs
 
 
+# TODO: Need tests and the new args of Line (named_funcs...)
 class LayeredPipeline(Pipeline):
-    def __init__(self, *funcs: LayeredFuncs, name=None):
+    def __init__(self, *funcs: LayeredFuncs, pipeline_name=None):
         def _funcs():
             for func in funcs:
                 if isinstance(func, Callable):
@@ -318,7 +326,7 @@ class LayeredPipeline(Pipeline):
                 else:
                     raise ValueError(f"Don't know how to deal with this func: {func}")
 
-        super().__init__(*_funcs(), name=name)
+        super().__init__(*_funcs(), pipeline_name=pipeline_name)
 
 
 def _signature_of_pipeline(*funcs):
@@ -364,6 +372,21 @@ def mk_multi_func(named_funcs_dict: Optional[Dict] = None, /, **named_funcs) -> 
 
     You can also use both. Like with ``dict(...)``.
 
+    Here's a more significant example.
+
+    >>> chunkers = {'a': lambda x: x[0] + x[1],
+    ...             'b': lambda x: x[0] * x[1]}
+    >>> featurizers = {'a': lambda z: str(z),
+    ...                'b': lambda z: [z] * 3}
+    >>> multi_chunker = mk_multi_func(**chunkers)
+    >>> multi_chunker({'a': (1, 2), 'b': (3, 4)})
+    {'a': 3, 'b': 12}
+    >>> multi_featurizer = mk_multi_func(**featurizers)
+    >>> multi_featurizer({'a': 3, 'b': 12})
+    {'a': '3', 'b': [12, 12, 12]}
+    >>> my_pipe = Pipeline(multi_chunker, multi_featurizer)
+    >>> my_pipe({'a': (1, 2), 'b': (3, 4)})
+    {'a': '(1, 2)', 'b': [(3, 4), (3, 4), (3, 4)]}
     """
 
     named_funcs_dict = named_funcs_dict or {}
