@@ -104,9 +104,8 @@ class Line:
 
         Border case: One function only
 
-        >>> same_as_first = Pipeline(first)
+        >>> same_as_first = Line(first)
         >>> assert same_as_first(42) == first(42)
-
 
         >>> from functools import partial
         >>> pipe = Line(sum, str, print, pipeline_name='MyPipeline', input_name='x', output_name='y')
@@ -121,7 +120,9 @@ class Line:
         # really, it would make sense that this is the identity, but we'll implement only when needed
         assert len(funcs) > 0, "You need to specify at least one function!"
         self.funcs = tuple(fnode(func, name) for name, func in named_funcs.items())
-        self.named_funcs = {name: fnode_func for name, fnode_func in zip(named_funcs, funcs)}
+        self.named_funcs = {name: fnode_func for name, fnode_func in zip(named_funcs, self.funcs)}
+        assert all(f == ff for f, ff in zip(self.funcs, self.named_funcs.values())), (
+            f"funcs and named_funcs are not aligned after merging")
         self.__signature__ = _signature_of_pipeline(*self.funcs)
         if pipeline_name is not None:
             self.__name__ = pipeline_name
@@ -315,7 +316,7 @@ def stack(*funcs):
 
 
 # TODO: Need tests and the new args of Line (named_funcs...)
-class LayeredPipeline(Pipeline):
+class LayeredPipeline(Line):
     def __init__(self, *funcs: LayeredFuncs, pipeline_name=None):
         def _funcs():
             for func in funcs:
@@ -384,7 +385,7 @@ def mk_multi_func(named_funcs_dict: Optional[Dict] = None, /, **named_funcs) -> 
     >>> multi_featurizer = mk_multi_func(**featurizers)
     >>> multi_featurizer({'a': 3, 'b': 12})
     {'a': '3', 'b': [12, 12, 12]}
-    >>> my_pipe = Pipeline(multi_chunker, multi_featurizer)
+    >>> my_pipe = Line(multi_chunker, multi_featurizer)
     >>> my_pipe({'a': (1, 2), 'b': (3, 4)})
     {'a': '(1, 2)', 'b': [(3, 4), (3, 4), (3, 4)]}
     """
