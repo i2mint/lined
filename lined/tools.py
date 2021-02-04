@@ -257,14 +257,21 @@ def with_cursor(func, start=0, step=1):
 
 
 Stats = Any
+from typing import Optional
+
+from typing import cast
+
+_no_value_specified_sentinel = cast(int, object())
 
 
-class OldBufferStats(deque):
+# _no_value_specified_sentinel = object()
+
+class BufferStats(deque):
     """A callable (fifo) buffer. Calls add input to it, but also returns a function of it's contents.
 
     What "add" means is configurable (through ``add_new_val`` arg). Default is append, but can be extend etc.
 
-    >>> bs = BufferStats(4, sum)
+    >>> bs = BufferStats(maxlen=4, func=sum)
     >>> list(map(bs, range(7)))
     [0, 1, 3, 6, 10, 14, 18]
 
@@ -275,16 +282,16 @@ class OldBufferStats(deque):
 
     More examples:
 
-    >>> list(map(BufferStats(4, ''.join), 'abcdefgh'))
+    >>> list(map(BufferStats(maxlen=4, func=''.join), 'abcdefgh'))
     ['a', 'ab', 'abc', 'abcd', 'bcde', 'cdef', 'defg', 'efgh']
 
     >>> from math import prod
-    >>> list(map(BufferStats(4, prod), range(7)))
+    >>> list(map(BufferStats(maxlen=4, func=prod), range(7)))
     [0, 0, 0, 0, 24, 120, 360]
 
     With a different ``add_new_val`` choice.
 
-    >>> bs = BufferStats(4, ''.join, add_new_val=deque.appendleft)
+    >>> bs = BufferStats(maxlen=4, func=''.join, add_new_val=deque.appendleft)
     >>> list(map(bs, 'abcdefgh'))
     ['a', 'ba', 'cba', 'dcba', 'edcb', 'fedc', 'gfed', 'hgfe']
 
@@ -292,7 +299,7 @@ class OldBufferStats(deque):
     In the following, also see how we use iterize to get a function that takes an iterator and returns an iterator
 
     >>> from lined import iterize
-    >>> window_stats = iterize(BufferStats(4, ''.join, add_new_val=deque.extend))
+    >>> window_stats = iterize(BufferStats(maxlen=4, func=''.join, add_new_val=deque.extend))
     >>> chks = ['a', 'bc', 'def', 'gh']
     >>> for x in window_stats(chks):
     ...     print(x)
@@ -310,7 +317,8 @@ class OldBufferStats(deque):
     # __name__ = 'BufferStats'
 
     def __init__(self,
-                 maxlen: int,
+                 values=(),
+                 maxlen: int = _no_value_specified_sentinel,
                  func: Callable = sum,
                  add_new_val: Callable = deque.append):
         """
@@ -321,7 +329,12 @@ class OldBufferStats(deque):
             Is usually a deque method (``deque.append`` by default, but could be ``deque.extend``,
             ``deque.appendleft`` etc.). Can also be any other function that has a valid (self, new_val) signature.
         """
-        super().__init__(maxlen=maxlen)
+        if maxlen is _no_value_specified_sentinel:
+            raise TypeError("You are required to specify maxlen")
+        if not isinstance(maxlen, int):
+            raise TypeError(f"maxlen must be an integer, was: {maxlen}")
+
+        super().__init__(values, maxlen=maxlen)
         self.func = func
         if isinstance(add_new_val, str):
             add_new_val = getattr(self, add_new_val)  # add_new_val is a method of deque
@@ -331,97 +344,6 @@ class OldBufferStats(deque):
     def __call__(self, new_val) -> Stats:
         self.add_new_val(self, new_val)  # add the new value
         return self.func(self)
-
-    # def __getstate__(self):
-    #     return {'maxlen': self.maxlen, 'func': self.func, 'add_new_val': self.add_new_val}
-    #
-    # def __setstate__(self, state):
-    #     for k, v in state.items():
-    #         setattr(self, k, v)
-
-
-class BufferStats:
-    """A callable (fifo) buffer. Calls add input to it, but also returns a function of it's contents.
-
-    What "add" means is configurable (through ``add_new_val`` arg). Default is append, but can be extend etc.
-
-    >>> bs = BufferStats(4, sum)
-    >>> list(map(bs, range(7)))
-    [0, 1, 3, 6, 10, 14, 18]
-
-    See what happens when you feed the same sequence again:
-
-    >>> list(map(bs, range(7)))
-    [15, 12, 9, 6, 10, 14, 18]
-
-    More examples:
-
-    >>> list(map(BufferStats(4, ''.join), 'abcdefgh'))
-    ['a', 'ab', 'abc', 'abcd', 'bcde', 'cdef', 'defg', 'efgh']
-
-    >>> from math import prod
-    >>> list(map(BufferStats(4, prod), range(7)))
-    [0, 0, 0, 0, 24, 120, 360]
-
-    With a different ``add_new_val`` choice.
-
-    >>> bs = BufferStats(4, ''.join, add_new_val=deque.appendleft)
-    >>> list(map(bs, 'abcdefgh'))
-    ['a', 'ba', 'cba', 'dcba', 'edcb', 'fedc', 'gfed', 'hgfe']
-
-    With ``add_new_val=deque.extend``, data can be fed in chunks.
-    In the following, also see how we use iterize to get a function that takes an iterator and returns an iterator
-
-    >>> from lined import iterize
-    >>> window_stats = iterize(BufferStats(4, ''.join, add_new_val=deque.extend))
-    >>> chks = ['a', 'bc', 'def', 'gh']
-    >>> for x in window_stats(chks):
-    ...     print(x)
-    a
-    abc
-    cdef
-    efgh
-
-    Note: To those who might think that they can optimize this for special cases: Yes you can.
-    But SHOULD you? Is it worth the increase in complexity and reduction in flexibility?
-    See https://github.com/thorwhalen/umpyre/blob/master/misc/performance_of_rolling_window_stats.md
-
-    """
-
-    # __name__ = 'BufferStats'
-    buffer = ()
-
-    def __init__(self,
-                 maxlen: int,
-                 func: Callable = sum,
-                 add_new_val: Callable = deque.append):
-        """
-
-        :param maxlen: Size of the buffer
-        :param func: The function to be computed (on buffer contents) and returned when buffer is "called"
-        :param add_new_val: The function that adds values on the buffer. Signature must be (self, new_val)
-            Is usually a deque method (``deque.append`` by default, but could be ``deque.extend``,
-            ``deque.appendleft`` etc.). Can also be any other function that has a valid (self, new_val) signature.
-        """
-        self.buffer = deque(maxlen=maxlen)
-        self.func = func
-        if isinstance(add_new_val, str):
-            add_new_val = getattr(self, add_new_val)  # add_new_val is a method of deque
-        self.add_new_val = add_new_val
-        self.__name__ = 'BufferStats2'
-
-    def __call__(self, new_val) -> Stats:
-        self.add_new_val(self.buffer, new_val)  # add the new value
-        return self.func(self.buffer)
-
-    def __getattr__(self, item):
-        return getattr(self.buffer, item)
-
-    def __iter__(self):
-        return self.buffer.__iter__()
-
-    def __getitem__(self, item):
-        return self.buffer[item]
 
 
 def is_not_none(x):

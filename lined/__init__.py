@@ -1,4 +1,5 @@
 from lined.base import Line, Pipeline, mk_multi_func, LayeredPipeline
+from lined.simple import Pipe
 from lined.tools import (
     keys_extractor,
     items,
