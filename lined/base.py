@@ -42,7 +42,7 @@ def fnode(func, name=None):
     return Fnode(func, name)
 
 
-_line_init_reserved_names = {'name', 'input_name', 'output_name'}
+_line_init_reserved_names = {'pipeline_name', 'input_name', 'output_name'}
 
 
 def _merge_funcs_and_named_funcs(funcs, named_funcs):
