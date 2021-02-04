@@ -1,10 +1,9 @@
 """
-
-
+The base objects of lined.
 """
 
 from functools import wraps
-from typing import Callable, Dict, Iterable, Optional, Union
+from typing import Callable, Dict, Iterable, Optional, Union, Mapping
 from inspect import Signature, signature
 from itertools import starmap
 from dataclasses import dataclass
@@ -394,6 +393,7 @@ def mk_multi_func(named_funcs_dict: Optional[Dict] = None, /, **named_funcs) -> 
     assert named_funcs_dict.keys().isdisjoint(named_funcs), \
         f"named_funcs_dict and named_funcs can't share keys. Yet they share {named_funcs_dict.keys() & named_funcs}"
     named_funcs = dict(named_funcs_dict, **named_funcs)
+    assert all(map(callable, named_funcs)), f"At least one value of named_funcs was not callable"
 
     def multi_func(d: dict):
         def gen():

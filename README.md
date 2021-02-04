@@ -57,11 +57,11 @@ Line's string representation (`__repr__`) and how it deals with callables that d
 from lined.base import Line
 from functools import partial
 
-pipe = Line(sum, np.log, str, print, partial(map, str), name='some_name')
+pipe = Line(sum, np.log, str, print, partial(map, str), pipeline_name='some_name')
 pipe
 ```
 ```
-Line(sum, log, str, print, unnamed_func_001, name='some_name')
+Line(sum, log, str, print, unnamed_func_001, pipeline_name='some_name')
 ```
 
 If you have [graphviz](https://pypi.org/project/graphviz/) installed, you can also do this:
@@ -96,7 +96,7 @@ pipe = Line(sum, np.log, str, print, partial(map, str), input_name='x', output_n
 str(pipe)
 ```
 ```
-"Line(sum, log, str, print, unnamed_func_001, name='some_name')"
+"Line(sum, log, str, print, unnamed_func_001, pipeline_name='some_name')"
 ```
 
 ```python

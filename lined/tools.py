@@ -1,8 +1,16 @@
 from functools import partial, wraps
 from collections import deque
-from typing import Union, Callable, Iterable
+from typing import Union, Callable, Iterable, Any
+from dataclasses import dataclass
+from lined.base import Fnode
+from lined.util import func_name, partial_plus
 
-from lined.util import func_name
+
+def add_name(obj, name=None):
+    if name is None:
+        name = type(obj).__name__
+    obj.__name__ = name
+    return obj
 
 
 def keys_extractor(keys):
@@ -53,6 +61,15 @@ def iterate(iterable: Iterable):
         pass
 
 
+def side_call(x, callback):
+    callback(x)
+    return x
+
+
+print_and_pass_on = partial_plus(side_call, callback=print, __name__='print_and_pass_on',
+                                 __doc__="Passes input through to output, but prints before outputing")
+
+
 # Function transformers ###################################################################
 
 
@@ -67,6 +84,32 @@ def mywraps(func, name=None, doc_prefix=""):
         return extra_wraps(wraps(func)(wrapped), name=name, doc_prefix=doc_prefix)
 
     return wrapper
+
+
+def tail_io(func):
+    """Will apply function only to the tail of tuple inputs, still passing the header on.
+    That is, from a ``x -> func(x)`` function, you get a ``(*header, x) -> (*header, func(x))`` function.
+
+    >>> def foo(x):
+    ...    return x * 2
+    >>>
+    >>> foo('boo')
+    'booboo'
+    >>> new_foo = tail_io(foo)
+    >>> new_foo((7, 'boo'))
+    (7, 'booboo')
+    >>> new_foo(('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on', 'boo'))
+    ('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on', 'booboo')
+
+    """
+
+    @mywraps(func)
+    def _func(input):
+        *header, real_input = input
+        out = func(real_input)
+        return *header, out
+
+    return _func
 
 
 def iterize(func, name=None):
@@ -126,13 +169,20 @@ def iterize(func, name=None):
 generator_version = iterize  # back compatibility alias
 
 
+def mk_filter(filter_func=None):
+    return partial_plus(filter, filter_func, __name__='mk_filter', __doc__='Makes a filter with a fixed filt func.')
+
+
 def map_star(func):
     """Make a func(args) function out of a func(*args) one.
     Also known as singularize_arg_input.
 
     >>> def foo(a, b):
     ...     return a + b
-    >>> 
+    >>> singularized_foo = map_star(foo)
+    >>> singularized_foo((2, 3))
+    5
+    >>> assert singularized_foo([2, 3]) == singularized_foo({2, 3}) == foo(2, 3)
     """
 
     @mywraps(func, doc_prefix=f"singularize_arg_input version of {func_name(func)}")
@@ -143,6 +193,70 @@ def map_star(func):
 
 
 singularize_arg_input = map_star  # alias
+
+
+class Enumerate:
+    """Decorator a function so it enumerates the number of calls.
+    Or in general, returns (cursor, func(x)) instead of just func(x), where the start and step of the cursor can
+    be defined (default is start=0 and step=1)
+
+    >>> def foo(x):
+    ...    return x * 2
+    >>> new_foo = Enumerate(foo)
+    >>> new_foo('ha')
+    (0, 'haha')
+    >>> new_foo('ho')
+    (1, 'hoho')
+    >>> enum_foo_with_step = Enumerate(foo, start=3, step=7)
+    >>> enum_foo_with_step('z')
+    (3, 'zz')
+    >>> enum_foo_with_step(11)
+    (10, 22)
+    """
+
+    def __init__(self, func, start=0, step=1):
+        self.func = func
+        self.cursor = start
+        self.step = step
+
+    def __call__(self, *args, **kwargs):
+        current_cursor = self.cursor
+        out = self.func(*args, **kwargs)
+        self.cursor += self.step
+        return current_cursor, out
+
+
+def with_cursor(func, start=0, step=1):
+    """Decorator a function so it enumerates the number of calls.
+    Or in general, returns (cursor, func(x)) instead of just func(x), where the start and step of the cursor can
+    be defined (default is start=0 and step=1)
+
+    >>> def foo(x):
+    ...    return x * 2
+    >>> new_foo = with_cursor(foo)
+    >>> new_foo('ha')
+    (0, 'haha')
+    >>> new_foo('ho')
+    (1, 'hoho')
+    >>> enum_foo_with_step = with_cursor(foo, start=3, step=7)
+    >>> enum_foo_with_step('z')
+    (3, 'zz')
+    >>> enum_foo_with_step(11)
+    (10, 22)
+    """
+
+    @wraps(func)
+    def _func(*args, **kwargs):
+        current_cursor = _func.cursor
+        out = func(*args, **kwargs)
+        _func.cursor += step
+        return current_cursor, out
+
+    _func.cursor = start
+    return _func
+
+
+Stats = Any
 
 
 class BufferStats(deque):
@@ -193,7 +307,12 @@ class BufferStats(deque):
 
     """
 
-    def __init__(self, maxlen, func: Callable = sum, add_new_val: Callable = deque.append):
+    # __name__ = 'BufferStats'
+
+    def __init__(self,
+                 maxlen: int,
+                 func: Callable = sum,
+                 add_new_val: Callable = deque.append):
         """
 
         :param maxlen: Size of the buffer
@@ -207,7 +326,40 @@ class BufferStats(deque):
         if isinstance(add_new_val, str):
             add_new_val = getattr(self, add_new_val)  # add_new_val is a method of deque
         self.add_new_val = add_new_val
+        self.__name__ = 'BufferStats'
 
-    def __call__(self, new_val):
+    def __call__(self, new_val) -> Stats:
         self.add_new_val(self, new_val)  # add the new value
         return self.func(self)
+
+    def __getstate__(self):
+        return {'maxlen': self.maxlen, 'func': self.func, 'add_new_val': self.add_new_val}
+
+    def __setstate__(self, state):
+        for k, v in state.items():
+            setattr(self, k, v)
+
+def is_not_none(x):
+    return x is not None
+
+
+def return_buffer_on_stats_condition(stats: Stats,
+                                     buffer: Iterable,
+                                     cond: Callable = is_not_none,
+                                     else_val=None):
+    if cond(stats):
+        return buffer
+    else:
+        return else_val
+
+
+# @add_name
+@dataclass
+class Segmenter:
+    buffer: BufferStats
+    stats_buffer_callback: Callable[[Stats, Iterable], Any] = return_buffer_on_stats_condition
+    __name__ = 'Segmenter'
+
+    def __call__(self, new_val):
+        stats = self.buffer(new_val)
+        return self.stats_buffer_callback(stats, list(self.buffer))
