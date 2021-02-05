@@ -57,7 +57,7 @@ Line's string representation (`__repr__`) and how it deals with callables that d
 from lined.base import Line
 from functools import partial
 
-pipe = Line(sum, np.log, str, print, partial(map, str), pipeline_name='some_name')
+pipe = Line(sum, np.log, str, print, pipeline_name='some_name')
 pipe
 ```
 ```
@@ -68,7 +68,7 @@ If you have [graphviz](https://pypi.org/project/graphviz/) installed, you can al
 ```python
 pipe.dot_digraph()
 ```
-![image](https://user-images.githubusercontent.com/1906276/96199560-ce0b8480-0f25-11eb-8b0a-5f0e537e48d6.png)
+![image](https://user-images.githubusercontent.com/1906276/107063948-d23b0680-678f-11eb-88ce-1c0638175569.png)
 
 And if you don't, but have some other [dot language](https://www.graphviz.org/doc/info/lang.html) interpreter, you can just get the body (and fiddle with it):
 
@@ -92,18 +92,17 @@ Optionally, a pipeline can have an `input_name` and/or an `output_name`.
 These will be used in the string representation and the dot digraph.
 
 ```python
-pipe = Line(sum, np.log, str, print, partial(map, str), input_name='x', output_name='y')
+pipe = Line(sum, np.log, str, print, input_name='x', output_name='y')
 str(pipe)
 ```
 ```
-"Line(sum, log, str, print, unnamed_func_001, pipeline_name='some_name')"
+"Line(sum, log, str, print, pipeline_name='some_name')"
 ```
 
 ```python
 pipe.dot_digraph()
 ```
-![image](https://user-images.githubusercontent.com/1906276/96199887-86d1c380-0f26-11eb-9df6-642a3762787b.png)
-
+![image](https://user-images.githubusercontent.com/1906276/107064180-175f3880-6790-11eb-87e0-5b75840a6f73.png)
 
 
 

@@ -135,7 +135,7 @@ class Line:
             suffix += f", input_name='{self.input_name}'"
         if self.output_name is not None:
             suffix += f", output_name='{self.output_name}'"
-        return f"{self.__class__.__name__}({funcs_str}, name='{self.__name__}'{suffix})"
+        return f"{self.__class__.__name__}({funcs_str}, pipeline_name='{self.__name__}'{suffix})"
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
