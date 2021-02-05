@@ -57,7 +57,7 @@ Line's string representation (`__repr__`) and how it deals with callables that d
 from lined.base import Line
 from functools import partial
 
-pipe = Line(sum, np.log, str, print, partial(map, str), pipeline_name='some_name')
+pipe = Line(sum, np.log, str, print, pipeline_name='some_name')
 pipe
 ```
 ```
