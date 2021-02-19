@@ -62,6 +62,9 @@ def iterate(iterable: Iterable):
 
 
 def side_call(x, callback):
+    """Identity function that calls a callaback function before returning the input as is
+    (if callback didn't change it)
+    """
     callback(x)
     return x
 
