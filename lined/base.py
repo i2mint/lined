@@ -173,19 +173,21 @@ class Line:
         else:
             yield prefix
 
+        func_names = list(self.named_funcs)
+
         if self.input_name is not None:
             yield f'{self.input_name} [shape="circle"]'
-            yield f'{self.input_name} -> {self.funcs[0].__name__}'
+            yield f'{self.input_name} -> {func_names[0]}'
 
-        for f in self.funcs:
-            yield f'{f.__name__} [shape="{fnode_shape}"]'
+        for fname in func_names:
+            yield f'{fname} [shape="{fnode_shape}"]'
 
-        for f, ff in zip(self.funcs[:-1], self.funcs[1:]):
-            yield f'{f.__name__} -> {ff.__name__}'
+        for from_fname, to_fname in zip(func_names[:-1], func_names[1:]):
+            yield f'{from_fname} -> {to_fname}'
 
         if self.output_name is not None:
             yield f'{self.output_name} [shape="{vnode_shape}"]'
-            yield f'{self.funcs[-1].__name__} -> {self.output_name}'
+            yield f'{func_names[-1]} -> {self.output_name}'
 
     def dot_digraph(self, prefix=None, **kwargs):
         try:
