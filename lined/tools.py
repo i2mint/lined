@@ -2,8 +2,31 @@ from functools import partial, wraps
 from collections import deque
 from typing import Union, Callable, Iterable, Any
 from dataclasses import dataclass
-from lined.base import Fnode
+
 from lined.util import func_name, partial_plus
+from lined.base import Line
+
+
+def _extract_first_argument(args: tuple, kwargs: dict):
+    """
+    Returns the tuple (X, _args, _kwargs) where X is the first argument (found in either args or kwargs), and _args, _kwargs are the same (with X removed)
+
+    >>> _extract_first_argument((1,2,3), {'d': 4})
+    (1, [2, 3], {'d': 4})
+    >>> _extract_first_argument((), {'d': 4, 'e': 5})
+    (4, [], {'e': 5})
+
+    """
+    if len(args) > 0:
+        first_arg_val, *_args = args
+        return first_arg_val, _args, kwargs
+    else:
+        first_arg_name = next(iter(kwargs), None)
+        if first_arg_name is None:
+            raise ValueError(
+                "You need to have at least one argument (the data (aka 'X'))")
+        first_arg_val = kwargs.pop(first_arg_name)
+        return first_arg_val, [], kwargs
 
 
 def add_name(obj, name=None):
@@ -167,6 +190,24 @@ def iterize(func, name=None):
     wrapper = mywraps(func, name=name,
                       doc_prefix=f"generator version of {func_name(func)}:\n")
     return wrapper(partial(map, func))
+
+
+def wrap_first_arg_in_list(func):
+    """Takes a func(X,...) function and returns a func([X],...) function. """
+
+    @wraps(func)
+    def _func(*args, **kwargs):
+        first_arg_val, args, kwargs = _extract_first_argument(args, kwargs)
+        return func([first_arg_val], *args, **kwargs)
+
+    return _func
+
+
+def deiterize(func):
+    """The inverse of iterize.
+    Takes an "iterized" (a.k.a. "vectorized") function (i.e. a function that works on iterables), and
+    That is, takes a func(X,...) function and returns a next(iter(func([X],...))) function. """
+    return Line(wrap_first_arg_in_list(func), iter, next)
 
 
 generator_version = iterize  # back compatibility alias

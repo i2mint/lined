@@ -67,8 +67,11 @@ class Pipe:
         else:
             first_func, *other_funcs, last_func = funcs
 
-        self.__signature__ = Signature(signature(first_func).parameters.values(),
-                                       return_annotation=signature(last_func).return_annotation)
+        try:
+            self.__signature__ = Signature(signature(first_func).parameters.values(),
+                                           return_annotation=signature(last_func).return_annotation)
+        except ValueError:  # some builtins don't have signatures, so ignore.
+            pass
         self.first_func = first_func
         self.other_funcs = tuple(other_funcs) + (last_func,)
 
