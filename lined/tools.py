@@ -29,6 +29,22 @@ def _extract_first_argument(args: tuple, kwargs: dict):
         return first_arg_val, [], kwargs
 
 
+def del_fields(d, fields):
+    """Returns the same mapping, but with specified fields removed.
+    Intended to be applied to a stream of Mappings, using partial to fix fields
+
+    >>> d = [{'a': 1, 'b': 2}, {'a': 11, 'c': 3}]
+    >>> list(map(partial(del_fields, fields=['a']), d))
+    [{'b': 2}, {'c': 3}]
+
+    """
+    if isinstance(fields, str) or not isinstance(fields, Iterable):
+        fields = [fields]
+    for f in fields:
+        d.pop(f, None)
+    return d
+
+
 def add_name(obj, name=None):
     if name is None:
         name = type(obj).__name__
