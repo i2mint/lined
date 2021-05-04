@@ -59,6 +59,38 @@ def keys_extractor(keys):
     return extract
 
 
+from typing import Callable, Union, Optional
+
+
+def apply_to_single_item(
+        func: Callable,
+        item_idx: int
+):
+    """Get a version of func that applies itself to only the item_idx-th element of the input,
+    leaving the rest untouched.
+
+    That is, apply_to_single_item(func, 2), for example, is a new_func such that
+    ```
+        new_func([a, b, c, d, e]) == [a, b, func(c), d, e]
+    ```
+
+    :param func: A function to apply to a single element of an iterable (that has a [...])
+    :param item_idx: The particular item index to apply function to
+    :return:
+
+    >>> apply_to_second_item = apply_to_single_item(func=lambda x: x * 10, item_idx=1)
+    >>> apply_to_second_item([1, 2, 3, 4])
+    (1, 20, 2, 3, 4)
+    """
+    @wraps(func)
+    def wrapped(first_arg, *args, **kwargs):
+        val_to_apply_func_to = first_arg[item_idx]
+        func_output = func(val_to_apply_func_to)
+        return tuple([*first_arg[:item_idx], func_output, *first_arg[item_idx:]])
+
+    return wrapped
+
+
 def items(mapping):
     """Get an items generator from a mapping"""
     return mapping.items()
