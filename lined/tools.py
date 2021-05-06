@@ -268,6 +268,7 @@ def mk_filter(filter_func=None):
 def map_star(func):
     """Make a func(args) function out of a func(*args) one.
     Also known as singularize_arg_input.
+    In a way, the opposite of map_starexpanded_args.
 
     >>> def foo(a, b):
     ...     return a + b
@@ -277,7 +278,7 @@ def map_star(func):
     >>> assert singularized_foo([2, 3]) == singularized_foo({2, 3}) == foo(2, 3)
     """
 
-    @mywraps(func, doc_prefix=f"singularize_arg_input version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f"map_star version of {func_name(func)}")
     def func_with_single_arg_input(args):
         return func(*args)
 
@@ -285,6 +286,22 @@ def map_star(func):
 
 
 singularize_arg_input = map_star  # alias
+
+def expanded_args(func):
+    """Make's a func(*args) function out of a func(args) one.
+    In a way, the opposite of map_star.
+
+    >>> sum([1,2,3,4])
+    10
+    >>> mysum = expanded_args(sum)
+    >>> mysum(1, 2, 3, 4)
+    10
+
+    """
+    @mywraps(func, doc_prefix=f"expanded_args version of {func_name(func)}")
+    def _func(*args):
+        return func(args)
+    return _func
 
 
 class Enumerate:
