@@ -29,6 +29,16 @@ def _extract_first_argument(args: tuple, kwargs: dict):
         return first_arg_val, [], kwargs
 
 
+def raise_exception(
+        exception: Union[Callable, BaseException],
+        *args,
+        **kwargs):
+    """Raise an exception (from an exception instance, or a callable that makes one"""
+    if isinstance(exception, Callable):
+        exception = exception(*args, **kwargs)
+    raise exception
+
+
 def del_fields(d, fields):
     """Returns the same mapping, but with specified fields removed.
     Intended to be applied to a stream of Mappings, using partial to fix fields
@@ -82,6 +92,7 @@ def apply_to_single_item(
     >>> apply_to_second_item([1, 2, 3, 4])
     (1, 20, 2, 3, 4)
     """
+
     @wraps(func)
     def wrapped(first_arg, *args, **kwargs):
         val_to_apply_func_to = first_arg[item_idx]
@@ -287,6 +298,7 @@ def map_star(func):
 
 singularize_arg_input = map_star  # alias
 
+
 def expanded_args(func):
     """Make's a func(*args) function out of a func(args) one.
     In a way, the opposite of map_star.
@@ -298,9 +310,11 @@ def expanded_args(func):
     10
 
     """
+
     @mywraps(func, doc_prefix=f"expanded_args version of {func_name(func)}")
     def _func(*args):
         return func(args)
+
     return _func
 
 
