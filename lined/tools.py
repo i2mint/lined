@@ -1,10 +1,26 @@
 from functools import partial, wraps
 from collections import deque
-from typing import Union, Callable, Iterable, Any
+from typing import Union, Callable, Iterable, Any, Optional
 from dataclasses import dataclass
 
-from lined.util import func_name, partial_plus
+from lined.util import func_name, partial_plus, n_required_args
 from lined.base import Line
+
+
+def identity(x):
+    """Takes one argument, and returns it as is"""
+    return x
+
+
+def blind(x, output):
+    """Takes one argument, and returns it as is.
+    The output is meant to be bound by currying (functools.partial)
+    """
+    return output
+
+
+true_no_matter_what = partial(blind, output=True)
+false_no_matter_what = partial(blind, output=False)
 
 
 def _extract_first_argument(args: tuple, kwargs: dict):
@@ -24,19 +40,209 @@ def _extract_first_argument(args: tuple, kwargs: dict):
         first_arg_name = next(iter(kwargs), None)
         if first_arg_name is None:
             raise ValueError(
-                "You need to have at least one argument (the data (aka 'X'))")
+                "You need to have at least one argument (the data (aka 'X'))"
+            )
         first_arg_val = kwargs.pop(first_arg_name)
         return first_arg_val, [], kwargs
 
 
-def raise_exception(
-        exception: Union[Callable, BaseException],
-        *args,
-        **kwargs):
+########################################################################################################################
+
+from operator import le
+from typing import Union, Callable, Generator, Iterable
+from itertools import tee
+
+
+def if_then_else(
+    x, if_func=true_no_matter_what, then_func=identity, else_func=identity
+):
+    """Implement the if-then-else logic as a function.
+
+    >>> if_then_else('world', if_func=lambda x: x == 'world', then_func="hello {}".format, else_func=lambda x: x * 2)
+    'hello world'
+    >>> if_then_else('bora', if_func=lambda x: x == 'world', then_func="hello {}".format, else_func=lambda x: x * 2)
+    'borabora'
+
+    Really, it's meant to be curried to make functional components.
+    For example, to make a function that ensures that a string is encapsulated in a tuple, we could do this:
+
+    >>> def is_a_str(x): return isinstance(x, str)
+    >>> def make_it_a_tuple(x): return tuple([x])
+    >>>
+    >>> ensure_tuple_if_string = partial(
+    ...     if_then_else,
+    ...     if_func=is_a_str,
+    ...     then_func=make_it_a_tuple
+    ... )
+    >>> ensure_tuple_if_string('a string')
+    ('a string',)
+    >>> ensure_tuple_if_string(['a', 'list'])  # not a string so returned as is
+    ['a', 'list']
+    """
+    if if_func(x):
+        return then_func(x)
+    else:
+        return else_func(x)
+
+
+def make_it_a_tuple(x):
+    return tuple([x])
+
+
+def is_a_str(x):
+    return isinstance(x, str)
+
+
+cast_to_tuple_if_string = partial(
+    if_then_else, if_func=is_a_str, then_func=make_it_a_tuple
+)
+
+
+def is_not_iterable_or_is_a_str(x):
+    return not isinstance(x, Iterable) or isinstance(x, str)
+
+
+cast_to_tuple_if_non_iterable_or_a_string = partial(
+    if_then_else, if_func=is_not_iterable_or_is_a_str, then_func=make_it_a_tuple
+)
+
+
+########################################################################################################################
+
+
+class Command:
+    def __init__(self, func, *args, **kwargs):
+        self.func, self.args, self.kwargs = func, args, kwargs
+
+    def __call__(self):
+        return self.func(*self.args, **self.kwargs)
+
+
+class ItemsNotSorted(RuntimeError):
+    """Use to indicate that two consecutive items where not in the expected order"""
+
+
+def raise_(exception):
+    raise exception
+
+
+raise_not_sorted_error = Command(raise_, ItemsNotSorted)
+
+
+def pairwise(iterable):
+    """Yield sliding window pairs
+    >>> list(pairwise([1, 2, 3, 4]))
+    [(1, 2), (2, 3), (3, 4)]"""
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
+
+
+def raise_exception(exception: Union[Callable, BaseException], *args, **kwargs):
     """Raise an exception (from an exception instance, or a callable that makes one"""
     if isinstance(exception, Callable):
         exception = exception(*args, **kwargs)
     raise exception
+
+
+def consume_until_error(iterable, caught_errors=(Exception,)):
+    """Iterable that will simply exit with out error if one of the caught errors occurs.
+
+    >>> list(consume_until_error(map(lambda x: 1 / x, [4, 2, 1, 0, -1])))
+    [0.25, 0.5, 1.0]
+    """
+    caught_errors = cast_to_tuple_if_non_iterable_or_a_string(caught_errors) + (
+        StopIteration,
+    )
+    it = iter(iterable)
+    while True:
+        try:
+            yield next(it)
+        except caught_errors:
+            break
+
+
+def _validated_comparison_func(key: Callable):
+    n_required = n_required_args(key)
+    if n_required == 1:
+
+        def comp_func(x, y):
+            return key(x) <= key(y)
+
+        return comp_func
+    assert n_required == 2, f"key should be a callable with 1 or 2 required arguments"
+    return key
+
+
+def check_sorted_during_iteration(
+    iterable: Iterable,
+    key: Callable[[Any, Any], bool] = le,
+    not_sorted_callback: Union[Callable, BaseException] = raise_not_sorted_error,
+) -> Generator:
+    """Wrap an iterable so that ordering of the elements is checked at runtime.
+
+    :param iterable: Iterable to consume
+    :param key: The function that defines what it means to be sorted.
+        Could be a Any->bool function, which will act like the key argument of builtin sorted for example.
+        Could also be an explicit (element, next_element)->bool function that returns True iff in the right order
+    :param not_sorted_callback: The function to call when two consecutive elements are not sorted. For example:
+        - raising an error (the default)
+        - logging the information, and skiping the offending element (or not)
+    :return: A generator consuming the input iterable
+
+    >>> list(check_sorted_during_iteration(iter([1, 2, 3, 4])))
+    [1, 2, 3, 4]
+
+    >>> try:
+    ...     for i, x in enumerate(check_sorted_during_iteration([2, 4, 3, 6]), 1):
+    ...         print(x)
+    ... except ItemsNotSorted:
+    ...     print(f"An ItemsNotSorted exception was raised right after the {i} element (whose value was {x})")
+    ...     print("----> Normally, here, you'd put some thing to actually handle the exception...")
+    2
+    4
+    An ItemsNotSorted exception was raised right after the 2 element (whose value was 4)
+    ----> Normally, here, you'd put some thing to actually handle the exception...
+
+    Now, mind you, you have total control over what sorted means.
+    For example, to define it as strict
+    >>> comp = lambda x, y: x > y  # Really, we suggest to use operator.gt here (and other operator module functions!)
+    >>> list(check_sorted_during_iteration(iter([4, 3, 2, 1]), key=comp))
+    [4, 3, 2, 1]
+
+    Now for a more complex example.
+    First we'll define a function that will consume the iterable until an error occurs, returning the elements consumed.
+
+    >>> from lined.tools import consume_until_error
+    >>> consume = Line(check_sorted_during_iteration, consume_until_error, list)
+
+    >>> iterable = ['a', 'ba', 'cba', 'cba', 'back', 'bacca']
+    >>> consume(iterable, lambda x, y: x < y)  # compare with strict <
+    ['a', 'ba', 'cba']
+    >>> consume(iterable, len)  # compare based on the length
+    ['a', 'ba', 'cba', 'cba', 'back', 'bacca']
+    >>> consume(iterable, lambda x: x[0])  # compare based on the first letter only
+    ['a', 'ba', 'cba', 'cba']
+    >>> # compare based on whether the previous element is a subset of the next:
+    >>> consume(iterable, lambda x, y: set(x).issubset(y))
+    ['a', 'ba', 'cba', 'cba', 'back']
+
+    """
+
+    # TODO: Optimization opportunity:
+    #   In this implementation, the key of an element is computed twice (once when element, once when next_element)
+    # TODO: key could be generalized to being a Callable[[element, next_element], bool].
+    #   Though note that it's only an interface flexibility since same could (?) be acheived with a key returning an
+    #   instance of a class such that class.__le__(element, next_element) is what is desired
+    key = _validated_comparison_func(key)
+    for element, next_element in pairwise(iterable):
+        yield element
+        if not key(element, next_element):
+            not_sorted_callback()
+    yield next_element
+
+
+########################################################################################################################
 
 
 def del_fields(d, fields):
@@ -69,13 +275,7 @@ def keys_extractor(keys):
     return extract
 
 
-from typing import Callable, Union, Optional
-
-
-def apply_to_single_item(
-        func: Callable,
-        item_idx: int
-):
+def apply_to_single_item(func: Callable, item_idx: int):
     """Get a version of func that applies itself to only the item_idx-th element of the input,
     leaving the rest untouched.
 
@@ -151,8 +351,12 @@ def side_call(x, callback):
     return x
 
 
-print_and_pass_on = partial_plus(side_call, callback=print, __name__='print_and_pass_on',
-                                 __doc__="Passes input through to output, but prints before outputing")
+print_and_pass_on = partial_plus(
+    side_call,
+    callback=print,
+    __name__="print_and_pass_on",
+    __doc__="Passes input through to output, but prints before outputing",
+)
 
 
 # Function transformers ###################################################################
@@ -160,7 +364,7 @@ print_and_pass_on = partial_plus(side_call, callback=print, __name__='print_and_
 
 def extra_wraps(func, name=None, doc_prefix=""):
     func.__name__ = name or func_name(func)
-    func.__doc__ = doc_prefix + getattr(func, '__name__', '')
+    func.__doc__ = doc_prefix + getattr(func, "__name__", "")
     return func
 
 
@@ -246,8 +450,9 @@ def iterize(func, name=None):
     >>> list(iterable)  # consume the iterable and gather it's items
     ['hello 2', 'hello 4', 'hello 6']
     """
-    wrapper = mywraps(func, name=name,
-                      doc_prefix=f"generator version of {func_name(func)}:\n")
+    wrapper = mywraps(
+        func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"
+    )
     return wrapper(partial(map, func))
 
 
@@ -265,7 +470,7 @@ def wrap_first_arg_in_list(func):
 def deiterize(func):
     """The inverse of iterize.
     Takes an "iterized" (a.k.a. "vectorized") function (i.e. a function that works on iterables), and
-    That is, takes a func(X,...) function and returns a next(iter(func([X],...))) function. """
+    That is, takes a func(X,...) function and returns a next(iter(func([X],...))) function."""
     return Line(wrap_first_arg_in_list(func), iter, next)
 
 
@@ -273,7 +478,12 @@ generator_version = iterize  # back compatibility alias
 
 
 def mk_filter(filter_func=None):
-    return partial_plus(filter, filter_func, __name__='mk_filter', __doc__='Makes a filter with a fixed filt func.')
+    return partial_plus(
+        filter,
+        filter_func,
+        __name__="mk_filter",
+        __doc__="Makes a filter with a fixed filt func.",
+    )
 
 
 def map_star(func):
@@ -389,6 +599,7 @@ _no_value_specified_sentinel = cast(int, object())
 
 # _no_value_specified_sentinel = object()
 
+
 class BufferStats(deque):
     """A callable (fifo) buffer. Calls add input to it, but also returns a function of it's contents.
 
@@ -439,11 +650,13 @@ class BufferStats(deque):
 
     # __name__ = 'BufferStats'
 
-    def __init__(self,
-                 values=(),
-                 maxlen: int = _no_value_specified_sentinel,
-                 func: Callable = sum,
-                 add_new_val: Callable = deque.append):
+    def __init__(
+        self,
+        values=(),
+        maxlen: int = _no_value_specified_sentinel,
+        func: Callable = sum,
+        add_new_val: Callable = deque.append,
+    ):
         """
 
         :param maxlen: Size of the buffer
@@ -462,7 +675,7 @@ class BufferStats(deque):
         if isinstance(add_new_val, str):
             add_new_val = getattr(self, add_new_val)  # add_new_val is a method of deque
         self.add_new_val = add_new_val
-        self.__name__ = 'BufferStats'
+        self.__name__ = "BufferStats"
 
     def __call__(self, new_val) -> Stats:
         self.add_new_val(self, new_val)  # add the new value
@@ -473,10 +686,9 @@ def is_not_none(x):
     return x is not None
 
 
-def return_buffer_on_stats_condition(stats: Stats,
-                                     buffer: Iterable,
-                                     cond: Callable = is_not_none,
-                                     else_val=None):
+def return_buffer_on_stats_condition(
+    stats: Stats, buffer: Iterable, cond: Callable = is_not_none, else_val=None
+):
     if cond(stats):
         return buffer
     else:
@@ -487,8 +699,10 @@ def return_buffer_on_stats_condition(stats: Stats,
 @dataclass
 class Segmenter:
     buffer: BufferStats
-    stats_buffer_callback: Callable[[Stats, Iterable], Any] = return_buffer_on_stats_condition
-    __name__ = 'Segmenter'
+    stats_buffer_callback: Callable[
+        [Stats, Iterable], Any
+    ] = return_buffer_on_stats_condition
+    __name__ = "Segmenter"
 
     def __call__(self, new_val):
         stats = self.buffer(new_val)

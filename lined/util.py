@@ -1,15 +1,17 @@
 from functools import partial
+from typing import Callable
 
 writable_function_dunders = {
-    '__annotations__',
-    '__call__',
-    '__defaults__',
-    '__dict__',
-    '__doc__',
-    '__globals__',
-    '__kwdefaults__',
-    '__name__',
-    '__qualname__'}
+    "__annotations__",
+    "__call__",
+    "__defaults__",
+    "__dict__",
+    "__doc__",
+    "__globals__",
+    "__kwdefaults__",
+    "__name__",
+    "__qualname__",
+}
 
 
 def partial_plus(func, *args, **kwargs):
@@ -59,8 +61,34 @@ def func_name(func):
     To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing"""
     try:
         name = func.__name__
-        if name == '<lambda>':
+        if name == "<lambda>":
             return unnamed_func_name()
         return name
     except AttributeError:
         return unnamed_func_name()
+
+
+########################################################################################################################
+
+from inspect import signature, Parameter
+
+
+def param_is_required(param: Parameter) -> bool:
+    return param.default == Parameter.empty and param.kind not in {
+        Parameter.VAR_POSITIONAL,
+        Parameter.VAR_KEYWORD,
+    }
+
+
+def n_required_args(func: Callable) -> int:
+    """Number of required arguments.
+
+    A required argument is one that doesn't have a default, nor is VAR_POSITIONAL (*args) or VAR_KEYWORD (**kwargs).
+    Note: Sometimes a minimum number of arguments in VAR_POSITIONAL and VAR_KEYWORD are in fact required,
+    but we can't see this from the signature, so we can't tell you about that! You do the math.
+
+    >>> n_required_args(lambda x, y, z=None, *args, **kwargs: ...)
+    2
+
+    """
+    return sum(map(param_is_required, signature(func).parameters.values()))
