@@ -1,15 +1,17 @@
-from functools import partial
+from functools import partial, reduce
 from contextlib import suppress
 from operator import methodcaller, itemgetter
 from lined import Line
 from lined.tools import map_star, iterize
 
+
 transposer = map_star(zip)
-transposer.__name__ = 'transposer'
+transposer.__name__ = "transposer"
 
 
 def mk_transposer_to_array(dtype=None):
-    """Make a transposer that transposes an iterable of n iterables of size k into an iterable of k arrays of size n.
+    """Make a transposer that transposes an iterable of n iterables of size k into an iterable
+    of k arrays of size n.
 
     ## Commented out to avoid CI choking on the absence of numpy
     # >>> from numpy import array
@@ -20,17 +22,21 @@ def mk_transposer_to_array(dtype=None):
     # #        [3, 6]])
     """
     from numpy import array
-    return Line(map_star(zip),
-                list,
-                partial(array, dtype=dtype),
-                pipeline_name='transpose_to_array'
-                )
+
+    return Line(
+        map_star(zip),
+        list,
+        partial(array, dtype=dtype),
+        pipeline_name="transpose_to_array",
+    )
 
 
 mk_mapping_extractor = Line(
     iterize(itemgetter),
-    lambda funcs: lambda obj: list(map(methodcaller('__call__', obj), funcs)))
-mk_mapping_extractor.__module__ = __name__  # to make it seem it comes from this module (but doctests still don't work)
+    lambda funcs: lambda obj: list(map(methodcaller("__call__", obj), funcs)),
+)
+# to make it seem it comes from this module (but doctests still don't work):
+mk_mapping_extractor.__module__ = __name__
 mk_mapping_extractor.__doc__ = """
 Make a function that will extract specific fields from a mapping (e.g. dict)
     

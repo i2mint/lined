@@ -35,8 +35,10 @@ def compose(*funcs):
 
     composed_funcs.first_func = first_func
     composed_funcs.other_funcs = other_funcs
-    composed_funcs.__signature__ = Signature(signature(first_func).parameters.values(),
-                                             return_annotation=signature(last_func).return_annotation)
+    composed_funcs.__signature__ = Signature(
+        signature(first_func).parameters.values(),
+        return_annotation=signature(last_func).return_annotation,
+    )
     return composed_funcs
 
 
@@ -68,8 +70,10 @@ class Pipe:
             first_func, *other_funcs, last_func = funcs
 
         try:
-            self.__signature__ = Signature(signature(first_func).parameters.values(),
-                                           return_annotation=signature(last_func).return_annotation)
+            self.__signature__ = Signature(
+                signature(first_func).parameters.values(),
+                return_annotation=signature(last_func).return_annotation,
+            )
         except ValueError:  # some builtins don't have signatures, so ignore.
             pass
         self.first_func = first_func

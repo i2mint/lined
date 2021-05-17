@@ -14,6 +14,4 @@ from lined.tools import (
     side_call,
     print_and_pass_on,
 )
-from lined.util import (
-    partial_plus
-)
+from lined.util import partial_plus
