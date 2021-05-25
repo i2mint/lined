@@ -48,7 +48,7 @@ def _extract_first_argument(args: tuple, kwargs: dict):
         return first_arg_val, [], kwargs
 
 
-########################################################################################################################
+# ------------------------------------------------------------------------------
 
 from operator import le
 from typing import Union, Callable, Generator, Iterable
@@ -60,11 +60,14 @@ def if_then_else(
 ):
     """Implement the if-then-else logic as a function.
 
-    >>> if_then_else('world', if_func=lambda x: x == 'world',
-    then_func="hello {}".format, else_func=lambda x: x * 2)
+    >>> if_then_else(
+    ...     'world',
+    ...     if_func=lambda x: x == 'world',
+    ...     then_func="hello {}".format,
+    ...     else_func=lambda x: x * 2)
     'hello world'
-    >>> if_then_else('bora', if_func=lambda x: x == 'world', then_func="hello
-    {}".format, else_func=lambda x: x * 2)
+    >>> if_then_else('bora', if_func=lambda x: x == 'world',
+    ... then_func="hello{}".format, else_func=lambda x: x * 2)
     'borabora'
 
     Really, it's meant to be curried to make functional components.
@@ -112,7 +115,10 @@ cast_to_tuple_if_non_iterable_or_a_string = partial(
 )
 
 
-########################################################################################################################
+# ------------ Tools for iterables ---------------------------------------------
+
+
+from itertools import groupby
 
 
 class Command:
@@ -133,6 +139,40 @@ def raise_(exception):
 
 
 raise_not_sorted_error = Command(raise_, ItemsNotSorted)
+
+from itertools import groupby
+
+
+def enumerate_groups(iterable, key=None, start=0):
+    """Get enumeration of groups during a groupby call.
+
+    :param iterable: An iterable
+    :param key: The key to use in the groupby logic
+    :param start: Where to start the enumeration (default is 0)
+    :return: A generator of (group_idx, group, item) triples
+
+    >>> iterable = [0, 0, 0, 2, 5, 7, 8, 0, 0, 9, 3, 1]
+    >>> assert list(enumerate_groups(iterable, key=lambda x: x > 0)) == [
+    ...  (0, False, 0),
+    ...  (0, False, 0),
+    ...  (0, False, 0),
+    ...  (1, True, 2),
+    ...  (1, True, 5),
+    ...  (1, True, 7),
+    ...  (1, True, 8),
+    ...  (2, False, 0),
+    ...  (2, False, 0),
+    ...  (3, True, 9),
+    ...  (3, True, 3),
+    ...  (3, True, 1),
+    ...  ]
+
+
+    """
+    g = groupby(iterable, key)
+    for group_idx, (group, grouped_items) in enumerate(g, start):
+        for item in grouped_items:
+            yield group_idx, group, item
 
 
 def pairwise(iterable):
@@ -188,7 +228,7 @@ def check_sorted_during_iteration(
         not_sorted_callback: Union[
             Callable, BaseException] = raise_not_sorted_error,
 ) -> Generator:
-    """Wrap an iterable so that ordering of the elements is checked at runtime.
+    r"""Wrap an iterable so that ordering of the elements is checked at runtime.
 
     :param iterable: Iterable to consume
     :param key: The function that defines what it means to be sorted.
@@ -206,25 +246,24 @@ def check_sorted_during_iteration(
     [1, 2, 3, 4]
 
     >>> try:
-    ...     for i, x in enumerate(check_sorted_during_iteration([2, 4, 3,
-    6]), 1):
+    ...     for i, x in enumerate(
+    ...             check_sorted_during_iteration([2, 4, 3, 6]), 1):
     ...         print(x)
     ... except ItemsNotSorted:
-    ...     print(f"An ItemsNotSorted exception was raised right after the {
-    i} element (whose value was {x})")
-    ...     print("----> Normally, here, you'd put some thing to actually
-    handle the exception...")
+    ...     print(
+    ...         f"ItemsNotSorted after {i} element (whose value was {x})")
+    ...     print(
+    ...         "----> Normally, here, you'd put exception handling code")
+    ...
     2
     4
-    An ItemsNotSorted exception was raised right after the 2 element (whose
-    value was 4)
-    ----> Normally, here, you'd put some thing to actually handle the
-    exception...
+    ItemsNotSorted after 2 element (whose value was 4)
+    ----> Normally, here, you'd put exception handling code
 
     Now, mind you, you have total control over what sorted means.
     For example, to define it as strict
-    >>> comp = lambda x, y: x > y  # Really, we suggest to use operator.gt
-    here (and other operator module functions!)
+
+    >>> comp = lambda x, y: x > y  # in real life, use operator.gt
     >>> list(check_sorted_during_iteration(iter([4, 3, 2, 1]), key=comp))
     [4, 3, 2, 1]
 
@@ -240,8 +279,7 @@ def check_sorted_during_iteration(
     ['a', 'ba', 'cba']
     >>> consume(iterable, len)  # compare based on the length
     ['a', 'ba', 'cba', 'cba', 'back', 'bacca']
-    >>> consume(iterable, lambda x: x[0])  # compare based on the first
-    letter only
+    >>> consume(iterable, lambda x: x[0])  # compare based on first letter only
     ['a', 'ba', 'cba', 'cba']
     >>> # compare based on whether the previous element is a subset of the next:
     >>> consume(iterable, lambda x, y: set(x).issubset(y))
@@ -266,7 +304,7 @@ def check_sorted_during_iteration(
     yield next_element
 
 
-########################################################################################################################
+# ------------------------------------------------------------------------------
 
 def del_fields(d, fields):
     """Returns the same mapping, but with specified fields removed.
@@ -293,6 +331,7 @@ def add_name(obj, name=None):
 
 def keys_extractor(keys):
     """Deprecated: Use operator.itemgetter(*keys) instead."""
+
     def extract(x):
         return tuple((x[i] for i in keys))
 
@@ -314,8 +353,8 @@ def apply_to_single_item(func: Callable, item_idx: int):
     :param item_idx: The particular item index to apply function to
     :return:
 
-    >>> apply_to_second_item = apply_to_single_item(func=lambda x: x * 10,
-    item_idx=1)
+    >>> apply_to_second_item = apply_to_single_item(
+    ...     func=lambda x: x * 10, item_idx=1)
     >>> apply_to_second_item([1, 2, 3, 4])
     (1, 20, 2, 3, 4)
     """
@@ -488,8 +527,8 @@ def iterize(func, name=None):
     >>> pipe = Pipeline(iterize(lambda x: x * 2),
     ...                 iterize(lambda x: f"hello {x}"))
     >>> iterable = pipe([1, 2, 3])
-    >>> assert isinstance(iterable, Iterable)  # see that the result is an
-    iterable
+    >>> # see that the result is an iterable
+    >>> assert isinstance(iterable, Iterable)
     >>> list(iterable)  # consume the iterable and gather it's items
     ['hello 2', 'hello 4', 'hello 6']
     """
@@ -682,8 +721,8 @@ class BufferStats(deque):
     takes an iterator and returns an iterator
 
     >>> from lined import iterize
-    >>> window_stats = iterize(BufferStats(maxlen=4, func=''.join,
-    add_new_val=deque.extend))
+    >>> window_stats = iterize(BufferStats(
+    ... maxlen=4, func=''.join, add_new_val=deque.extend))
     >>> chks = ['a', 'bc', 'def', 'gh']
     >>> for x in window_stats(chks):
     ...     print(x)
