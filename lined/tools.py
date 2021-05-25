@@ -1,6 +1,6 @@
 from functools import partial, wraps
 from collections import deque
-from typing import Union, Callable, Iterable, Any, Optional
+from typing import Any
 from dataclasses import dataclass
 
 from lined.util import func_name, partial_plus, n_required_args
@@ -25,7 +25,9 @@ false_no_matter_what = partial(blind, output=False)
 
 def _extract_first_argument(args: tuple, kwargs: dict):
     """
-    Returns the tuple (X, _args, _kwargs) where X is the first argument (found in either args or kwargs), and _args, _kwargs are the same (with X removed)
+    Returns the tuple (X, _args, _kwargs) where X is the first argument (
+    found in either args or kwargs), and _args, _kwargs are the same (with X
+    removed)
 
     >>> _extract_first_argument((1,2,3), {'d': 4})
     (1, [2, 3], {'d': 4})
@@ -54,17 +56,20 @@ from itertools import tee
 
 
 def if_then_else(
-    x, if_func=true_no_matter_what, then_func=identity, else_func=identity
+        x, if_func=true_no_matter_what, then_func=identity, else_func=identity
 ):
     """Implement the if-then-else logic as a function.
 
-    >>> if_then_else('world', if_func=lambda x: x == 'world', then_func="hello {}".format, else_func=lambda x: x * 2)
+    >>> if_then_else('world', if_func=lambda x: x == 'world',
+    then_func="hello {}".format, else_func=lambda x: x * 2)
     'hello world'
-    >>> if_then_else('bora', if_func=lambda x: x == 'world', then_func="hello {}".format, else_func=lambda x: x * 2)
+    >>> if_then_else('bora', if_func=lambda x: x == 'world', then_func="hello
+    {}".format, else_func=lambda x: x * 2)
     'borabora'
 
     Really, it's meant to be curried to make functional components.
-    For example, to make a function that ensures that a string is encapsulated in a tuple, we could do this:
+    For example, to make a function that ensures that a string is
+    encapsulated in a tuple, we could do this:
 
     >>> def is_a_str(x): return isinstance(x, str)
     >>> def make_it_a_tuple(x): return tuple([x])
@@ -119,7 +124,8 @@ class Command:
 
 
 class ItemsNotSorted(RuntimeError):
-    """Use to indicate that two consecutive items where not in the expected order"""
+    """Use to indicate that two consecutive items where not in the expected
+    order"""
 
 
 def raise_(exception):
@@ -139,14 +145,16 @@ def pairwise(iterable):
 
 
 def raise_exception(exception: Union[Callable, BaseException], *args, **kwargs):
-    """Raise an exception (from an exception instance, or a callable that makes one"""
+    """Raise an exception (from an exception instance, or a callable that
+    makes one"""
     if isinstance(exception, Callable):
         exception = exception(*args, **kwargs)
     raise exception
 
 
 def consume_until_error(iterable, caught_errors=(Exception,)):
-    """Iterable that will simply exit with out error if one of the caught errors occurs.
+    """Iterable that will simply exit with out error if one of the caught
+    errors occurs.
 
     >>> list(consume_until_error(map(lambda x: 1 / x, [4, 2, 1, 0, -1])))
     [0.25, 0.5, 1.0]
@@ -165,27 +173,31 @@ def consume_until_error(iterable, caught_errors=(Exception,)):
 def _validated_comparison_func(key: Callable):
     n_required = n_required_args(key)
     if n_required == 1:
-
         def comp_func(x, y):
             return key(x) <= key(y)
 
         return comp_func
-    assert n_required == 2, f"key should be a callable with 1 or 2 required arguments"
+    assert n_required == 2, f"key should be a callable with 1 or 2 required " \
+                            f"arguments"
     return key
 
 
 def check_sorted_during_iteration(
-    iterable: Iterable,
-    key: Callable[[Any, Any], bool] = le,
-    not_sorted_callback: Union[Callable, BaseException] = raise_not_sorted_error,
+        iterable: Iterable,
+        key: Callable[[Any, Any], bool] = le,
+        not_sorted_callback: Union[
+            Callable, BaseException] = raise_not_sorted_error,
 ) -> Generator:
     """Wrap an iterable so that ordering of the elements is checked at runtime.
 
     :param iterable: Iterable to consume
     :param key: The function that defines what it means to be sorted.
-        Could be a Any->bool function, which will act like the key argument of builtin sorted for example.
-        Could also be an explicit (element, next_element)->bool function that returns True iff in the right order
-    :param not_sorted_callback: The function to call when two consecutive elements are not sorted. For example:
+        Could be a Any->bool function, which will act like the key argument
+        of builtin sorted for example.
+        Could also be an explicit (element, next_element)->bool function that
+        returns True iff in the right order
+    :param not_sorted_callback: The function to call when two consecutive
+    elements are not sorted. For example:
         - raising an error (the default)
         - logging the information, and skiping the offending element (or not)
     :return: A generator consuming the input iterable
@@ -194,24 +206,31 @@ def check_sorted_during_iteration(
     [1, 2, 3, 4]
 
     >>> try:
-    ...     for i, x in enumerate(check_sorted_during_iteration([2, 4, 3, 6]), 1):
+    ...     for i, x in enumerate(check_sorted_during_iteration([2, 4, 3,
+    6]), 1):
     ...         print(x)
     ... except ItemsNotSorted:
-    ...     print(f"An ItemsNotSorted exception was raised right after the {i} element (whose value was {x})")
-    ...     print("----> Normally, here, you'd put some thing to actually handle the exception...")
+    ...     print(f"An ItemsNotSorted exception was raised right after the {
+    i} element (whose value was {x})")
+    ...     print("----> Normally, here, you'd put some thing to actually
+    handle the exception...")
     2
     4
-    An ItemsNotSorted exception was raised right after the 2 element (whose value was 4)
-    ----> Normally, here, you'd put some thing to actually handle the exception...
+    An ItemsNotSorted exception was raised right after the 2 element (whose
+    value was 4)
+    ----> Normally, here, you'd put some thing to actually handle the
+    exception...
 
     Now, mind you, you have total control over what sorted means.
     For example, to define it as strict
-    >>> comp = lambda x, y: x > y  # Really, we suggest to use operator.gt here (and other operator module functions!)
+    >>> comp = lambda x, y: x > y  # Really, we suggest to use operator.gt
+    here (and other operator module functions!)
     >>> list(check_sorted_during_iteration(iter([4, 3, 2, 1]), key=comp))
     [4, 3, 2, 1]
 
     Now for a more complex example.
-    First we'll define a function that will consume the iterable until an error occurs, returning the elements consumed.
+    First we'll define a function that will consume the iterable until an
+    error occurs, returning the elements consumed.
 
     >>> from lined.tools import consume_until_error
     >>> consume = Line(check_sorted_during_iteration, consume_until_error, list)
@@ -221,7 +240,8 @@ def check_sorted_during_iteration(
     ['a', 'ba', 'cba']
     >>> consume(iterable, len)  # compare based on the length
     ['a', 'ba', 'cba', 'cba', 'back', 'bacca']
-    >>> consume(iterable, lambda x: x[0])  # compare based on the first letter only
+    >>> consume(iterable, lambda x: x[0])  # compare based on the first
+    letter only
     ['a', 'ba', 'cba', 'cba']
     >>> # compare based on whether the previous element is a subset of the next:
     >>> consume(iterable, lambda x, y: set(x).issubset(y))
@@ -230,10 +250,14 @@ def check_sorted_during_iteration(
     """
 
     # TODO: Optimization opportunity:
-    #   In this implementation, the key of an element is computed twice (once when element, once when next_element)
-    # TODO: key could be generalized to being a Callable[[element, next_element], bool].
-    #   Though note that it's only an interface flexibility since same could (?) be acheived with a key returning an
-    #   instance of a class such that class.__le__(element, next_element) is what is desired
+    #   In this implementation, the key of an element is computed twice (once
+    #   when element, once when next_element)
+    # TODO: key could be generalized to being a Callable[[element,
+    #  next_element], bool].
+    #   Though note that it's only an interface flexibility since same could
+    #   (?) be acheived with a key returning an
+    #   instance of a class such that class.__le__(element, next_element) is
+    #   what is desired
     key = _validated_comparison_func(key)
     for element, next_element in pairwise(iterable):
         yield element
@@ -243,7 +267,6 @@ def check_sorted_during_iteration(
 
 
 ########################################################################################################################
-
 
 def del_fields(d, fields):
     """Returns the same mapping, but with specified fields removed.
@@ -276,7 +299,8 @@ def keys_extractor(keys):
 
 
 def apply_to_single_item(func: Callable, item_idx: int):
-    """Get a version of func that applies itself to only the item_idx-th element of the input,
+    """Get a version of func that applies itself to only the item_idx-th
+    element of the input,
     leaving the rest untouched.
 
     That is, apply_to_single_item(func, 2), for example, is a new_func such that
@@ -284,11 +308,13 @@ def apply_to_single_item(func: Callable, item_idx: int):
         new_func([a, b, c, d, e]) == [a, b, func(c), d, e]
     ```
 
-    :param func: A function to apply to a single element of an iterable (that has a [...])
+    :param func: A function to apply to a single element of an iterable (that
+    has a [...])
     :param item_idx: The particular item index to apply function to
     :return:
 
-    >>> apply_to_second_item = apply_to_single_item(func=lambda x: x * 10, item_idx=1)
+    >>> apply_to_second_item = apply_to_single_item(func=lambda x: x * 10,
+    item_idx=1)
     >>> apply_to_second_item([1, 2, 3, 4])
     (1, 20, 2, 3, 4)
     """
@@ -297,7 +323,8 @@ def apply_to_single_item(func: Callable, item_idx: int):
     def wrapped(first_arg, *args, **kwargs):
         val_to_apply_func_to = first_arg[item_idx]
         func_output = func(val_to_apply_func_to)
-        return tuple([*first_arg[:item_idx], func_output, *first_arg[item_idx:]])
+        return tuple(
+            [*first_arg[:item_idx], func_output, *first_arg[item_idx:]])
 
     return wrapped
 
@@ -324,9 +351,12 @@ def iterate(iterable: Iterable):
     hello 4
     hello 6
 
-    It could be a bit awkward to have to "consume" the iterable to have it take effect.
-    Just calling  ``pipe([1, 2, 3])`` to get those prints seems like a more natural way.
-    This is where you can use `iterate`. It basically "launches" that consuming loop for you.
+    It could be a bit awkward to have to "consume" the iterable to have it
+    take effect.
+    Just calling  ``pipe([1, 2, 3])`` to get those prints seems like a more
+    natural way.
+    This is where you can use `iterate`. It basically "launches" that
+    consuming loop for you.
 
     >>> pipe = Pipeline(iterize(lambda x: x * 2),
     ...                iterize(lambda x: print(f"hello {x}")),
@@ -344,7 +374,8 @@ def iterate(iterable: Iterable):
 
 
 def side_call(x, callback):
-    """Identity function that calls a callaback function before returning the input as is
+    """Identity function that calls a callaback function before returning the
+    input as is
     (if callback didn't change it)
     """
     callback(x)
@@ -359,7 +390,8 @@ print_and_pass_on = partial_plus(
 )
 
 
-# Function transformers ###################################################################
+# Function transformers
+# ###################################################################
 
 
 def extra_wraps(func, name=None, doc_prefix=""):
@@ -370,14 +402,17 @@ def extra_wraps(func, name=None, doc_prefix=""):
 
 def mywraps(func, name=None, doc_prefix=""):
     def wrapper(wrapped):
-        return extra_wraps(wraps(func)(wrapped), name=name, doc_prefix=doc_prefix)
+        return extra_wraps(wraps(func)(wrapped), name=name,
+                           doc_prefix=doc_prefix)
 
     return wrapper
 
 
 def tail_io(func):
-    """Will apply function only to the tail of tuple inputs, still passing the header on.
-    That is, from a ``x -> func(x)`` function, you get a ``(*header, x) -> (*header, func(x))`` function.
+    """Will apply function only to the tail of tuple inputs, still passing
+    the header on.
+    That is, from a ``x -> func(x)`` function, you get a ``(*header, x) -> (
+    *header, func(x))`` function.
 
     >>> def foo(x):
     ...    return x * 2
@@ -387,8 +422,10 @@ def tail_io(func):
     >>> new_foo = tail_io(foo)
     >>> new_foo((7, 'boo'))
     (7, 'booboo')
-    >>> new_foo(('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on', 'boo'))
-    ('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on', 'booboo')
+    >>> new_foo(('all', 'items', 'but', 'the', 'last', 'are', 'just',
+    'passed', 'on', 'boo'))
+    ('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on',
+    'booboo')
 
     """
 
@@ -403,7 +440,8 @@ def tail_io(func):
 
 def iterize(func, name=None):
     """From an Input->Ouput function, makes a Iterator[Input]->Itertor[Output]
-    Some call this "vectorization", but it's not really a vector, but an iterable, thus the name.
+    Some call this "vectorization", but it's not really a vector, but an
+    iterable, thus the name.
 
     >>> f = lambda x: x * 10
     >>> f(2)
@@ -421,7 +459,8 @@ def iterize(func, name=None):
     >>> pipe(1)
     'hello 2'
 
-    But what if you wanted to use the pipeline on a "stream" of data. The following wouldn't work:
+    But what if you wanted to use the pipeline on a "stream" of data. The
+    following wouldn't work:
 
     >>> try:
     ...     pipe(iter([1,2,3]))
@@ -435,8 +474,10 @@ def iterize(func, name=None):
 
     The solution to it is (often): ``iterize``,
     which transforms a function that is meant to be applied to a single object,
-    into a function that is meant to be applied to an array, or any iterable of such objects.
-    (You might be familiar (if you use `numpy` for example) with the related concept of "vectorization",
+    into a function that is meant to be applied to an array, or any iterable
+    of such objects.
+    (You might be familiar (if you use `numpy` for example) with the related
+    concept of "vectorization",
     or [array programming](https://en.wikipedia.org/wiki/Array_programming).)
 
 
@@ -446,7 +487,8 @@ def iterize(func, name=None):
     >>> pipe = Pipeline(iterize(lambda x: x * 2),
     ...                 iterize(lambda x: f"hello {x}"))
     >>> iterable = pipe([1, 2, 3])
-    >>> assert isinstance(iterable, Iterable)  # see that the result is an iterable
+    >>> assert isinstance(iterable, Iterable)  # see that the result is an
+    iterable
     >>> list(iterable)  # consume the iterable and gather it's items
     ['hello 2', 'hello 4', 'hello 6']
     """
@@ -469,8 +511,10 @@ def wrap_first_arg_in_list(func):
 
 def deiterize(func):
     """The inverse of iterize.
-    Takes an "iterized" (a.k.a. "vectorized") function (i.e. a function that works on iterables), and
-    That is, takes a func(X,...) function and returns a next(iter(func([X],...))) function."""
+    Takes an "iterized" (a.k.a. "vectorized") function (i.e. a function that
+    works on iterables), and
+    That is, takes a func(X,...) function and returns a next(iter(func([X],
+    ...))) function."""
     return Line(wrap_first_arg_in_list(func), iter, next)
 
 
@@ -530,7 +574,8 @@ def expanded_args(func):
 
 class Enumerate:
     """Decorator a function so it enumerates the number of calls.
-    Or in general, returns (cursor, func(x)) instead of just func(x), where the start and step of the cursor can
+    Or in general, returns (cursor, func(x)) instead of just func(x),
+    where the start and step of the cursor can
     be defined (default is start=0 and step=1)
 
     >>> def foo(x):
@@ -561,7 +606,8 @@ class Enumerate:
 
 def with_cursor(func, start=0, step=1):
     """Decorator a function so it enumerates the number of calls.
-    Or in general, returns (cursor, func(x)) instead of just func(x), where the start and step of the cursor can
+    Or in general, returns (cursor, func(x)) instead of just func(x),
+    where the start and step of the cursor can
     be defined (default is start=0 and step=1)
 
     >>> def foo(x):
@@ -590,7 +636,6 @@ def with_cursor(func, start=0, step=1):
 
 
 Stats = Any
-from typing import Optional
 
 from typing import cast
 
@@ -601,9 +646,11 @@ _no_value_specified_sentinel = cast(int, object())
 
 
 class BufferStats(deque):
-    """A callable (fifo) buffer. Calls add input to it, but also returns a function of it's contents.
+    """A callable (fifo) buffer. Calls add input to it, but also returns a
+    function of it's contents.
 
-    What "add" means is configurable (through ``add_new_val`` arg). Default is append, but can be extend etc.
+    What "add" means is configurable (through ``add_new_val`` arg). Default
+    is append, but can be extend etc.
 
     >>> bs = BufferStats(maxlen=4, func=sum)
     >>> list(map(bs, range(7)))
@@ -630,10 +677,12 @@ class BufferStats(deque):
     ['a', 'ba', 'cba', 'dcba', 'edcb', 'fedc', 'gfed', 'hgfe']
 
     With ``add_new_val=deque.extend``, data can be fed in chunks.
-    In the following, also see how we use iterize to get a function that takes an iterator and returns an iterator
+    In the following, also see how we use iterize to get a function that
+    takes an iterator and returns an iterator
 
     >>> from lined import iterize
-    >>> window_stats = iterize(BufferStats(maxlen=4, func=''.join, add_new_val=deque.extend))
+    >>> window_stats = iterize(BufferStats(maxlen=4, func=''.join,
+    add_new_val=deque.extend))
     >>> chks = ['a', 'bc', 'def', 'gh']
     >>> for x in window_stats(chks):
     ...     print(x)
@@ -642,28 +691,35 @@ class BufferStats(deque):
     cdef
     efgh
 
-    Note: To those who might think that they can optimize this for special cases: Yes you can.
-    But SHOULD you? Is it worth the increase in complexity and reduction in flexibility?
-    See https://github.com/thorwhalen/umpyre/blob/master/misc/performance_of_rolling_window_stats.md
+    Note: To those who might think that they can optimize this for special
+    cases: Yes you can.
+    But SHOULD you? Is it worth the increase in complexity and reduction in
+    flexibility?
+    See https://github.com/thorwhalen/umpyre/blob/master/misc
+    /performance_of_rolling_window_stats.md
 
     """
 
     # __name__ = 'BufferStats'
 
     def __init__(
-        self,
-        values=(),
-        maxlen: int = _no_value_specified_sentinel,
-        func: Callable = sum,
-        add_new_val: Callable = deque.append,
+            self,
+            values=(),
+            maxlen: int = _no_value_specified_sentinel,
+            func: Callable = sum,
+            add_new_val: Callable = deque.append,
     ):
         """
 
         :param maxlen: Size of the buffer
-        :param func: The function to be computed (on buffer contents) and returned when buffer is "called"
-        :param add_new_val: The function that adds values on the buffer. Signature must be (self, new_val)
-            Is usually a deque method (``deque.append`` by default, but could be ``deque.extend``,
-            ``deque.appendleft`` etc.). Can also be any other function that has a valid (self, new_val) signature.
+        :param func: The function to be computed (on buffer contents) and
+        returned when buffer is "called"
+        :param add_new_val: The function that adds values on the buffer.
+        Signature must be (self, new_val)
+            Is usually a deque method (``deque.append`` by default, but could
+            be ``deque.extend``,
+            ``deque.appendleft`` etc.). Can also be any other function that
+            has a valid (self, new_val) signature.
         """
         if maxlen is _no_value_specified_sentinel:
             raise TypeError("You are required to specify maxlen")
@@ -673,7 +729,9 @@ class BufferStats(deque):
         super().__init__(values, maxlen=maxlen)
         self.func = func
         if isinstance(add_new_val, str):
-            add_new_val = getattr(self, add_new_val)  # add_new_val is a method of deque
+            add_new_val = getattr(self,
+                                  add_new_val)  # add_new_val is a method of
+            # deque
         self.add_new_val = add_new_val
         self.__name__ = "BufferStats"
 
@@ -687,7 +745,8 @@ def is_not_none(x):
 
 
 def return_buffer_on_stats_condition(
-    stats: Stats, buffer: Iterable, cond: Callable = is_not_none, else_val=None
+        stats: Stats, buffer: Iterable, cond: Callable = is_not_none,
+        else_val=None
 ):
     if cond(stats):
         return buffer
