@@ -292,6 +292,7 @@ def add_name(obj, name=None):
 
 
 def keys_extractor(keys):
+    """Deprecated: Use operator.itemgetter(*keys) instead."""
     def extract(x):
         return tuple((x[i] for i in keys))
 
