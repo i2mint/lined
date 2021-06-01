@@ -15,6 +15,13 @@ def identity(x):
 def blind(x, output):
     """Takes one argument, and returns it as is.
     The output is meant to be bound by currying (functools.partial)
+
+    >>> true_no_matter_what = partial(blind, output=True)
+    >>> false_no_matter_what = partial(blind, output=False)
+    >>> true_no_matter_what(42)
+    True
+    >>> false_no_matter_what(42)
+    False
     """
     return output
 
@@ -122,6 +129,17 @@ from itertools import groupby
 
 
 class Command:
+    """Make a no-input callable that will execute a specific function call.
+
+    >>> command = Command(sum, [1, 2, 3])
+    >>> command()
+    6
+    >>> command = Command(print, 'hello', 'world', sep=', ')
+    >>> command()
+    hello, world
+
+    See: https://en.wikipedia.org/wiki/Command_pattern
+    """
     def __init__(self, func, *args, **kwargs):
         self.func, self.args, self.kwargs = func, args, kwargs
 
@@ -463,9 +481,8 @@ def tail_io(func):
     >>> new_foo((7, 'boo'))
     (7, 'booboo')
     >>> new_foo(('all', 'items', 'but', 'the', 'last', 'are', 'just',
-    'passed', 'on', 'boo'))
-    ('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on',
-    'booboo')
+    ...          'passed', 'on', 'boo'))
+    ('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on', 'booboo')
 
     """
 
