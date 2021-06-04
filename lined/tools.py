@@ -431,6 +431,39 @@ def iterate(iterable: Iterable):
         pass
 
 
+def append_output_to_input(func, appender=lambda x, output: (x, output)):
+    """Decorator that makes the function into a function returning its input with output
+
+    ┌─────────────┐
+    │    input    │
+    └─────────────┘
+         │
+         ▼
+    ┌─────────────┐
+    │    func     │
+    └─────────────┘
+         │
+         ▼
+    ┌─────────────────┐
+    │ (input, output) │
+    └─────────────────┘
+
+    >>> func = lambda x: f"hello {x}"
+    >>> func('world')
+    'hello world'
+    >>> new_func = append_output_to_input(func)
+    >>> new_func('world')
+    ('world', 'hello world')
+    """
+    assert n_required_args(func) == 1
+
+    @wraps(func)
+    def _func(x):
+        output = func(x)
+        return appender(x, output)
+    return _func
+
+
 def side_call(x, callback):
     """Identity function that calls a callaback function before returning the
     input as is
