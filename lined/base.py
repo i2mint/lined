@@ -42,7 +42,17 @@ def fnode(func, name=None):
     return Fnode(func, name)
 
 
-_line_init_reserved_names = {"pipeline_name", "input_name", "output_name"}
+_line_init_reserved_names = {'pipeline_name', 'input_name', 'output_name'}
+
+
+def _func_to_name_func_pair(func):
+    """The func.__name__ of a callable func, or makes and returns one if that fails.
+    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing"""
+    if isinstance(func, tuple) and len(func) == 2:
+        name, func = func
+        return name, func
+    else:
+        return func_name(func), func
 
 
 def _merge_funcs_and_named_funcs(funcs, named_funcs):
@@ -51,12 +61,13 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
         named_funcs
     ), f"Can't name a function with any of the following strings: {', '.join(_line_init_reserved_names)}"
     funcs_obtained_from_named_funcs = tuple(named_funcs.values())
-    named_funcs_obtained_from_funcs = {func_name(func): func for func in funcs}
+    named_funcs_obtained_from_funcs = dict(map(_func_to_name_func_pair, funcs))
     assert named_funcs_obtained_from_funcs.keys().isdisjoint(
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
-    return funcs + funcs_obtained_from_named_funcs, dict(
-        named_funcs_obtained_from_funcs, **named_funcs
+    return (
+        funcs + funcs_obtained_from_named_funcs,
+        dict(named_funcs_obtained_from_funcs, **named_funcs),
     )
 
 
@@ -129,14 +140,14 @@ class Line:
         self.input_name = input_name
         self.output_name = output_name
         # really, it would make sense that this is the identity, but we'll implement only when needed
-        assert len(funcs) > 0, "You need to specify at least one function!"
+        assert len(funcs) > 0, 'You need to specify at least one function!'
         self.funcs = tuple(fnode(func, name) for name, func in named_funcs.items())
         self.named_funcs = {
             name: fnode_func for name, fnode_func in zip(named_funcs, self.funcs)
         }
         assert all(
             f == ff for f, ff in zip(self.funcs, self.named_funcs.values())
-        ), f"funcs and named_funcs are not aligned after merging"
+        ), f'funcs and named_funcs are not aligned after merging'
         self.__signature__ = _signature_of_pipeline(*self.funcs)
         if pipeline_name is not None:
             self.__name__ = pipeline_name
@@ -144,13 +155,13 @@ class Line:
             self.__name__ = unnamed_pipeline()
 
     def __repr__(self):
-        funcs_str = ", ".join((f.__name__ for f in self.funcs))
-        suffix = ""
+        funcs_str = ', '.join((fname for fname in self.named_funcs))
+        suffix = ''
         if self.input_name is not None:
             suffix += f", input_name='{self.input_name}'"
         if self.output_name is not None:
             suffix += f", output_name='{self.output_name}'"
-        return f"{self.__class__.__name__}({funcs_str}, pipeline_name='{self.__name__}'{suffix})"
+        return f'{self.__name__}({funcs_str}{suffix})'
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
@@ -165,22 +176,22 @@ class Line:
     def __getitem__(self, k):
         """Get a sub-pipeline"""
         if isinstance(k, (int, slice)):
-            item_str = ""
+            item_str = ''
             funcs = ()
             if isinstance(k, int):
                 funcs = (self.funcs[k],)
                 item_str = str(k)
             elif isinstance(k, slice):
-                assert k.step is None, f"slices with steps are not handled: {k}"
+                assert k.step is None, f'slices with steps are not handled: {k}'
                 funcs = self.funcs[k]
-                item_str = f"{k.start}:{k.stop}"
-            return self.__class__(*funcs, name=f"{self.__name__}[item_str]")
+                item_str = f'{k.start}:{k.stop}'
+            return self.__class__(*funcs, name=f'{self.__name__}[item_str]')
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
     def dot_digraph_body(self, prefix=None, **kwargs):
-        fnode_shape = kwargs.get("fnode_shape", "box")
-        vnode_shape = kwargs.get("fnode_shape", "oval")
+        fnode_shape = kwargs.get('fnode_shape', 'box')
+        vnode_shape = kwargs.get('fnode_shape', 'oval')
 
         if prefix is None:
             if len(self.funcs) <= 7:
@@ -192,25 +203,31 @@ class Line:
 
         if self.input_name is not None:
             yield f'{self.input_name} [shape="circle"]'
-            yield f"{self.input_name} -> {func_names[0]}"
+            yield f'{self.input_name} -> {func_names[0]}'
 
         for fname in func_names:
             yield f'{fname} [shape="{fnode_shape}"]'
 
         for from_fname, to_fname in zip(func_names[:-1], func_names[1:]):
-            yield f"{from_fname} -> {to_fname}"
+            yield f'{from_fname} -> {to_fname}'
 
         if self.output_name is not None:
             yield f'{self.output_name} [shape="{vnode_shape}"]'
-            yield f"{func_names[-1]} -> {self.output_name}"
+            yield f'{func_names[-1]} -> {self.output_name}'
+
+    def dot_digraph_ascii(self, prefix=None, **kwargs):
+        """Get an ascii art string that represents the pipeline"""
+        from lined.util import dot_to_ascii
+
+        return dot_to_ascii('\n'.join(self.dot_digraph_body(prefix=prefix, **kwargs)))
 
     def dot_digraph(self, prefix=None, **kwargs):
         try:
             import graphviz
         except (ModuleNotFoundError, ImportError) as e:
             raise ModuleNotFoundError(
-                f"{e}\nYou may not have graphviz installed. "
-                f"See https://pypi.org/project/graphviz/."
+                f'{e}\nYou may not have graphviz installed. '
+                f'See https://pypi.org/project/graphviz/.'
             )
 
         body = list(self.dot_digraph_body(prefix=prefix, **kwargs))
@@ -237,7 +254,7 @@ class Sentinel:
     def filter_in(cls, condition, sentinel_val=None):
         assert isinstance(
             condition, Callable
-        ), f"condition need to be callable, but was {condition}"
+        ), f'condition need to be callable, but was {condition}'
 
         def filt(x):
             if condition(x):
@@ -251,7 +268,7 @@ class Sentinel:
     def filter_out(cls, condition, sentinel_val=None):
         assert isinstance(
             condition, Callable
-        ), f"condition need to be callable, but was {condition}"
+        ), f'condition need to be callable, but was {condition}'
 
         def filt(x):
             if not condition(x):
@@ -331,8 +348,8 @@ def stack(*funcs):
 
     def stacked_funcs(input_tuple):
         assert len(funcs) == len(input_tuple), (
-            "the length of input_tuple ({len(input_tuple)} should be the same length"
-            " (len{funcs}) as the funcs: {input_tuple}"
+            'the length of input_tuple ({len(input_tuple)} should be the same length'
+            ' (len{funcs}) as the funcs: {input_tuple}'
         )
         return tuple(starmap(call, zip(funcs, input_tuple)))
 
@@ -357,7 +374,7 @@ class LayeredPipeline(Line):
 def _signature_of_pipeline(*funcs):
     n_funcs = len(funcs)
     if n_funcs == 0:
-        raise ValueError("You need to specify at least one function!")
+        raise ValueError('You need to specify at least one function!')
     elif n_funcs == 1:
         first_func = last_func = funcs[0]
     else:
@@ -375,9 +392,7 @@ def _signature_of_pipeline(*funcs):
         return None
 
 
-def mk_multi_func(
-    named_funcs_dict: Optional[Dict] = None, /, **named_funcs
-) -> MultiFunc:
+def mk_multi_func(named_funcs_dict: Optional[Dict] = None, /, **named_funcs) -> MultiFunc:
     """Make a multi-channel function from a {name: func, ...} specification.
 
     >>> multi_func = mk_multi_func(say_hello=lambda x: f"hello {x}", say_goodbye=lambda x: f"goodbye {x}")
@@ -423,7 +438,7 @@ def mk_multi_func(
     named_funcs = dict(named_funcs_dict, **named_funcs)
     assert all(
         map(callable, named_funcs.values())
-    ), f"At least one value of named_funcs was not callable"
+    ), f'At least one value of named_funcs was not callable'
 
     def multi_func(d: dict):
         def gen():

@@ -2,15 +2,15 @@ from functools import partial
 from typing import Callable
 
 writable_function_dunders = {
-    "__annotations__",
-    "__call__",
-    "__defaults__",
-    "__dict__",
-    "__doc__",
-    "__globals__",
-    "__kwdefaults__",
-    "__name__",
-    "__qualname__",
+    '__annotations__',
+    '__call__',
+    '__defaults__',
+    '__dict__',
+    '__doc__',
+    '__globals__',
+    '__kwdefaults__',
+    '__name__',
+    '__qualname__',
 }
 
 
@@ -40,7 +40,7 @@ def partial_plus(func, *args, **kwargs):
     return partial_func
 
 
-def incremental_str_maker(str_format="{:03.f}"):
+def incremental_str_maker(str_format='{:03.f}'):
     """Make a function that will produce a (incrementally) new string at every call."""
     i = 0
 
@@ -52,8 +52,8 @@ def incremental_str_maker(str_format="{:03.f}"):
     return mk_next_str
 
 
-unnamed_pipeline = incremental_str_maker(str_format="UnnamedPipeline{:03.0f}")
-unnamed_func_name = incremental_str_maker(str_format="unnamed_func_{:03.0f}")
+unnamed_pipeline = incremental_str_maker(str_format='UnnamedPipeline{:03.0f}')
+unnamed_func_name = incremental_str_maker(str_format='unnamed_func_{:03.0f}')
 
 
 def func_name(func):
@@ -61,14 +61,76 @@ def func_name(func):
     To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing"""
     try:
         name = func.__name__
-        if name == "<lambda>":
+        if name == '<lambda>':
             return unnamed_func_name()
         return name
     except AttributeError:
         return unnamed_func_name()
 
 
-########################################################################################################################
+def dot_to_ascii(dot: str, fancy: bool = True):
+    """Convert a dot string to an ascii rendering of the diagram.
+
+    Needs a connection to the internet to work.
+
+    >>> graph_dot = '''
+    ...     graph {
+    ...         rankdir=LR
+    ...         0 -- {1 2}
+    ...         1 -- {2}
+    ...         2 -> {0 1 3}
+    ...         3
+    ...     }
+    ... '''
+    >>>
+    >>> graph_ascii = dot_to_ascii(graph_dot)
+    >>>
+    >>> print(graph_ascii)
+    <BLANKLINE>
+                     ┌─────────┐
+                     ▼         │
+         ┌───┐     ┌───┐     ┌───┐     ┌───┐
+      ┌▶ │ 0 │ ─── │ 1 │ ─── │   │ ──▶ │ 3 │
+      │  └───┘     └───┘     │   │     └───┘
+      │    │                 │   │
+      │    └──────────────── │ 2 │
+      │                      │   │
+      │                      │   │
+      └───────────────────── │   │
+                             └───┘
+    <BLANKLINE>
+
+    """
+    import requests
+
+    url = 'https://dot-to-ascii.ggerganov.com/dot-to-ascii.php'
+    boxart = 0
+
+    # use nice box drawing char instead of + , | , -
+    if fancy:
+        boxart = 1
+
+    stripped_dot_str = dot.strip()
+    if not (
+        stripped_dot_str.startswith('graph') or stripped_dot_str.startswith('digraph')
+    ):
+        dot = 'graph {\n' + dot + '\n}'
+
+
+    params = {
+        'boxart': boxart,
+        'src': dot,
+    }
+
+    response = requests.get(url, params=params).text
+
+    if response == '':
+        raise SyntaxError('DOT string is not formatted correctly')
+
+    return response
+
+
+# ───────────────────────────────────────────────────────────────────────────────────────
 
 from inspect import signature, Parameter
 
