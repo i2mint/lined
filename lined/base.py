@@ -151,8 +151,6 @@ class Line:
         self.__signature__ = _signature_of_pipeline(*self.funcs)
         if pipeline_name is not None:
             self.__name__ = pipeline_name
-        else:
-            self.__name__ = unnamed_pipeline()
 
     def __repr__(self):
         funcs_str = ', '.join((fname for fname in self.named_funcs))
