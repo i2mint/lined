@@ -1,4 +1,12 @@
-from lined.base import Line, Pipeline, mk_multi_func, LayeredPipeline
+from lined.base import (
+    Line,
+    Pipeline,
+    mk_multi_func,
+    LayeredPipeline,
+    LineSentineled,
+    LineParametrized,
+)
+
 from lined.simple import Pipe
 from lined.tools import (
     Command,

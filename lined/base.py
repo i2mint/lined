@@ -71,6 +71,10 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
     )
 
 
+# TODO: Deprecate of named_funcs? Use (name, func) mechanism only?
+# TODO: add validation option (e.g. all downstream functions single-argumented)
+# TODO: Handle names with spaces
+# TODO: Use .name instead of __name__ for pipeline_name?
 class Line:
     def __init__(
         self,
@@ -131,7 +135,7 @@ class Line:
         >>> from functools import partial
         >>> pipe = Line(sum, str, print, pipeline_name='MyPipeline', input_name='x', output_name='y')
         >>> pipe
-        Line(sum, str, print, pipeline_name='MyPipeline', input_name='x', output_name='y')
+        MyPipeline(sum, str, print, input_name='x', output_name='y')
 
 
         """
@@ -148,18 +152,14 @@ class Line:
         assert all(
             f == ff for f, ff in zip(self.funcs, self.named_funcs.values())
         ), f'funcs and named_funcs are not aligned after merging'
-        self.__signature__ = _signature_of_pipeline(*self.funcs)
         if pipeline_name is not None:
             self.__name__ = pipeline_name
+        self.__signature__ = _signature_of_pipeline(*self.funcs)
 
-    def __repr__(self):
-        funcs_str = ', '.join((fname for fname in self.named_funcs))
-        suffix = ''
-        if self.input_name is not None:
-            suffix += f", input_name='{self.input_name}'"
-        if self.output_name is not None:
-            suffix += f", output_name='{self.output_name}'"
-        return f'{self.__name__}({funcs_str}{suffix})'
+    # Note: Did this to lighten __init__, but made signature(Line) not work
+    # @property
+    # def __signature__(self):
+    #     return _signature_of_pipeline(*self.funcs)
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
@@ -187,9 +187,19 @@ class Line:
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
-    def dot_digraph_body(self, prefix=None, **kwargs):
-        fnode_shape = kwargs.get('fnode_shape', 'box')
-        vnode_shape = kwargs.get('fnode_shape', 'oval')
+    def dot_digraph_body(
+        self,
+        prefix=None,
+        fnode_shape='box',
+        vnode_shape='none',
+        input_node=True,
+        output_node=False,
+        edges_gen=True,
+        **kwargs,
+    ):
+
+        if len(self.funcs) == 0:
+            return  # no functions, so just return
 
         if prefix is None:
             if len(self.funcs) <= 7:
@@ -199,27 +209,43 @@ class Line:
 
         func_names = list(self.named_funcs)
 
-        if self.input_name is not None:
-            yield f'{self.input_name} [shape="circle"]'
-            yield f'{self.input_name} -> {func_names[0]}'
+        if input_node:
+            if input_node is True:
+                for argname in signature(self.funcs[0]).parameters:
+                    yield f'{argname} [shape="{vnode_shape}"]'
+                    yield f'{argname} -> {func_names[0]}'
+            elif input_node == str:
+                input_node = self.input_name or 'input'
+                yield f'{input_node} [shape="{vnode_shape}"]'
+                yield f'{input_node} -> {func_names[0]}'
 
         for fname in func_names:
             yield f'{fname} [shape="{fnode_shape}"]'
 
-        for from_fname, to_fname in zip(func_names[:-1], func_names[1:]):
-            yield f'{from_fname} -> {to_fname}'
+        if edges_gen:
+            if edges_gen is True:
+                for from_fname, to_fname in zip(func_names[:-1], func_names[1:]):
+                    yield f'{from_fname} -> {to_fname}'
+            else:
+                yield from edges_gen
 
-        if self.output_name is not None:
-            yield f'{self.output_name} [shape="{vnode_shape}"]'
+        if output_node is None and self.output_name is not None:
+            output_node = self.output_name
+        if output_node:
+            if output_node is True:
+                output_node = self.output_name or 'output'
+            yield f'{output_node} [shape="{vnode_shape}"]'
             yield f'{func_names[-1]} -> {self.output_name}'
 
-    def dot_digraph_ascii(self, prefix=None, **kwargs):
+    @wraps(dot_digraph_body)
+    def dot_digraph_ascii(self, *args, **kwargs):
         """Get an ascii art string that represents the pipeline"""
         from lined.util import dot_to_ascii
 
-        return dot_to_ascii('\n'.join(self.dot_digraph_body(prefix=prefix, **kwargs)))
+        return dot_to_ascii('\n'.join(self.dot_digraph_body(*args, **kwargs)))
 
-    def dot_digraph(self, prefix=None, **kwargs):
+    @wraps(dot_digraph_body)
+    def dot_digraph(self, *args, **kwargs):
         try:
             import graphviz
         except (ModuleNotFoundError, ImportError) as e:
@@ -228,8 +254,20 @@ class Line:
                 f'See https://pypi.org/project/graphviz/.'
             )
 
-        body = list(self.dot_digraph_body(prefix=prefix, **kwargs))
+        body = list(self.dot_digraph_body(*args, **kwargs))
         return graphviz.Digraph(body=body)
+
+    def __repr__(self):
+        funcs_str = ', '.join((fname for fname in self.named_funcs))
+        suffix = ''
+        if self.input_name is not None:
+            suffix += f", input_name='{self.input_name}'"
+        if self.output_name is not None:
+            suffix += f", output_name='{self.output_name}'"
+        return f'{self._name_of_instance()}({funcs_str}{suffix})'
+
+    def _name_of_instance(self):
+        return getattr(self, '__name__', self.__class__.__name__)
 
 
 Pipeline = Line  # for back-compatibility
@@ -300,16 +338,278 @@ class Conditions:
         return condition
 
 
-class SentineledPipeline(Line):
+# ---------------------------------------------------------------------------------------
+
+from i2.signatures import call_forgivingly, Sig
+
+
+class NoSuchConfig:
+    def __bool__(self):
+        return False
+
+    def __repr__(self):
+        return 'no_such_config'
+
+
+no_such_config = NoSuchConfig()
+
+
+class Configs(dict):
+    """A dict, whose keys can be access as if they were attributes.
+    Also defaults to sentinel _default when
+
+    >>> s = Configs()
+
+    Write it as you do with attributes or dict keys,
+    get it as an attribute and a dict keys.
+
+    >>> s.foo = 'bar'
+    >>> assert s.foo == 'bar'
+    >>> assert s['foo'] == 'bar'
+    >>> s['hello'] = 'world'
+    >>> assert s.hello == 'world'
+    >>> assert s['hello'] == 'world'
+    >>> hasattr(s, 'hello')
+    True
+
+    >>> s['does not exist']
+    no_such_config
+    """
+
+    def __getattr__(self, name):
+        if name in self:
+            return self[name]
+        else:
+            raise AttributeError('No such attribute: ' + name)
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+    def __delattr__(self, name):
+        if name in self:
+            del self[name]
+        else:
+            raise AttributeError('No such attribute: ' + name)
+
+    def __missing__(self, name):
+        return self._key_missing_callback()
+
+    def _key_missing_callback(self):
+        """Override if needed. Can also just raise to raise KeyError"""
+        return no_such_config
+
+
+from collections import ChainMap
+
+dflt_configs = dict(
+    fnode_shape='box',
+    vnode_shape='none',
+    display_all_arguments=True,
+    edge_kind='to_args_on_edge',
+    input_node=True,
+    output_node='output',
+)
+
+
+class LineParametrized(Line):
+    r"""A pipeline that exposes all inputs of all the functions of the pipeline.
+
+    For example, say you have two functions `f(a, b=1)` and `g(x, y=2)`.
+
+    `Line(f, g)` would be a function with `a` and `b` as your inputs.
+
+    ```
+            ┌───┐     ┌───┐
+     a  ──▶ │ f │ ──▶ │ g │ ──▶  output
+            └───┘     └───┘
+              ▲
+              │
+              │
+
+              b
+    ```
+
+    On the other hand, `LineParametrized(f, g)` will give you control over `y`.
+
+            ┌───┐  x   ┌───┐
+     a  ──▶ │ f │ ───▶ │ g │ ──▶  output
+            └───┘      └───┘
+              ▲          ▲
+              │          │
+              │          │
+
+              b         y=
+
+    >>> def add(a, b=0): return a + b
+    >>> def times(x, y=2): return x * y
+    >>> def exp(r, e=3):  return r ** e
+    >>> f = LineParametrized(add, times, exp)
+    >>> assert f(2) == 64  # as before
+    >>> assert f(2, 3) == 1000  # as before, but now you can do this...
+    >>> assert f(2, 3, y=1) == 125  # ((2 + 3) * 1) ** 3 == 125
+    >>> assert f(2, 3, e=1) == 10  # ((2 + 3) * 2) ** 1 == 10
+    >>> assert f(2, 3, y=3, e=1) == 15  # ((2 + 3) * 3) ** 1 == 15
+    >>> assert f(2, y=10, e=1) == 20  # (skipping b here! using default b=0) ((2 + 0) * 10) ** 1 == 20
+
+    >>> from inspect import signature
+    >>> signature(f)
+    <Sig (a, x, r, b=0, y=2, e=3)>
+
+    >>> print(f.dot_digraph_ascii())
+            ┌─────┐  x   ┌───────┐  r   ┌─────┐
+     a  ──▶ │ add │ ───▶ │ times │ ───▶ │ exp │ ──▶  output
+            └─────┘      └───────┘      └─────┘
+              ▲            ▲              ▲
+              │            │              │
+              │            │              │
+    <BLANKLINE>
+               b            y=            e=
+    <BLANKLINE>
+
+    >>> print(f.dot_digraph_ascii(edge_kind='simple'))
+            ┌─────┐     ┌───────┐     ┌─────┐
+     a  ──▶ │ add │ ──▶ │ times │ ──▶ │ exp │ ──▶  output
+            └─────┘     └───────┘     └─────┘
+              ▲
+              │
+              │
+    <BLANKLINE>
+               b
+    <BLANKLINE>
+
+    >>> print(f.dot_digraph_ascii(edge_kind='simple_on_edge'))
+            ┌─────┐  x   ┌───────┐  r   ┌─────┐
+     a  ──▶ │ add │ ───▶ │ times │ ───▶ │ exp │ ──▶  output
+            └─────┘      └───────┘      └─────┘
+              ▲
+              │
+              │
+    <BLANKLINE>
+               b
+    <BLANKLINE>
+
+    >>> print(f.dot_digraph_ascii(edge_kind='to_args'))
+    <BLANKLINE>
+                            x            r
+    <BLANKLINE>
+                          │             │
+                          │             │
+                          ▼             ▼
+            ┌─────┐     ┌───────┐     ┌─────┐
+     a  ──▶ │ add │ ──▶ │ times │ ──▶ │ exp │ ──▶  output
+            └─────┘     └───────┘     └─────┘
+              ▲           ▲             ▲
+              │           │             │
+              │           │             │
+    <BLANKLINE>
+               b           y=           e=
+    <BLANKLINE>
+    """
+
+    @wraps(Line.__init__)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__signature__ = Sig.from_objs(*self.funcs)
+
+    def __call__(self, *args, **kwargs):
+        first_func, *other_funcs = self.funcs
+        out = call_forgivingly(first_func, *args, **kwargs)
+        for func in other_funcs:
+            out = call_forgivingly(func, out, **kwargs)
+        return out
+
+    # @property
+    # def __signature__(self):
+    #     return Sig.from_objs(*self.funcs)
+
+    # TODO: Try merging Line.dot_diagraph_body and this, for reuse
+    def dot_digraph_body(
+        self, prefix=None, edge_kind='to_args_on_edge', convention=None, **kwargs
+    ):
+
+        c = Configs(
+            ChainMap(
+                convention or {},
+                dict(kwargs, edge_kind=edge_kind, prefix=prefix),
+                dflt_configs,
+            )
+        )
+        if prefix is None:
+            if len(self.funcs) <= 7:
+                yield 'rankdir="LR"'
+        else:
+            yield prefix
+
+        func_names = list(self.named_funcs)
+
+        if c.input_node:
+            if c.input_node is True:
+                for argname in signature(self.funcs[0]).parameters:
+                    yield f'{argname} [shape="{c.vnode_shape}"]'
+                    yield f'{argname} -> {func_names[0]}'
+            elif c.input_node == str:
+                input_node = self.input_name or 'input'
+                yield f'{input_node} [shape="{c.vnode_shape}"]'
+                yield f'{input_node} -> {func_names[0]}'
+
+        for i, (fname, func) in enumerate(self.named_funcs.items()):
+            yield f'{fname} [shape="{c.fnode_shape}"]'
+
+            sig = Sig(func)
+            if i > 0:
+                first_arg = next(iter(sig.names), None)
+
+                on_edge = c.edge_kind.endswith('on_edge')
+                if on_edge:
+                    yield f'{func_names[i - 1]} -> {fname} [label="{first_arg}"]'
+                else:
+                    yield f'{func_names[i - 1]} -> {fname}'
+
+                if c.edge_kind.startswith('to_args'):
+                    if c.display_all_arguments:
+                        for i, argname in enumerate(sig.names):
+                            if on_edge and i == 0:
+                                continue  # skip first arg if on_edge mode
+                            if argname not in sig.defaults:
+                                yield f'{argname} [shape="{c.vnode_shape}"]'
+                            else:
+                                argname_with_equals = argname + '='
+                                yield (
+                                    f'{argname} [shape="{c.vnode_shape}" label="'
+                                    f'{argname_with_equals}"]'
+                                )
+                            yield f'{argname} -> {fname}'
+
+        if c.output_node:
+            yield f'{c.output_node} [shape="{c.vnode_shape}"]'
+            yield f'{func_names[-1]} -> {c.output_node}'
+
+    @wraps(dot_digraph_body)
+    def dot_digraph_ascii(self, *args, **kwargs):
+        """Get an ascii art string that represents the pipeline"""
+        return super().dot_digraph_ascii(*args, **kwargs)
+
+    @wraps(dot_digraph_body)
+    def dot_digraph(self, *args, **kwargs):
+        return super().dot_digraph(*args, **kwargs)
+
+
+# ---------------------------------------------------------------------------------------
+
+
+class LineSentineled(Line):
     """A pipeline that can be interrupted by a sentinel.
 
     Sentinels are useful to interrupt the pipeline computation.
 
-    Say, for example, you know if the length of an input iterable divided by three is 1 or 2.
-    You wouldn't want to divide by 0 or have a loop choke on an input that doesn't have a length.
+    Say, for example, you know if the length of an input iterable divided by three is
+    1 or 2.
+    You wouldn't want to divide by 0 or have a loop choke on an input that doesn't
+    have a length.
+
     So you do this:
 
-    >>> pipe = SentineledPipeline(
+    >>> pipe = LineSentineled(
     ...     lambda x: (hasattr(x, '__len__') and x) or Sentinel('no length'), # returns x if it has a length, and None if not
     ...     len,
     ...     lambda x: x % 3,
@@ -332,6 +632,9 @@ class SentineledPipeline(Line):
                 if isinstance(out, Sentinel):
                     break
         return out
+
+
+SentineledPipeline = LineSentineled  # back-compatibility alias
 
 
 def inject_names_if_missing(funcs):

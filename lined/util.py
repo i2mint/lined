@@ -73,6 +73,7 @@ def dot_to_ascii(dot: str, fancy: bool = True):
 
     Needs a connection to the internet to work.
 
+
     >>> graph_dot = '''
     ...     graph {
     ...         rankdir=LR
@@ -83,9 +84,9 @@ def dot_to_ascii(dot: str, fancy: bool = True):
     ...     }
     ... '''
     >>>
-    >>> graph_ascii = dot_to_ascii(graph_dot)
+    >>> graph_ascii = dot_to_ascii(graph_dot)  # doctest: +SKIP
     >>>
-    >>> print(graph_ascii)
+    >>> print(graph_ascii)  # doctest: +SKIP
     <BLANKLINE>
                      ┌─────────┐
                      ▼         │
