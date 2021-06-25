@@ -64,7 +64,7 @@ from itertools import tee
 
 
 def if_then_else(
-        x, if_func=true_no_matter_what, then_func=identity, else_func=identity
+    x, if_func=true_no_matter_what, then_func=identity, else_func=identity
 ):
     """Implement the if-then-else logic as a function.
 
@@ -141,6 +141,7 @@ class Command:
 
     See: https://en.wikipedia.org/wiki/Command_pattern
     """
+
     def __init__(self, func, *args, **kwargs):
         self.func, self.args, self.kwargs = func, args, kwargs
 
@@ -232,20 +233,21 @@ def consume_until_error(iterable, caught_errors=(Exception,)):
 def _validated_comparison_func(key: Callable):
     n_required = n_required_args(key)
     if n_required == 1:
+
         def comp_func(x, y):
             return key(x) <= key(y)
 
         return comp_func
-    assert n_required == 2, f"key should be a callable with 1 or 2 required " \
-                            f"arguments"
+    assert n_required == 2, (
+        f"key should be a callable with 1 or 2 required " f"arguments"
+    )
     return key
 
 
 def check_sorted_during_iteration(
-        iterable: Iterable,
-        key: Callable[[Any, Any], bool] = le,
-        not_sorted_callback: Union[
-            Callable, BaseException] = raise_not_sorted_error,
+    iterable: Iterable,
+    key: Callable[[Any, Any], bool] = le,
+    not_sorted_callback: Union[Callable, BaseException] = raise_not_sorted_error,
 ) -> Generator:
     r"""Wrap an iterable so that ordering of the elements is checked at runtime.
 
@@ -325,6 +327,7 @@ def check_sorted_during_iteration(
 
 # ------------------------------------------------------------------------------
 
+
 def del_fields(d, fields):
     """Returns the same mapping, but with specified fields removed.
     Intended to be applied to a stream of Mappings, using partial to fix fields
@@ -382,8 +385,7 @@ def apply_to_single_item(func: Callable, item_idx: int):
     def wrapped(first_arg, *args, **kwargs):
         val_to_apply_func_to = first_arg[item_idx]
         func_output = func(val_to_apply_func_to)
-        return tuple(
-            [*first_arg[:item_idx], func_output, *first_arg[item_idx:]])
+        return tuple([*first_arg[:item_idx], func_output, *first_arg[item_idx:]])
 
     return wrapped
 
@@ -462,6 +464,7 @@ def append_output_to_input(func, appender=lambda x, output: (x, output)):
     def _func(x):
         output = func(x)
         return appender(x, output)
+
     return _func
 
 
@@ -503,8 +506,7 @@ def extra_wraps(func, name=None, doc_prefix=""):
 
 def mywraps(func, name=None, doc_prefix=""):
     def wrapper(wrapped):
-        return extra_wraps(wraps(func)(wrapped), name=name,
-                           doc_prefix=doc_prefix)
+        return extra_wraps(wraps(func)(wrapped), name=name, doc_prefix=doc_prefix)
 
     return wrapper
 
@@ -621,7 +623,7 @@ def iterize(func, name=None):
 
 
 def wrap_first_arg_in_list(func):
-    """Takes a func(X,...) function and returns a func([X],...) function. """
+    """Takes a func(X,...) function and returns a func([X],...) function."""
 
     @wraps(func)
     def _func(*args, **kwargs):
@@ -825,11 +827,11 @@ class BufferStats(deque):
     # __name__ = 'BufferStats'
 
     def __init__(
-            self,
-            values=(),
-            maxlen: int = _no_value_specified_sentinel,
-            func: Callable = sum,
-            add_new_val: Callable = deque.append,
+        self,
+        values=(),
+        maxlen: int = _no_value_specified_sentinel,
+        func: Callable = sum,
+        add_new_val: Callable = deque.append,
     ):
         """
 
@@ -851,8 +853,7 @@ class BufferStats(deque):
         super().__init__(values, maxlen=maxlen)
         self.func = func
         if isinstance(add_new_val, str):
-            add_new_val = getattr(self,
-                                  add_new_val)  # add_new_val is a method of
+            add_new_val = getattr(self, add_new_val)  # add_new_val is a method of
             # deque
         self.add_new_val = add_new_val
         self.__name__ = "BufferStats"
@@ -867,8 +868,7 @@ def is_not_none(x):
 
 
 def return_buffer_on_stats_condition(
-        stats: Stats, buffer: Iterable, cond: Callable = is_not_none,
-        else_val=None
+    stats: Stats, buffer: Iterable, cond: Callable = is_not_none, else_val=None
 ):
     if cond(stats):
         return buffer
