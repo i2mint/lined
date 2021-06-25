@@ -7,7 +7,7 @@ from lined.base import (
     LayeredPipeline,
     LineSentineled,
     LineParametrized,
-    MultiFunc,
+    ParallelFuncs,
     log_calls,
 )
 

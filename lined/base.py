@@ -925,23 +925,26 @@ def _signature_of_pipeline(*funcs):
         return None
 
 
-class MultiFunc:
+class ParallelFuncs:
     """Make a multi-channel function from a {name: func, ...} specification.
 
-    >>> multi_func = MultiFunc(say_hello=lambda x: f"hello {x}", say_goodbye=lambda x: f"goodbye {x}")
+    >>> multi_func = ParallelFuncs(say_hello=lambda x: f"hello {x}",
+    say_goodbye=lambda x: f"goodbye {x}")
     >>> multi_func({'say_hello': 'world', 'say_goodbye': 'Lenin'})
     {'say_hello': 'hello world', 'say_goodbye': 'goodbye Lenin'}
 
     :param spec: A map between a name (str) and a function associated to that name
-    :return: A function that takes a dict as an (multi-channel) input and a dict as a (multi-channel) output
+    :return: A function that takes a dict as an (multi-channel) input and a dict as a
+    (multi-channel) output
 
     Q: Why can I specify the specs both with named_funcs_dict and **named_funcs?
     A: Look at the ``dict(...)`` interface. You see the same thing there.
     Different reason though (here we assert that the keys don't overlap).
-    Usually named_funcs is more convenient, but if you need to use keys that are not valid python variable names,
+    Usually named_funcs is more convenient, but if you need to use keys that are not
+    valid python variable names,
     you can always use named_funcs_dict to express that!
 
-    >>> multi_func = MultiFunc({
+    >>> multi_func = ParallelFuncs({
     ...     'x+y': lambda d: f"sum is {d}",
     ...     'x*y': lambda d: f"prod is {d}"}
     ... )
@@ -963,10 +966,10 @@ class MultiFunc:
     ...     'a': lambda z: str(z),
     ...     'b': lambda z: [z] * 3
     ... }
-    >>> multi_chunker = MultiFunc(**chunkers)
+    >>> multi_chunker = ParallelFuncs(**chunkers)
     >>> multi_chunker({'a': (1, 2), 'b': (3, 4)})
     {'a': 3, 'b': 12}
-    >>> multi_featurizer = MultiFunc(**featurizers)
+    >>> multi_featurizer = ParallelFuncs(**featurizers)
     >>> multi_featurizer({'a': 3, 'b': 12})
     {'a': '3', 'b': [12, 12, 12]}
     >>> my_pipe = Line(multi_chunker, multi_featurizer)
@@ -996,7 +999,7 @@ class MultiFunc:
         return dict(self._key_output_gen(d))
 
 
-mk_multi_func = MultiFunc  # back-compatibility alias
+mk_multi_func = ParallelFuncs  # back-compatibility alias
 
 from collections import defaultdict
 
