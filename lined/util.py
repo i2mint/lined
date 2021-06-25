@@ -1,5 +1,8 @@
-from functools import partial
+from functools import partial, partialmethod
 from typing import Callable
+from types import MethodType
+import itertools
+
 
 writable_function_dunders = {
     '__annotations__',
@@ -15,9 +18,11 @@ writable_function_dunders = {
 
 
 def partial_plus(func, *args, **kwargs):
-    """Like partial, but with the ability to add 'normal function' stuff (name, doc) to the curried function.
+    """Like partial, but with the ability to add 'normal function' stuff
+    (name, doc) to the curried function.
 
-    Note: if no writable_function_dunders is specified will just act as the builtin partial (which it calls first).
+    Note: if no writable_function_dunders is specified will just act as the
+    builtin partial (which it calls first).
 
     >>> def foo(a, b): return a + b
     >>> f = partial_plus(foo, b=2, __name__='bar', __doc__='foo, but with b=2')
@@ -26,6 +31,8 @@ def partial_plus(func, *args, **kwargs):
     >>> f.__doc__
     'foo, but with b=2'
     """
+    kwargs['__name__'] = kwargs.get('__name__', func_name(func))
+
     dunders_in_kwargs = writable_function_dunders.intersection(kwargs)
 
     def gen():
@@ -34,9 +41,13 @@ def partial_plus(func, *args, **kwargs):
             yield dunder, dunder_val
 
     dunders_to_write = dict(gen())  # will remove dunders from kwargs
+
+    # partial_func = CachedInstancePartial(func, *args, **kwargs)
     partial_func = partial(func, *args, **kwargs)
+
     for dunder, dunder_val in dunders_to_write.items():
         setattr(partial_func, dunder, dunder_val)
+
     return partial_func
 
 
@@ -117,7 +128,6 @@ def dot_to_ascii(dot: str, fancy: bool = True):
     ):
         dot = 'graph {\n' + dot + '\n}'
 
-
     params = {
         'boxart': boxart,
         'src': dot,
@@ -155,3 +165,55 @@ def n_required_args(func: Callable) -> int:
 
     """
     return sum(map(param_is_required, signature(func).parameters.values()))
+
+
+# ───────────────────────────────────────────────────────────────────────────────────────
+# Vendorized from boltons (https://github.com/mahmoud/boltons)
+
+make_method = lambda desc, obj, obj_type: MethodType(desc, obj)
+
+
+def mro_items(type_obj):
+    """Takes a type and returns an iterator over all class variables
+    throughout the type hierarchy (respecting the MRO).
+
+    >>> sorted(set([k for k, v in mro_items(int) if not k.startswith('__')
+    ...     and 'bytes' not in k and not callable(v)]))
+    ['denominator', 'imag', 'numerator', 'real']
+    """
+    # TODO: handle slots?
+    return itertools.chain.from_iterable(ct.__dict__.items() for ct in type_obj.__mro__)
+
+
+class CachedInstancePartial(partial):
+    """The ``CachedInstancePartial`` is virtually the same as
+    :class:`InstancePartial`, adding support for method-usage to
+    :class:`functools.partial`, except that upon first access, it
+    caches the bound method on the associated object, speeding it up
+    for future accesses, and bringing the method call overhead to
+    about the same as non-``partial`` methods.
+
+    See the :class:`InstancePartial` docstring for more details.
+    """
+
+    def __get__(self, obj, obj_type):
+        # These assignments could've been in __init__, but there was
+        # no simple way to do it without breaking one of PyPy or Py3.
+        self.__name__ = None
+        self.__doc__ = self.func.__doc__
+        self.__module__ = self.func.__module__
+
+        name = self.__name__
+        if name is None:
+            for k, v in mro_items(obj_type):
+                if v is self:
+                    self.__name__ = name = k
+        if obj is None:
+            return make_method(self, obj, obj_type)
+        try:
+            # since this is a data descriptor, this block
+            # is probably only hit once (per object)
+            return obj.__dict__[name]
+        except KeyError:
+            obj.__dict__[name] = ret = make_method(self, obj, obj_type)
+            return ret

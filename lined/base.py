@@ -8,10 +8,19 @@ from inspect import Signature, signature
 from itertools import starmap
 from dataclasses import dataclass
 
+from i2.signatures import (
+    DFLT_DEFAULT_CONFLICT_METHOD,
+    Sig,
+    call_forgivingly,
+    ch_signature_to_all_pk,
+    tuple_the_args,
+    PO,  # POSITION_ONLY
+)
+
+
 from lined.util import unnamed_pipeline, func_name
 
 # MultiFuncSpec = Dict[str, Callable]
-MultiFunc = Callable[[Dict], Dict]
 Funcs = Union[Iterable[Callable], Callable]
 LayeredFuncs = Iterable[Funcs]
 
@@ -27,22 +36,68 @@ LayeredFuncs = Iterable[Funcs]
 
 @dataclass
 class Fnode:
+    """A function wrapper to be used in pipelines.
+
+    >>> import pickle
+    >>>
+    >>> Sig(pickle.dumps)
+    <Sig (obj, protocol=None, *, fix_imports=True, buffer_callback=None)>
+    >>> fn = Fnode(pickle.dumps)
+    >>> Sig(fn)
+    <Sig (obj, protocol=None, *, fix_imports=True, buffer_callback=None)>
+
+    The `first_arg_position_only=True` flag will set the first argument of the
+    Fnode instance signature to be POSITION_ONLY.
+    This is a useful normalization for inner nodes of a pipeline.
+
+    >>> fn = Fnode(pickle.dumps, name='my_pickler', first_arg_position_only=True)
+    >>> Sig(fn)
+    <Sig (obj, /, protocol=None, *, fix_imports=True, buffer_callback=None)>
+    >>> unpickled_fn = pickle.loads(pickle.dumps(fn))
+
+    >>> unpickled_fn
+    my_pickler(obj, /, protocol=None, *, fix_imports=True, buffer_callback=None)
+
+    """
+
     func: Callable
-    __name__: Optional[str] = None
+    name: Optional[str] = None
+    first_arg_position_only: bool = False
 
     def __post_init__(self):
+        self.name = self.name or func_name(self.func)
+        self.__name__ = self.name
         wraps(self.func)(self)
-        self.__name__ = self.__name__ or func_name(self.func)
+        if self.first_arg_position_only:
+            _mk_first_argument_position_only(self)
 
     def __call__(self, *args, **kwargs):
         return self.func(*args, **kwargs)
 
+    def __getattr__(self, attr):
+        return getattr(self.func, attr)
 
-def fnode(func, name=None):
-    return Fnode(func, name)
+    def __repr__(self):
+        return f"{self.name}{Sig(self)}"
+
+    def __getstate__(self):
+        return dict(
+            func=self.func,
+            name=self.name,
+            first_arg_position_only=self.first_arg_position_only,
+            __name__=self.__name__,
+            __signature__=signature(self),
+        )
+
+    def __setstate__(self, state):
+        self.__dict__ = state
 
 
-_line_init_reserved_names = {'pipeline_name', 'input_name', 'output_name'}
+def fnode(func, name=None, first_arg_position_only=False):
+    return Fnode(func, name=name, first_arg_position_only=first_arg_position_only)
+
+
+_line_init_reserved_names = {"pipeline_name", "input_name", "output_name"}
 
 
 def _func_to_name_func_pair(func):
@@ -56,19 +111,72 @@ def _func_to_name_func_pair(func):
 
 
 def _merge_funcs_and_named_funcs(funcs, named_funcs):
-    """Add the funcs of named_funcs to funcs tuple and visa versa, making two aligned collections of functions."""
-    assert _line_init_reserved_names.isdisjoint(
-        named_funcs
-    ), f"Can't name a function with any of the following strings: {', '.join(_line_init_reserved_names)}"
+    """Add the funcs of named_funcs to funcs tuple and visa versa,
+    making two aligned collections of functions."""
+    assert _line_init_reserved_names.isdisjoint(named_funcs), (
+        "Can't name a function with any of the following strings: "
+        f"{', '.join(_line_init_reserved_names)}"
+    )
     funcs_obtained_from_named_funcs = tuple(named_funcs.values())
     named_funcs_obtained_from_funcs = dict(map(_func_to_name_func_pair, funcs))
+
     assert named_funcs_obtained_from_funcs.keys().isdisjoint(
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
+    funcs = (
+        tuple(named_funcs_obtained_from_funcs.values()) + funcs_obtained_from_named_funcs
+    )
     return (
-        funcs + funcs_obtained_from_named_funcs,
+        funcs,
         dict(named_funcs_obtained_from_funcs, **named_funcs),
     )
+
+
+def _mk_first_argument_position_only(func):
+    """Replaces the first argument's parameter kind by PO (POSITION_ONLY).
+    This is needed in some edge cases that involved functions that work only with PO
+    kinds.
+
+    >>> str(Sig(_mk_first_argument_position_only(lambda x, y: None)))
+    '(x, /, y)'
+
+    """
+    sig = Sig(func)
+    first_argname = next(iter(sig), None)
+
+    if first_argname:  # if there are any arguments
+        new_sig = Sig.from_objs(
+            sig.modified(**{first_argname: {"kind": PO}}),
+            return_annotation=sig.return_annotation,
+        )
+        return new_sig(func)
+    return func
+
+
+def _normalize_funcs_and_named_funcs(funcs, named_funcs):
+    """
+    Normalizing functions so we know what to expect.
+    It's assumed that named_funcs is an iterable of names -- but in most cases
+    should be a {name: func,...} dict aligned with funcs.
+    What will be done here:
+    - Wrap all funcs in an fnode instance
+    - Make all but first function have their first argument be position only
+
+    :return Transformed funcs, named_funcs
+    """
+    if len(funcs):
+        first_func, *remaining_funcs = funcs[0], funcs[1:]
+        func = first_func
+        funcs = list(
+            fnode(func, name, first_arg_position_only=True)
+            for name, func in named_funcs.items()
+        )
+        # Override the first fnode to NOT use the first_arg_position_only flag
+        funcs[0] = fnode(first_func, name=next(iter(named_funcs)))
+
+        funcs = tuple(funcs)
+        named_funcs = {name: func for name, func in zip(named_funcs, funcs)}
+    return funcs, named_funcs
 
 
 # TODO: Deprecate of named_funcs? Use (name, func) mechanism only?
@@ -82,7 +190,7 @@ class Line:
         pipeline_name=None,
         input_name=None,
         output_name=None,
-        **named_funcs,
+        # **named_funcs,
     ):
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
@@ -119,41 +227,62 @@ class Line:
         >>> assert f(2) == 12
         >>> assert f(2, 10) == 30
 
-        Let's check out the signature of f:
+        Let's check out the signature of f.
 
         >>> from inspect import signature
-        >>>
-        >>> assert str(signature(f)) == '(a, b=1) -> float'
+        >>> print(str(signature(f)))
+        (a, b=1) -> float
+
+        Note that the arguments of the line (composition) are the arguments of the first
+        function...
+
         >>> assert signature(f).parameters == signature(first).parameters
-        >>> assert signature(f).return_annotation == signature(last).return_annotation == float
+
+        ... and the return_annotation of the line (composition) is taken from the last
+        function.
+
+        >>> assert signature(f).return_annotation == signature(last).return_annotation
 
         Border case: One function only
 
         >>> same_as_first = Line(first)
         >>> assert same_as_first(42) == first(42)
 
+        You can also give names to: The (pipe)line, input, and output.
+        This is useful for visualization and analysis purposes.
+
         >>> from functools import partial
-        >>> pipe = Line(sum, str, print, pipeline_name='MyPipeline', input_name='x', output_name='y')
+        >>> pipe = Line(
+        ...     sum, str, print,
+        ... pipeline_name='MyPipeline', input_name='x', output_name='y')
         >>> pipe
-        MyPipeline(sum, str, print, input_name='x', output_name='y')
+        MyPipeline(iterable, /, start=0)
 
 
         """
+        named_funcs = {}
         funcs, named_funcs = _merge_funcs_and_named_funcs(funcs, named_funcs)
 
+        assert len(funcs) > 0, "You need to specify at least one function!"
+        funcs, named_funcs = _normalize_funcs_and_named_funcs(funcs, named_funcs)
+
+        # print(funcs[0]([3, 3, 3, 3]))
+
+        self.funcs = funcs
+        self.named_funcs = named_funcs
         self.input_name = input_name
         self.output_name = output_name
         # really, it would make sense that this is the identity, but we'll implement only when needed
-        assert len(funcs) > 0, 'You need to specify at least one function!'
-        self.funcs = tuple(fnode(func, name) for name, func in named_funcs.items())
-        self.named_funcs = {
-            name: fnode_func for name, fnode_func in zip(named_funcs, self.funcs)
-        }
+        # self.funcs = tuple(fnode(func, name) for name, func in named_funcs.items())
+        # self.named_funcs = {
+        #     name: fnode_func for name, fnode_func in zip(named_funcs, self.funcs)
+        # }
         assert all(
             f == ff for f, ff in zip(self.funcs, self.named_funcs.values())
-        ), f'funcs and named_funcs are not aligned after merging'
+        ), f"funcs and named_funcs are not aligned after merging"
         if pipeline_name is not None:
             self.__name__ = pipeline_name
+        self.name = pipeline_name or self.__class__.__name__
         self.__signature__ = _signature_of_pipeline(*self.funcs)
 
     # Note: Did this to lighten __init__, but made signature(Line) not work
@@ -174,24 +303,25 @@ class Line:
     def __getitem__(self, k):
         """Get a sub-pipeline"""
         if isinstance(k, (int, slice)):
-            item_str = ''
+            item_str = ""
             funcs = ()
             if isinstance(k, int):
                 funcs = (self.funcs[k],)
                 item_str = str(k)
             elif isinstance(k, slice):
-                assert k.step is None, f'slices with steps are not handled: {k}'
+                assert k.step is None, f"slices with steps are not handled: {k}"
                 funcs = self.funcs[k]
-                item_str = f'{k.start}:{k.stop}'
-            return self.__class__(*funcs, name=f'{self.__name__}[item_str]')
+                item_str = f"{k.start}:{k.stop}"
+            pipeline_name = self.name or self.__class__.__name__
+            return self.__class__(*funcs, pipeline_name=f"{pipeline_name}[{item_str}]")
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
     def dot_digraph_body(
         self,
         prefix=None,
-        fnode_shape='box',
-        vnode_shape='none',
+        fnode_shape="box",
+        vnode_shape="none",
         input_node=True,
         output_node=False,
         edges_gen=True,
@@ -213,11 +343,11 @@ class Line:
             if input_node is True:
                 for argname in signature(self.funcs[0]).parameters:
                     yield f'{argname} [shape="{vnode_shape}"]'
-                    yield f'{argname} -> {func_names[0]}'
+                    yield f"{argname} -> {func_names[0]}"
             elif input_node == str:
-                input_node = self.input_name or 'input'
+                input_node = self.input_name or "input"
                 yield f'{input_node} [shape="{vnode_shape}"]'
-                yield f'{input_node} -> {func_names[0]}'
+                yield f"{input_node} -> {func_names[0]}"
 
         for fname in func_names:
             yield f'{fname} [shape="{fnode_shape}"]'
@@ -225,7 +355,7 @@ class Line:
         if edges_gen:
             if edges_gen is True:
                 for from_fname, to_fname in zip(func_names[:-1], func_names[1:]):
-                    yield f'{from_fname} -> {to_fname}'
+                    yield f"{from_fname} -> {to_fname}"
             else:
                 yield from edges_gen
 
@@ -233,16 +363,16 @@ class Line:
             output_node = self.output_name
         if output_node:
             if output_node is True:
-                output_node = self.output_name or 'output'
+                output_node = self.output_name or "output"
             yield f'{output_node} [shape="{vnode_shape}"]'
-            yield f'{func_names[-1]} -> {self.output_name}'
+            yield f"{func_names[-1]} -> {self.output_name}"
 
     @wraps(dot_digraph_body)
     def dot_digraph_ascii(self, *args, **kwargs):
         """Get an ascii art string that represents the pipeline"""
         from lined.util import dot_to_ascii
 
-        return dot_to_ascii('\n'.join(self.dot_digraph_body(*args, **kwargs)))
+        return dot_to_ascii("\n".join(self.dot_digraph_body(*args, **kwargs)))
 
     @wraps(dot_digraph_body)
     def dot_digraph(self, *args, **kwargs):
@@ -250,27 +380,73 @@ class Line:
             import graphviz
         except (ModuleNotFoundError, ImportError) as e:
             raise ModuleNotFoundError(
-                f'{e}\nYou may not have graphviz installed. '
-                f'See https://pypi.org/project/graphviz/.'
+                f"{e}\nYou may not have graphviz installed. "
+                f"See https://pypi.org/project/graphviz/."
             )
 
         body = list(self.dot_digraph_body(*args, **kwargs))
         return graphviz.Digraph(body=body)
 
     def __repr__(self):
-        funcs_str = ', '.join((fname for fname in self.named_funcs))
-        suffix = ''
-        if self.input_name is not None:
-            suffix += f", input_name='{self.input_name}'"
-        if self.output_name is not None:
-            suffix += f", output_name='{self.output_name}'"
-        return f'{self._name_of_instance()}({funcs_str}{suffix})'
+        return f"{self._name_of_instance()}{Sig(self)}"
+        # funcs_str = ', '.join((fname for fname in self.named_funcs))
+        # suffix = ''
+        # if self.input_name is not None:
+        #     suffix += f", input_name='{self.input_name}'"
+        # if self.output_name is not None:
+        #     suffix += f", output_name='{self.output_name}'"
+        # return f'{self._name_of_instance()}({funcs_str}{suffix})'
 
     def _name_of_instance(self):
-        return getattr(self, '__name__', self.__class__.__name__)
+        return getattr(self, "__name__", self.__class__.__name__)
 
 
 Pipeline = Line  # for back-compatibility
+
+from i2.deco import mk_call_logger, _call_signature
+
+
+def log_calls(line: Line, logger: Callable = print, what_to_log=_call_signature):
+    """Log the calls of every step of a pipeline.
+
+    :param line: A Line object
+    :param logger: A callable that will be called on the output of what_to_log.
+        Default is print.
+    :param what_to_log: A callable that will be called on (func, args, kwargs) to
+        produce the data that will be pased on to logger.
+        By default it will produce a string representation of the call.
+    :return: A pipeline that will log the calls made at every step
+
+    >>> from math import log2
+    >>> pipe = Line(sum, log2, str)
+    >>> logged_pipe = log_calls(pipe)
+    >>> t = logged_pipe([1, 3, 4])
+    sum([1, 3, 4], )
+    log2(8, )
+    str(3.0, )
+    >>> t
+    '3.0'
+
+    Note that some other pairs than the default
+        '(logger=print, what_to_log=_call_signature)'
+    pair can be useful in some situations.
+
+    For example, some of these calls may involve objects whose string representation
+    is no informative, or two large to be useful.
+    In this case, one could instead set (logger, what_to_log) to serialize the
+    calls and save in a DB or pickle files that could then be studied.
+
+    """
+    call_logger = mk_call_logger(logger, what_to_log)
+
+    # TODO: applying call_logger to _fnode didn't work. Would be good to make it work.
+    named_funcs = [
+        (name, call_logger(_fnode.func)) for name, _fnode in line.named_funcs.items()
+    ]
+    # TODO: In the following, we would lose any other attributes we might have in the
+    #  line instance. We'd like to clone it (with transformed funcs) instead.
+    return type(line)(*named_funcs)
+
 
 from dataclasses import dataclass
 from typing import Any
@@ -290,7 +466,7 @@ class Sentinel:
     def filter_in(cls, condition, sentinel_val=None):
         assert isinstance(
             condition, Callable
-        ), f'condition need to be callable, but was {condition}'
+        ), f"condition need to be callable, but was {condition}"
 
         def filt(x):
             if condition(x):
@@ -304,7 +480,7 @@ class Sentinel:
     def filter_out(cls, condition, sentinel_val=None):
         assert isinstance(
             condition, Callable
-        ), f'condition need to be callable, but was {condition}'
+        ), f"condition need to be callable, but was {condition}"
 
         def filt(x):
             if not condition(x):
@@ -340,7 +516,9 @@ class Conditions:
 
 # ---------------------------------------------------------------------------------------
 
-from i2.signatures import call_forgivingly, Sig
+
+def normalize_func(func):
+    return ch_signature_to_all_pk(tuple_the_args(func))
 
 
 class NoSuchConfig:
@@ -348,7 +526,7 @@ class NoSuchConfig:
         return False
 
     def __repr__(self):
-        return 'no_such_config'
+        return "no_such_config"
 
 
 no_such_config = NoSuchConfig()
@@ -380,7 +558,7 @@ class Configs(dict):
         if name in self:
             return self[name]
         else:
-            raise AttributeError('No such attribute: ' + name)
+            raise AttributeError("No such attribute: " + name)
 
     def __setattr__(self, name, value):
         self[name] = value
@@ -389,7 +567,7 @@ class Configs(dict):
         if name in self:
             del self[name]
         else:
-            raise AttributeError('No such attribute: ' + name)
+            raise AttributeError("No such attribute: " + name)
 
     def __missing__(self, name):
         return self._key_missing_callback()
@@ -402,12 +580,12 @@ class Configs(dict):
 from collections import ChainMap
 
 dflt_configs = dict(
-    fnode_shape='box',
-    vnode_shape='none',
+    fnode_shape="box",
+    vnode_shape="none",
     display_all_arguments=True,
-    edge_kind='to_args_on_edge',
+    edge_kind="to_args_on_edge",
     input_node=True,
-    output_node='output',
+    output_node="output",
 )
 
 
@@ -426,7 +604,7 @@ class LineParametrized(Line):
               │
               │
 
-              b
+              b=
     ```
 
     On the other hand, `LineParametrized(f, g)` will give you control over `y`.
@@ -438,7 +616,7 @@ class LineParametrized(Line):
               │          │
               │          │
 
-              b         y=
+              b=         y=
 
     >>> def add(a, b=0): return a + b
     >>> def times(x, y=2): return x * y
@@ -453,7 +631,12 @@ class LineParametrized(Line):
 
     >>> from inspect import signature
     >>> signature(f)
-    <Sig (a, x, r, b=0, y=2, e=3)>
+    <Sig (a, b=0, y=2, e=3)>
+
+    Note in the above signature, that `x` and `r` are missing.
+    That's because these are "connecting" arguments.
+    'x' comes from `add` and is fed to `times`.
+    `r` comes from `times` and is fed to `exp`.
 
     >>> print(f.dot_digraph_ascii())
             ┌─────┐  x   ┌───────┐  r   ┌─────┐
@@ -463,7 +646,7 @@ class LineParametrized(Line):
               │            │              │
               │            │              │
     <BLANKLINE>
-               b            y=            e=
+              b=            y=            e=
     <BLANKLINE>
 
     >>> print(f.dot_digraph_ascii(edge_kind='simple'))
@@ -474,7 +657,7 @@ class LineParametrized(Line):
               │
               │
     <BLANKLINE>
-               b
+              b=
     <BLANKLINE>
 
     >>> print(f.dot_digraph_ascii(edge_kind='simple_on_edge'))
@@ -485,7 +668,7 @@ class LineParametrized(Line):
               │
               │
     <BLANKLINE>
-               b
+              b=
     <BLANKLINE>
 
     >>> print(f.dot_digraph_ascii(edge_kind='to_args'))
@@ -502,14 +685,31 @@ class LineParametrized(Line):
               │           │             │
               │           │             │
     <BLANKLINE>
-               b           y=           e=
+              b=           y=           e=
     <BLANKLINE>
+
+
     """
 
-    @wraps(Line.__init__)
+    @Sig.from_objs(
+        Line.__init__, ("default_conflict_method", DFLT_DEFAULT_CONFLICT_METHOD)
+    )
     def __init__(self, *args, **kwargs):
+        default_conflict_method = kwargs.pop("default_conflict_method", None)
         super().__init__(*args, **kwargs)
-        self.__signature__ = Sig.from_objs(*self.funcs)
+        first_func, *_funcs = self.funcs
+
+        def sig_without_the_first_input(func):
+            sig = Sig(func)
+            return sig - sig.names[0]
+
+        # _funcs = map(normalize_func, _funcs)  # TODO: Test edge cases to assess need
+        _funcs = map(sig_without_the_first_input, _funcs)
+
+        self.__signature__ = Sig.from_objs(
+            *(first_func, *_funcs),
+            default_conflict_method=default_conflict_method,
+        )
 
     def __call__(self, *args, **kwargs):
         first_func, *other_funcs = self.funcs
@@ -524,7 +724,13 @@ class LineParametrized(Line):
 
     # TODO: Try merging Line.dot_diagraph_body and this, for reuse
     def dot_digraph_body(
-        self, prefix=None, edge_kind='to_args_on_edge', convention=None, **kwargs
+        self,
+        prefix=None,
+        edge_kind="to_args_on_edge",
+        convention=None,
+        required_arg_line: Optional[Callable[[str], str]] = None,
+        bound_arg_line: Optional[Callable[[str], str]] = None,
+        **kwargs,
     ):
 
         c = Configs(
@@ -534,24 +740,48 @@ class LineParametrized(Line):
                 dflt_configs,
             )
         )
+
+        if required_arg_line is None:
+
+            def required_arg_line(argname: str) -> str:
+                return f'{argname} [shape="{c.vnode_shape}"]'
+
+        if bound_arg_line is None:
+
+            def bound_arg_line(argname: str) -> str:
+                argname_with_equals = argname + "="
+                return (
+                    f'{argname} [shape="{c.vnode_shape}" label="'
+                    f'{argname_with_equals}"]'
+                )
+
+        def lines_for_argname(fname, sig, argname):
+            if argname not in sig.defaults:
+                yield required_arg_line(argname)
+            else:  # this argname is bound (has a default)
+                yield bound_arg_line(argname)
+            yield f"{argname} -> {fname}"
+
         if prefix is None:
             if len(self.funcs) <= 7:
                 yield 'rankdir="LR"'
         else:
             yield prefix
 
-        func_names = list(self.named_funcs)
+        first_func, *_funcs = self.funcs
+        first_func_name, *_func_names = list(self.named_funcs)
 
         if c.input_node:
             if c.input_node is True:
-                for argname in signature(self.funcs[0]).parameters:
-                    yield f'{argname} [shape="{c.vnode_shape}"]'
-                    yield f'{argname} -> {func_names[0]}'
+                sig = Sig(first_func)
+                for argname in sig.parameters:
+                    yield from lines_for_argname(first_func_name, sig, argname)
             elif c.input_node == str:
-                input_node = self.input_name or 'input'
+                input_node = self.input_name or "input"
                 yield f'{input_node} [shape="{c.vnode_shape}"]'
-                yield f'{input_node} -> {func_names[0]}'
+                yield f"{input_node} -> {first_func_name}"
 
+        previous_func_name = first_func_name
         for i, (fname, func) in enumerate(self.named_funcs.items()):
             yield f'{fname} [shape="{c.fnode_shape}"]'
 
@@ -559,30 +789,24 @@ class LineParametrized(Line):
             if i > 0:
                 first_arg = next(iter(sig.names), None)
 
-                on_edge = c.edge_kind.endswith('on_edge')
+                on_edge = c.edge_kind.endswith("on_edge")
                 if on_edge:
-                    yield f'{func_names[i - 1]} -> {fname} [label="{first_arg}"]'
+                    yield f'{previous_func_name} -> {fname} [label="{first_arg}"]'
                 else:
-                    yield f'{func_names[i - 1]} -> {fname}'
+                    yield f"{previous_func_name} -> {fname}"
 
-                if c.edge_kind.startswith('to_args'):
+                if c.edge_kind.startswith("to_args"):
                     if c.display_all_arguments:
                         for i, argname in enumerate(sig.names):
                             if on_edge and i == 0:
                                 continue  # skip first arg if on_edge mode
-                            if argname not in sig.defaults:
-                                yield f'{argname} [shape="{c.vnode_shape}"]'
-                            else:
-                                argname_with_equals = argname + '='
-                                yield (
-                                    f'{argname} [shape="{c.vnode_shape}" label="'
-                                    f'{argname_with_equals}"]'
-                                )
-                            yield f'{argname} -> {fname}'
+                            yield from lines_for_argname(fname, sig, argname)
+
+                previous_func_name = fname
 
         if c.output_node:
             yield f'{c.output_node} [shape="{c.vnode_shape}"]'
-            yield f'{func_names[-1]} -> {c.output_node}'
+            yield f"{_func_names[-1]} -> {c.output_node}"
 
     @wraps(dot_digraph_body)
     def dot_digraph_ascii(self, *args, **kwargs):
@@ -649,8 +873,8 @@ def stack(*funcs):
 
     def stacked_funcs(input_tuple):
         assert len(funcs) == len(input_tuple), (
-            'the length of input_tuple ({len(input_tuple)} should be the same length'
-            ' (len{funcs}) as the funcs: {input_tuple}'
+            "the length of input_tuple ({len(input_tuple)} should be the same length"
+            " (len{funcs}) as the funcs: {input_tuple}"
         )
         return tuple(starmap(call, zip(funcs, input_tuple)))
 
@@ -675,7 +899,7 @@ class LayeredPipeline(Line):
 def _signature_of_pipeline(*funcs):
     n_funcs = len(funcs)
     if n_funcs == 0:
-        raise ValueError('You need to specify at least one function!')
+        raise ValueError("You need to specify at least one function!")
     elif n_funcs == 1:
         first_func = last_func = funcs[0]
     else:
@@ -683,7 +907,7 @@ def _signature_of_pipeline(*funcs):
     # Finally, let's make the __call__ have a nice signature.
     # Argument information from first func and return annotation from last func
     try:
-        input_params = signature(first_func).parameters.values()
+        input_params = list(signature(first_func).parameters.values())
         try:
             return_annotation = signature(last_func).return_annotation
         except ValueError:
@@ -693,10 +917,10 @@ def _signature_of_pipeline(*funcs):
         return None
 
 
-def mk_multi_func(named_funcs_dict: Optional[Dict] = None, /, **named_funcs) -> MultiFunc:
+class MultiFunc:
     """Make a multi-channel function from a {name: func, ...} specification.
 
-    >>> multi_func = mk_multi_func(say_hello=lambda x: f"hello {x}", say_goodbye=lambda x: f"goodbye {x}")
+    >>> multi_func = MultiFunc(say_hello=lambda x: f"hello {x}", say_goodbye=lambda x: f"goodbye {x}")
     >>> multi_func({'say_hello': 'world', 'say_goodbye': 'Lenin'})
     {'say_hello': 'hello world', 'say_goodbye': 'goodbye Lenin'}
 
@@ -709,53 +933,69 @@ def mk_multi_func(named_funcs_dict: Optional[Dict] = None, /, **named_funcs) -> 
     Usually named_funcs is more convenient, but if you need to use keys that are not valid python variable names,
     you can always use named_funcs_dict to express that!
 
-    >>> multi_func = mk_multi_func({'x+y': lambda d: f"sum is {d}", 'x*y': lambda d: f"prod is {d}"})
-    >>> multi_func({'x+y': 5, 'x*y': 6})
+    >>> multi_func = MultiFunc({
+    ...     'x+y': lambda d: f"sum is {d}",
+    ...     'x*y': lambda d: f"prod is {d}"}
+    ... )
+    >>> multi_func({
+    ...     'x+y': 5,
+    ...     'x*y': 6
+    ... })
     {'x+y': 'sum is 5', 'x*y': 'prod is 6'}
 
     You can also use both. Like with ``dict(...)``.
 
     Here's a more significant example.
 
-    >>> chunkers = {'a': lambda x: x[0] + x[1],
-    ...             'b': lambda x: x[0] * x[1]}
-    >>> featurizers = {'a': lambda z: str(z),
-    ...                'b': lambda z: [z] * 3}
-    >>> multi_chunker = mk_multi_func(**chunkers)
+    >>> chunkers = {
+    ...     'a': lambda x: x[0] + x[1],
+    ...     'b': lambda x: x[0] * x[1]
+    ... }
+    >>> featurizers = {
+    ...     'a': lambda z: str(z),
+    ...     'b': lambda z: [z] * 3
+    ... }
+    >>> multi_chunker = MultiFunc(**chunkers)
     >>> multi_chunker({'a': (1, 2), 'b': (3, 4)})
     {'a': 3, 'b': 12}
-    >>> multi_featurizer = mk_multi_func(**featurizers)
+    >>> multi_featurizer = MultiFunc(**featurizers)
     >>> multi_featurizer({'a': 3, 'b': 12})
     {'a': '3', 'b': [12, 12, 12]}
     >>> my_pipe = Line(multi_chunker, multi_featurizer)
     >>> my_pipe({'a': (1, 2), 'b': (3, 4)})
-    {'a': '(1, 2)', 'b': [(3, 4), (3, 4), (3, 4)]}
+    {'a': '3', 'b': [12, 12, 12]}
+
+    #{'a': '(1, 2)', 'b': [(3, 4), (3, 4), (3, 4)]}
+
     """
 
-    named_funcs_dict = named_funcs_dict or {}
-    assert named_funcs_dict.keys().isdisjoint(
-        named_funcs
-    ), f"named_funcs_dict and named_funcs can't share keys. Yet they share {named_funcs_dict.keys() & named_funcs}"
-    named_funcs = dict(named_funcs_dict, **named_funcs)
-    assert all(
-        map(callable, named_funcs.values())
-    ), f'At least one value of named_funcs was not callable'
+    def __init__(self, named_funcs_dict: Optional[Dict] = None, /, **named_funcs):
+        named_funcs_dict = named_funcs_dict or {}
+        assert named_funcs_dict.keys().isdisjoint(named_funcs), (
+            f"named_funcs_dict and named_funcs can't share keys. "
+            f"Yet they share {named_funcs_dict.keys() & named_funcs}"
+        )
+        self.named_funcs = dict(named_funcs_dict, **named_funcs)
+        assert all(
+            map(callable, named_funcs.values())
+        ), f"At least one value of named_funcs was not callable"
 
-    def multi_func(d: dict):
-        def gen():
-            for key, func in named_funcs.items():
-                yield key, func(d[key])
+    def _key_output_gen(self, d: dict):
+        for key, func in self.named_funcs.items():
+            yield key, func(d[key])
 
-        return dict(gen())
+    def __call__(self, d: dict):
+        return dict(self._key_output_gen(d))
 
-    return multi_func
 
+mk_multi_func = MultiFunc  # back-compatibility alias
 
 from collections import defaultdict
 
-
 # Class to represent a graph
 class Digraph:
+    """This class is experiemental and will probably move to meshed."""
+
     def __init__(self, nodes_adjacent_to=None):
         nodes_adjacent_to = nodes_adjacent_to or dict()
         self.nodes_adjacent_to = defaultdict(

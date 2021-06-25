@@ -1,10 +1,14 @@
+"""
+Making pipelines easily, and being able to visualize and diagnose them.
+"""
 from lined.base import (
     Line,
     Pipeline,
-    mk_multi_func,
     LayeredPipeline,
     LineSentineled,
     LineParametrized,
+    MultiFunc,
+    log_calls,
 )
 
 from lined.simple import Pipe

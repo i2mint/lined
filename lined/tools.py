@@ -3,6 +3,7 @@ from collections import deque
 from typing import Any
 from dataclasses import dataclass
 
+from i2.signatures import Sig, Parameter
 from lined.util import func_name, partial_plus, n_required_args
 from lined.base import Line
 
@@ -466,8 +467,16 @@ def append_output_to_input(func, appender=lambda x, output: (x, output)):
 
 def side_call(x, callback):
     """Identity function that calls a callaback function before returning the
-    input as is
-    (if callback didn't change it)
+    input as is (unless the input is mutable and the callback changes it).
+
+    >>>
+    42
+    >>> from functools import partial
+    >>> logger = partial(side_call, callback=lambda x: print(f"input is {x}"))
+    >>> logged_add = Line(logger, add)
+    >>> logged_add(40)
+    input is 40
+    42
     """
     callback(x)
     return x
@@ -582,6 +591,28 @@ def iterize(func, name=None):
     >>> list(iterable)  # consume the iterable and gather it's items
     ['hello 2', 'hello 4', 'hello 6']
     """
+    # # TODO: Try replacing with partial_plus instead
+    # wrapper = mywraps(
+    #     func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"
+    # )
+    #
+    # _func = partial(map, func)
+    # new_sig = Sig(map).normalize_kind(kind=Parameter.POSITIONAL_ONLY)
+    #
+    # @wrapper
+    # @new_sig
+    # def __func(*args):
+    #     return _func(*args)
+    #
+    # __func._iterized = True
+    # return __func
+
+    # the simpler earlier version has problems with LineParametrized
+    #   TypeError: map() takes no keyword arguments
+    # because
+    #   args, kwargs = Sig(func).source_args_and_kwargs(*args, **kwargs)
+    # made kwargs that made map partial choke.
+
     wrapper = mywraps(
         func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"
     )
