@@ -469,12 +469,13 @@ def side_call(x, callback):
     """Identity function that calls a callaback function before returning the
     input as is (unless the input is mutable and the callback changes it).
 
-    >>>
+    >>> add2 = lambda x: x + 2
+    >>> add2(40)
     42
     >>> from functools import partial
     >>> logger = partial(side_call, callback=lambda x: print(f"input is {x}"))
-    >>> logged_add = Line(logger, add)
-    >>> logged_add(40)
+    >>> logged_add2 = Line(logger, add2)
+    >>> logged_add2(40)
     input is 40
     42
     """

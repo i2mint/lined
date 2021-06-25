@@ -436,6 +436,13 @@ def log_calls(line: Line, logger: Callable = print, what_to_log=_call_signature)
     In this case, one could instead set (logger, what_to_log) to serialize the
     calls and save in a DB or pickle files that could then be studied.
 
+    Note: This function logs all the calls.
+
+    If you want to log only some calls, you might want to use lined.tools.side_call
+    or lined.tools.print_and_pass_on.
+    You can also provide a custome (logger, what_to_log) pair that will do something
+    special according to the function (namely, log the call or not).
+
     """
     call_logger = mk_call_logger(logger, what_to_log)
 

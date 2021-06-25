@@ -31,8 +31,12 @@ def mk_transposer_to_array(dtype=None):
     )
 
 
+def _itemgetter(*items):
+    return itemgetter(*items)
+
+
 mk_mapping_extractor = Line(
-    iterize(itemgetter),
+    iterize(_itemgetter),
     lambda funcs: lambda obj: list(map(methodcaller("__call__", obj), funcs)),
 )
 # to make it seem it comes from this module (but doctests still don't work):
