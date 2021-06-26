@@ -197,6 +197,7 @@ def enumerate_groups(iterable, key=None, start=0):
 
 def pairwise(iterable):
     """Yield sliding window pairs
+
     >>> list(pairwise([1, 2, 3, 4]))
     [(1, 2), (2, 3), (3, 4)]"""
     a, b = tee(iterable)
