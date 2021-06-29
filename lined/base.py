@@ -124,8 +124,7 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
     funcs = (
-        tuple(named_funcs_obtained_from_funcs.values())
-        + funcs_obtained_from_named_funcs
+        tuple(named_funcs_obtained_from_funcs.values()) + funcs_obtained_from_named_funcs
     )
     return (
         funcs,
