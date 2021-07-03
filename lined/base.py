@@ -124,7 +124,8 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
     funcs = (
-        tuple(named_funcs_obtained_from_funcs.values()) + funcs_obtained_from_named_funcs
+        tuple(named_funcs_obtained_from_funcs.values())
+        + funcs_obtained_from_named_funcs
     )
     return (
         funcs,
@@ -164,19 +165,23 @@ def _normalize_funcs_and_named_funcs(funcs, named_funcs):
 
     :return Transformed funcs, named_funcs
     """
+    # Why do we even want to set first_arg_position_only=True?
+    # Because a Line doesn't NEED the keyword argument, and not having breaks somethings
+    # like iterize. TODO: A better solution would be welcome
     if len(funcs):
-        first_func, *remaining_funcs = funcs[0], funcs[1:]
-        func = first_func
-        funcs = list(
-            fnode(func, name, first_arg_position_only=True)
+        # make the arguments we'll call fnode on.
+        fnode_kwargs = list(
+            dict(func=func, name=name, first_arg_position_only=True)
             for name, func in named_funcs.items()
         )
         # Override the first fnode to NOT use the first_arg_position_only flag
-        funcs[0] = fnode(first_func, name=next(iter(named_funcs)))
+        fnode_kwargs[0]["first_arg_position_only"] = False
+        # make fncdes from the funcs
+        fnodes = list(fnode(**kwargs) for kwargs in fnode_kwargs)
 
-        funcs = tuple(funcs)
-        named_funcs = {name: func for name, func in zip(named_funcs, funcs)}
-    return funcs, named_funcs
+        fnodes = tuple(fnodes)
+        named_funcs = {name: fnode_ for name, fnode_ in zip(named_funcs, fnodes)}
+    return fnodes, named_funcs
 
 
 # TODO: Deprecate of named_funcs? Use (name, func) mechanism only?
@@ -263,20 +268,16 @@ class Line:
         named_funcs = {}
         funcs, named_funcs = _merge_funcs_and_named_funcs(funcs, named_funcs)
 
+        # It might make sense that if no funcs are specified, we take the lined to be
+        # the identity, but we'll implement only when needed
         assert len(funcs) > 0, "You need to specify at least one function!"
         funcs, named_funcs = _normalize_funcs_and_named_funcs(funcs, named_funcs)
-
-        # print(funcs[0]([3, 3, 3, 3]))
 
         self.funcs = funcs
         self.named_funcs = named_funcs
         self.input_name = input_name
         self.output_name = output_name
-        # really, it would make sense that this is the identity, but we'll implement only when needed
-        # self.funcs = tuple(fnode(func, name) for name, func in named_funcs.items())
-        # self.named_funcs = {
-        #     name: fnode_func for name, fnode_func in zip(named_funcs, self.funcs)
-        # }
+
         assert all(
             f == ff for f, ff in zip(self.funcs, self.named_funcs.values())
         ), f"funcs and named_funcs are not aligned after merging"
@@ -304,16 +305,23 @@ class Line:
         """Get a sub-pipeline"""
         if isinstance(k, (int, slice)):
             item_str = ""
-            funcs = ()
-            if isinstance(k, int):
-                funcs = (self.funcs[k],)
+            funcs = []
+            if isinstance(k, int):  # TODO: Add str k handling
+                funcs = [self.funcs[k]]
                 item_str = str(k)
             elif isinstance(k, slice):
                 assert k.step is None, f"slices with steps are not handled: {k}"
-                funcs = self.funcs[k]
+                funcs = list(self.funcs[k])
                 item_str = f"{k.start}:{k.stop}"
-            pipeline_name = self.name or self.__class__.__name__
-            return self.__class__(*funcs, pipeline_name=f"{pipeline_name}[{item_str}]")
+            pipeline_name = self.name or type(self).__name__
+            if len(funcs) > 0:
+                # Need to get rid of the forced position only first arg
+                # TODO: Get rid of this if/when we get rid of forced position only
+                first_fnode, *_ = funcs
+                underlying_funcs_sig = Sig(first_fnode.func)
+                sig = Sig(underlying_funcs_sig)
+                funcs[0] = fnode(sig(first_fnode.func), first_fnode.name)
+            return type(self)(*funcs, pipeline_name=f"{pipeline_name}[{item_str}]")
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
@@ -927,8 +935,9 @@ def _signature_of_pipeline(*funcs):
 class ParallelFuncs:
     """Make a multi-channel function from a {name: func, ...} specification.
 
-    >>> multi_func = ParallelFuncs(say_hello=lambda x: f"hello {x}",
-    say_goodbye=lambda x: f"goodbye {x}")
+    >>> multi_func = ParallelFuncs(
+    ...     say_hello=lambda x: f"hello {x}", say_goodbye=lambda x: f"goodbye {x}"
+    ... )
     >>> multi_func({'say_hello': 'world', 'say_goodbye': 'Lenin'})
     {'say_hello': 'hello world', 'say_goodbye': 'goodbye Lenin'}
 
