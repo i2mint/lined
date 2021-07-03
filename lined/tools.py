@@ -487,9 +487,13 @@ def side_call(x, callback):
     return x
 
 
+def _print(*args, **kwargs):
+    return print(*args, **kwargs)
+
+
 print_and_pass_on = partial_plus(
     side_call,
-    callback=print,
+    callback=_print,
     __name__="print_and_pass_on",
     __doc__="Passes input through to output, but prints before outputing",
 )
