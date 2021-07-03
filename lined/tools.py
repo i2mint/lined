@@ -487,13 +487,12 @@ def side_call(x, callback):
     return x
 
 
-# TODO: Figure out how to make CI not choke on this!
-# print_and_pass_on = partial_plus(
-#     side_call,
-#     callback=print,
-#     __name__="print_and_pass_on",
-#     __doc__="Passes input through to output, but prints before outputing",
-# )
+print_and_pass_on = partial_plus(
+    side_call,
+    callback=print,
+    __name__="print_and_pass_on",
+    __doc__="Passes input through to output, but prints before outputing",
+)
 
 
 # Function transformers
