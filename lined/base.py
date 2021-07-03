@@ -302,7 +302,43 @@ class Line:
         return len(self.funcs)
 
     def __getitem__(self, k):
-        """Get a sub-pipeline"""
+        """Get a sub-pipeline
+
+        >>> from lined import Line
+        >>>
+        >>> def add(a, b=3):
+        ...     return a + b
+        ...
+        >>> def mult(x, y=2):
+        ...     return x * y
+        ...
+        >>> def exp(m, n=1):
+        ...     return m ** n
+        ...
+        >>> f = Line(add, mult, exp, pipeline_name='line')
+        >>> f
+        line(a, b=3)
+        >>> f(4)  # ((4 + 3) * 2) ** 1 == 7 * 2 == 14
+        14
+
+        A Line instance acts a bit like a lit of the functions that compose it.
+
+        You can get a sub-line by getting a slice of the line:
+
+        >>> ff = f[1:]
+        >>> ff
+        line[1:None](x, y=2)
+        >>> ff(4)  # (4 * 2) ** 1 == 8
+        8
+
+        You can ask for only one node of the line:
+
+        >>> fff = f[2]
+        >>> fff
+        line[2](m, n=1)
+        >>> fff(4)  # 4 ** 1 == 4
+        4
+        """
         if isinstance(k, (int, slice)):
             item_str = ""
             funcs = []
