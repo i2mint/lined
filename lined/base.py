@@ -14,7 +14,8 @@ from i2.signatures import (
     call_forgivingly,
     ch_signature_to_all_pk,
     tuple_the_args,
-    PO,  # POSITION_ONLY
+    PO,  # POSITION_ONLY,
+    KO,  # KEYWORD_ONLY
 )
 
 
@@ -682,7 +683,12 @@ class LineParametrized(Line):
 
     >>> from inspect import signature
     >>> signature(f)
-    <Sig (a, b=0, y=2, e=3)>
+    <Sig (a, b=0, *, y=2, e=3)>
+
+    Note that `y` and `e` are keyword-only arguments.
+    All arguments that are not from the first function will be keyword only
+    (except for the first argument of these functions, which do not appear at all
+    since they're used as the "connecting arguments").
 
     Note in the above signature, that `x` and `r` are missing.
     That's because these are "connecting" arguments.
@@ -752,7 +758,8 @@ class LineParametrized(Line):
 
         def sig_without_the_first_input(func):
             sig = Sig(func)
-            return sig - sig.names[0]
+            sig = sig - sig.names[0]
+            return sig.ch_kinds(**{name: KO for name in sig.names})
 
         # _funcs = map(normalize_func, _funcs)  # TODO: Test edge cases to assess need
         _funcs = map(sig_without_the_first_input, _funcs)
