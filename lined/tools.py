@@ -374,7 +374,8 @@ def check_sorted_during_iteration(
     error occurs, returning the elements consumed.
 
     >>> from lined.tools import consume_until_error
-    >>> consume = Line(check_sorted_during_iteration, consume_until_error, list)
+    >>> from lined.simple import Pipe
+    >>> consume = Pipe(check_sorted_during_iteration, consume_until_error, list)
 
     >>> iterable = ['a', 'ba', 'cba', 'cba', 'back', 'bacca']
     >>> consume(iterable, lambda x, y: x < y)  # compare with strict <
