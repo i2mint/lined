@@ -1,4 +1,23 @@
-from inspect import signature, Signature
+from inspect import signature, Signature, Parameter
+
+dflt_signature = Signature(
+    [
+        Parameter(name="args", kind=Parameter.VAR_POSITIONAL),
+        Parameter(name="kwargs", kind=Parameter.VAR_KEYWORD),
+    ]
+)
+
+
+def _signature_from_first_and_last_func(first_func, last_func):
+    try:
+        input_params = signature(first_func).parameters.values()
+    except ValueError:  # function doesn't have a signature, so take default
+        input_params = dflt_signature.parameters.values()
+    try:
+        return_annotation = signature(last_func).return_annotation
+    except ValueError:  # function doesn't have a signature, so take default
+        return_annotation = dflt_signature.return_annotation
+    return Signature(input_params, return_annotation=return_annotation)
 
 
 def compose(*funcs):
@@ -35,10 +54,13 @@ def compose(*funcs):
 
     composed_funcs.first_func = first_func
     composed_funcs.other_funcs = other_funcs
-    composed_funcs.__signature__ = Signature(
-        signature(first_func).parameters.values(),
-        return_annotation=signature(last_func).return_annotation,
+    composed_funcs.__signature__ = _signature_from_first_and_last_func(
+        first_func, last_func
     )
+    # composed_funcs.__signature__ = Signature(
+    #     signature(first_func).parameters.values(),
+    #     return_annotation=signature(last_func).return_annotation,
+    # )
     return composed_funcs
 
 
@@ -69,13 +91,15 @@ class Pipe:
         else:
             first_func, *other_funcs, last_func = funcs
 
-        try:
-            self.__signature__ = Signature(
-                signature(first_func).parameters.values(),
-                return_annotation=signature(last_func).return_annotation,
-            )
-        except ValueError:  # some builtins don't have signatures, so ignore.
-            pass
+        # try:
+        #     self.__signature__ = Signature(
+        #         signature(first_func).parameters.values(),
+        #         return_annotation=signature(last_func).return_annotation,
+        #     )
+        # except ValueError:  # some builtins don't have signatures, so ignore.
+        #     pass
+
+        self.__signature__ = _signature_from_first_and_last_func(first_func, last_func)
         self.first_func = first_func
         self.other_funcs = tuple(other_funcs) + (last_func,)
 
