@@ -2,10 +2,31 @@ from functools import partial, wraps
 from collections import deque
 from typing import Any
 from dataclasses import dataclass
+from operator import not_
 
-from i2.signatures import Sig, Parameter
 from lined.util import func_name, partial_plus, n_required_args
-from lined.base import Line
+from lined.simple import Pipe
+
+
+def negate(func):  # TODO: Do we want to use wraps(func) to get more than just signature?
+    """Get a negated version of a function
+
+    Will return a function with
+    the same signature, but whose output is negated (that is, it calls the original
+    function getting the `output` but instead of returning it,
+    it returns `not output`.
+
+    >>> sum([1, 2, 3])
+    6
+    >>> sum([-2, 2])
+    0
+    >>> sum_is_zero = negate(sum)
+    >>> sum_is_zero([1, 2, 3])
+    False
+    >>> sum_is_zero([-2, 2])
+    True
+    """
+    return Pipe(func, not_)
 
 
 def identity(x):
@@ -63,9 +84,7 @@ from typing import Union, Callable, Generator, Iterable
 from itertools import tee
 
 
-def if_then_else(
-    x, if_func=true_no_matter_what, then_func=identity, else_func=identity
-):
+def if_then_else(x, if_func=true_no_matter_what, then_func=identity, else_func=identity):
     """Implement the if-then-else logic as a function.
 
     >>> if_then_else(
@@ -154,8 +173,71 @@ class ItemsNotSorted(RuntimeError):
     order"""
 
 
+def return_instead_of_raising_exceptions(func=None, *, exceptions=(Exception,)):
+    """Make a function return its exceptions instead of raising them.
+
+    >>> def foo(x, y):
+    ...     return x / y
+    >>> f = return_instead_of_raising_exceptions(foo)
+    >>> f(6, 2)
+    3.0
+    >>> f(1,0)  # note that this doesn't raise, but returns the exception (instance)
+    ZeroDivisionError('division by zero')
+
+    :param func: The function to transform.
+    :param exceptions: The exceptions to handle
+        Default is Exception (letting other BaseException instances like
+        KeyboardInterrupt still be raised). If you need more exceptions, or less
+        exceptions to be handled, enter them here.
+    :return:
+    """
+
+    def _process_exceptions(exceptions):
+        if isinstance(exceptions, type) and issubclass(exceptions, BaseException):
+            return (exceptions,)  # needs to be a tuple
+        elif isinstance(exceptions, Iterable):
+            exceptions = tuple(exceptions)
+            assert all(issubclass(e, BaseException) for e in exceptions), (
+                "All elements of exceptions must be subclasses of BaseException: "
+                "Was {exceptions}"
+            )
+        else:
+            raise TypeError(
+                f"exceptions must be a BaseException subclass or iterable thereof: "
+                f"{exceptions}"
+            )
+        return exceptions
+
+    exceptions = _process_exceptions(exceptions)
+
+    if func is None:
+        return partial(return_instead_of_raising_exceptions, exceptions=exceptions)
+
+    @wraps(func)
+    def func_that_returns_instead_of_raising_exceptions(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except exceptions as exception_instance:
+            return exception_instance
+
+    return func_that_returns_instead_of_raising_exceptions
+
+
 def raise_(exception):
-    raise exception
+    """raises the given exception (instance or callable that returns one)
+    Meant to be hooked to the out put of a function that returns an exception or a
+    command to raise one.
+
+    """
+    if isinstance(exception, BaseException):
+        raise exception
+    elif callable(exception):
+        raise exception()
+    else:
+        raise TypeError(
+            f"exception must be an BaseException instance or a "
+            f"callable that returns one. Was: {exception}"
+        )
 
 
 raise_not_sorted_error = Command(raise_, ItemsNotSorted)
@@ -239,9 +321,7 @@ def _validated_comparison_func(key: Callable):
             return key(x) <= key(y)
 
         return comp_func
-    assert n_required == 2, (
-        f"key should be a callable with 1 or 2 required " f"arguments"
-    )
+    assert n_required == 2, f"key should be a callable with 1 or 2 required " f"arguments"
     return key
 
 
@@ -402,10 +482,11 @@ def iterate(iterable: Iterable):
 
     For example, consider the following:
 
-    >>> from lined import Pipeline, iterize, iterate
-    >>> pipe = Pipeline(iterize(lambda x: x * 2),
-    ...                 iterize(lambda x: print(f"hello {x}")),
-    ...            )
+    >>> from lined import Pipe, iterize, iterate
+    >>> pipe = Pipe(
+    ...     iterize(lambda x: x * 2),
+    ...     iterize(lambda x: print(f"hello {x}")),
+    ... )
     >>>
     >>> for _ in pipe([1, 2, 3]):
     ...     pass
@@ -420,10 +501,11 @@ def iterate(iterable: Iterable):
     This is where you can use `iterate`. It basically "launches" that
     consuming loop for you.
 
-    >>> pipe = Pipeline(iterize(lambda x: x * 2),
-    ...                iterize(lambda x: print(f"hello {x}")),
-    ...                iterate
-    ...               )
+    >>> pipe = Pipe(
+    ...     iterize(lambda x: x * 2),
+    ...     iterize(lambda x: print(f"hello {x}")),
+    ...     iterate
+    ... )
     >>>
     >>> pipe([1, 2, 3])
     hello 2
@@ -473,12 +555,13 @@ def side_call(x, callback):
     """Identity function that calls a callaback function before returning the
     input as is (unless the input is mutable and the callback changes it).
 
+    >>> from lined import Pipe
     >>> add2 = lambda x: x + 2
     >>> add2(40)
     42
     >>> from functools import partial
     >>> logger = partial(side_call, callback=lambda x: print(f"input is {x}"))
-    >>> logged_add2 = Line(logger, add2)
+    >>> logged_add2 = Pipe(logger, add2)
     >>> logged_add2(40)
     input is 40
     42
@@ -555,9 +638,9 @@ def iterize(func, name=None):
 
     Consider the following pipeline:
 
-    >>> from lined import Pipeline
+    >>> from lined import Pipe
     >>>
-    >>> pipe = Pipeline(lambda x: x * 2,
+    >>> pipe = Pipe(lambda x: x * 2,
     ...                 lambda x: f"hello {x}")
     >>> pipe(1)
     'hello 2'
@@ -584,10 +667,10 @@ def iterize(func, name=None):
     or [array programming](https://en.wikipedia.org/wiki/Array_programming).)
 
 
-    >>> from lined import Pipeline, iterize
+    >>> from lined import Pipe, iterize
     >>> from typing import Iterable
     >>>
-    >>> pipe = Pipeline(iterize(lambda x: x * 2),
+    >>> pipe = Pipe(iterize(lambda x: x * 2),
     ...                 iterize(lambda x: f"hello {x}"))
     >>> iterable = pipe([1, 2, 3])
     >>> # see that the result is an iterable
@@ -640,7 +723,7 @@ def deiterize(func):
     works on iterables), and
     That is, takes a func(X,...) function and returns a next(iter(func([X],
     ...))) function."""
-    return Line(wrap_first_arg_in_list(func), iter, next)
+    return Pipe(wrap_first_arg_in_list(func), iter, next)
 
 
 generator_version = iterize  # back compatibility alias
@@ -656,7 +739,7 @@ def mk_filter(filter_func=None):
 
 
 def map_star(func):
-    """Make a func(args) function out of a func(*args) one.
+    """Make a func(args) function out of a func(*args) o.
     Also known as singularize_arg_input.
     In a way, the opposite of map_starexpanded_args.
 

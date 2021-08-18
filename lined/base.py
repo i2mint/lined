@@ -178,7 +178,15 @@ def _normalize_funcs_and_named_funcs(funcs, named_funcs):
         # Override the first fnode to NOT use the first_arg_position_only flag
         fnode_kwargs[0]["first_arg_position_only"] = False
         # make fncdes from the funcs
-        fnodes = list(fnode(**kwargs) for kwargs in fnode_kwargs)
+        try:
+            fnodes = list(fnode(**kwargs) for kwargs in fnode_kwargs)
+        except ValueError as e:
+            add_to_msg = (
+                "You can consider using Pipe instead of Line. Pipe doesn't have as "
+                "many goodies as Line, but it's also more lenient with functions."
+            )
+            raise ValueError(e.args[0] + '\n' + add_to_msg)
+
 
         fnodes = tuple(fnodes)
         named_funcs = {name: fnode_ for name, fnode_ in zip(named_funcs, fnodes)}
