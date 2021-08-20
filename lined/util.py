@@ -1,7 +1,33 @@
+"""Util functions"""
+
 from functools import partial, partialmethod
 from typing import Callable
 from types import MethodType
 import itertools
+
+from inspect import Signature, Parameter, signature
+
+
+dflt_signature = Signature(
+    [
+        Parameter(name="args", kind=Parameter.VAR_POSITIONAL),
+        Parameter(name="kwargs", kind=Parameter.VAR_KEYWORD),
+    ]
+)
+
+
+def signature_from_first_and_last_func(first_func, last_func):
+    """Returns a signature using the first_func for it's params and last_func for
+    return annotations, both only if possible"""
+    try:
+        input_params = signature(first_func).parameters.values()
+    except ValueError:  # function doesn't have a signature, so take default
+        input_params = dflt_signature.parameters.values()
+    try:
+        return_annotation = signature(last_func).return_annotation
+    except ValueError:  # function doesn't have a signature, so take default
+        return_annotation = dflt_signature.return_annotation
+    return Signature(input_params, return_annotation=return_annotation)
 
 
 writable_function_dunders = {
@@ -133,7 +159,10 @@ def dot_to_ascii(dot: str, fancy: bool = True):
         "src": dot,
     }
 
-    response = requests.get(url, params=params).text
+    try:
+        response = requests.get(url, params=params).text
+    except requests.exceptions.ConnectionError:
+        return "ConnectionError: You need the internet to convert dot into ascii!"
 
     if response == "":
         raise SyntaxError("DOT string is not formatted correctly")

@@ -8,7 +8,7 @@ dflt_signature = Signature(
 )
 
 
-def _signature_from_first_and_last_func(first_func, last_func):
+def signature_from_first_and_last_func(first_func, last_func):
     try:
         input_params = signature(first_func).parameters.values()
     except ValueError:  # function doesn't have a signature, so take default
@@ -54,13 +54,10 @@ def compose(*funcs):
 
     composed_funcs.first_func = first_func
     composed_funcs.other_funcs = other_funcs
-    composed_funcs.__signature__ = _signature_from_first_and_last_func(
+    composed_funcs.__signature__ = signature_from_first_and_last_func(
         first_func, last_func
     )
-    # composed_funcs.__signature__ = Signature(
-    #     signature(first_func).parameters.values(),
-    #     return_annotation=signature(last_func).return_annotation,
-    # )
+
     return composed_funcs
 
 
@@ -91,15 +88,7 @@ class Pipe:
         else:
             first_func, *other_funcs, last_func = funcs
 
-        # try:
-        #     self.__signature__ = Signature(
-        #         signature(first_func).parameters.values(),
-        #         return_annotation=signature(last_func).return_annotation,
-        #     )
-        # except ValueError:  # some builtins don't have signatures, so ignore.
-        #     pass
-
-        self.__signature__ = _signature_from_first_and_last_func(first_func, last_func)
+        self.__signature__ = signature_from_first_and_last_func(first_func, last_func)
         self.first_func = first_func
         self.other_funcs = tuple(other_funcs) + (last_func,)
 

@@ -4,7 +4,7 @@ The base objects of lined.
 
 from functools import wraps
 from typing import Callable, Dict, Iterable, Optional, Union, Mapping
-from inspect import Signature, signature
+from inspect import signature, Parameter
 from itertools import starmap
 from dataclasses import dataclass
 
@@ -19,7 +19,7 @@ from i2.signatures import (
 )
 
 
-from lined.util import unnamed_pipeline, func_name
+from lined.util import signature_from_first_and_last_func, func_name
 
 # MultiFuncSpec = Dict[str, Callable]
 Funcs = Union[Iterable[Callable], Callable]
@@ -125,8 +125,7 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
     funcs = (
-        tuple(named_funcs_obtained_from_funcs.values())
-        + funcs_obtained_from_named_funcs
+        tuple(named_funcs_obtained_from_funcs.values()) + funcs_obtained_from_named_funcs
     )
     return (
         funcs,
@@ -185,12 +184,32 @@ def _normalize_funcs_and_named_funcs(funcs, named_funcs):
                 "You can consider using Pipe instead of Line. Pipe doesn't have as "
                 "many goodies as Line, but it's also more lenient with functions."
             )
-            raise ValueError(e.args[0] + '\n' + add_to_msg)
-
+            raise ValueError(e.args[0] + "\n" + add_to_msg)
 
         fnodes = tuple(fnodes)
         named_funcs = {name: fnode_ for name, fnode_ in zip(named_funcs, fnodes)}
     return fnodes, named_funcs
+
+
+ParamToLabel = Callable[[Parameter], str]
+name_with_varkind_and_default_marker: ParamToLabel
+
+
+def name_with_varkind_and_default_marker(param: Parameter) -> str:
+    """Returns a string representation for the Parameter object"""
+    empty = Parameter.empty
+
+    def kind_marker(param):
+        if param.kind == Parameter.VAR_POSITIONAL:
+            return "*"
+        elif param.kind == Parameter.VAR_KEYWORD:
+            return "**"
+        else:
+            return ""
+
+    return (
+        kind_marker(param) + f"{param.name}" + ("=" if param.default is not empty else "")
+    )
 
 
 # TODO: Deprecate of named_funcs? Use (name, func) mechanism only?
@@ -378,6 +397,7 @@ class Line:
         input_node=True,
         output_node=False,
         edges_gen=True,
+        arg_param_to_string: Callable = name_with_varkind_and_default_marker,
         **kwargs,
     ):
 
@@ -393,14 +413,16 @@ class Line:
         func_names = list(self.named_funcs)
 
         if input_node:
+            first_func_name = func_names[0]
             if input_node is True:
-                for argname in signature(self.funcs[0]).parameters:
-                    yield f'{argname} [shape="{vnode_shape}"]'
-                    yield f"{argname} -> {func_names[0]}"
+                for argname, param in signature(self).parameters.items():
+                    label = arg_param_to_string(param)
+                    yield f'{argname} [shape="{vnode_shape}" label="{label}"]'
+                    yield f"{argname} -> {first_func_name}"
             elif input_node == str:
                 input_node = self.input_name or "input"
                 yield f'{input_node} [shape="{vnode_shape}"]'
-                yield f"{input_node} -> {func_names[0]}"
+                yield f"{input_node} -> {first_func_name}"
 
         for fname in func_names:
             yield f'{fname} [shape="{fnode_shape}"]'
@@ -972,15 +994,17 @@ def _signature_of_pipeline(*funcs):
         first_func, *_, last_func = funcs
     # Finally, let's make the __call__ have a nice signature.
     # Argument information from first func and return annotation from last func
-    try:
-        input_params = list(signature(first_func).parameters.values())
-        try:
-            return_annotation = signature(last_func).return_annotation
-        except ValueError:
-            return_annotation = Signature.empty
-        return Signature(input_params, return_annotation=return_annotation)
-    except ValueError:
-        return None
+    return signature_from_first_and_last_func(first_func, last_func)
+    #
+    # try:
+    #     input_params = list(signature(first_func).parameters.values())
+    #     try:
+    #         return_annotation = signature(last_func).return_annotation
+    #     except ValueError:
+    #         return_annotation = Signature.empty
+    #     return Signature(input_params, return_annotation=return_annotation)
+    # except ValueError:
+    #     return None
 
 
 class ParallelFuncs:
