@@ -1,3 +1,6 @@
+Install: `pip install lined`
+
+[Documentation](https://otosense.github.io/lined/)
 
 # lined
 
