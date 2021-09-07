@@ -11,6 +11,7 @@ And lightly too! No dependencies. All with pure builtin python.
 A really simple example:
 
 ```pydocstring
+>>> from lined import Line
 >>> p = Line(sum, str)
 >>> p([2, 3])
 '5'
