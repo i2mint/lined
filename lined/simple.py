@@ -1,9 +1,11 @@
+"""Simple lightweight utils"""
+
 from inspect import signature, Signature, Parameter
 
 dflt_signature = Signature(
     [
-        Parameter(name="args", kind=Parameter.VAR_POSITIONAL),
-        Parameter(name="kwargs", kind=Parameter.VAR_KEYWORD),
+        Parameter(name='args', kind=Parameter.VAR_POSITIONAL),
+        Parameter(name='kwargs', kind=Parameter.VAR_KEYWORD),
     ]
 )
 
@@ -44,7 +46,7 @@ def compose(*funcs):
 
     n_funcs = len(funcs)
     if n_funcs == 0:
-        raise ValueError("You need to specify at least one function!")
+        raise ValueError('You need to specify at least one function!')
     elif n_funcs == 1:
         first_func = last_func = funcs[0]
         other_funcs = ()
@@ -82,7 +84,7 @@ class Pipe:
         n_funcs = len(funcs)
         other_funcs = ()
         if n_funcs == 0:
-            raise ValueError("You need to specify at least one function!")
+            raise ValueError('You need to specify at least one function!')
         elif n_funcs == 1:
             first_func = last_func = funcs[0]
         else:

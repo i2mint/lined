@@ -1,3 +1,6 @@
+"""
+All kinds of useful tools to use in pipelines.
+"""
 from functools import partial, wraps
 from collections import deque
 from typing import Any
@@ -8,7 +11,9 @@ from lined.util import func_name, partial_plus, n_required_args
 from lined.simple import Pipe
 
 
-def negate(func):  # TODO: Do we want to use wraps(func) to get more than just signature?
+def negate(
+    func,
+):  # TODO: Do we want to use wraps(func) to get more than just signature?
     """Get a negated version of a function
 
     Will return a function with
@@ -84,7 +89,9 @@ from typing import Union, Callable, Generator, Iterable
 from itertools import tee
 
 
-def if_then_else(x, if_func=true_no_matter_what, then_func=identity, else_func=identity):
+def if_then_else(
+    x, if_func=true_no_matter_what, then_func=identity, else_func=identity
+):
     """Implement the if-then-else logic as a function.
 
     >>> if_then_else(
@@ -198,13 +205,13 @@ def return_instead_of_raising_exceptions(func=None, *, exceptions=(Exception,)):
         elif isinstance(exceptions, Iterable):
             exceptions = tuple(exceptions)
             assert all(issubclass(e, BaseException) for e in exceptions), (
-                "All elements of exceptions must be subclasses of BaseException: "
-                "Was {exceptions}"
+                'All elements of exceptions must be subclasses of BaseException: '
+                'Was {exceptions}'
             )
         else:
             raise TypeError(
-                f"exceptions must be a BaseException subclass or iterable thereof: "
-                f"{exceptions}"
+                f'exceptions must be a BaseException subclass or iterable thereof: '
+                f'{exceptions}'
             )
         return exceptions
 
@@ -235,8 +242,8 @@ def raise_(exception):
         raise exception()
     else:
         raise TypeError(
-            f"exception must be an BaseException instance or a "
-            f"callable that returns one. Was: {exception}"
+            f'exception must be an BaseException instance or a '
+            f'callable that returns one. Was: {exception}'
         )
 
 
@@ -321,7 +328,9 @@ def _validated_comparison_func(key: Callable):
             return key(x) <= key(y)
 
         return comp_func
-    assert n_required == 2, f"key should be a callable with 1 or 2 required " f"arguments"
+    assert n_required == 2, (
+        f'key should be a callable with 1 or 2 required ' f'arguments'
+    )
     return key
 
 
@@ -574,22 +583,21 @@ def side_call(x, callback):
 print_and_pass_on = partial_plus(
     side_call,
     callback=print,
-    __name__="print_and_pass_on",
-    __doc__="Passes input through to output, but prints before outputing",
+    __name__='print_and_pass_on',
+    __doc__='Passes input through to output, but prints before outputing',
 )
-
 
 # Function transformers
 # ###################################################################
 
 
-def extra_wraps(func, name=None, doc_prefix=""):
+def extra_wraps(func, name=None, doc_prefix=''):
     func.__name__ = name or func_name(func)
-    func.__doc__ = doc_prefix + getattr(func, "__name__", "")
+    func.__doc__ = doc_prefix + getattr(func, '__name__', '')
     return func
 
 
-def mywraps(func, name=None, doc_prefix=""):
+def mywraps(func, name=None, doc_prefix=''):
     def wrapper(wrapped):
         return extra_wraps(wraps(func)(wrapped), name=name, doc_prefix=doc_prefix)
 
@@ -620,7 +628,7 @@ def tail_io(func):
     def _func(input):
         *header, real_input = input
         out = func(real_input)
-        return *header, out
+        return (*header, out)
 
     return _func
 
@@ -702,7 +710,7 @@ def iterize(func, name=None):
     # made kwargs that made map partial choke.
 
     wrapper = mywraps(
-        func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"
+        func, name=name, doc_prefix=f'generator version of {func_name(func)}:\n'
     )
     return wrapper(partial(map, func))
 
@@ -734,8 +742,8 @@ def mk_filter(filter_func=None):
     return partial_plus(
         filter,
         filter_func,
-        __name__="mk_filter",
-        __doc__="Makes a filter with a fixed filt func.",
+        __name__='mk_filter',
+        __doc__='Makes a filter with a fixed filt func.',
     )
 
 
@@ -752,7 +760,7 @@ def map_star(func):
     >>> assert singularized_foo([2, 3]) == singularized_foo({2, 3}) == foo(2, 3)
     """
 
-    @mywraps(func, doc_prefix=f"map_star version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'map_star version of {func_name(func)}')
     def func_with_single_arg_input(args):
         return func(*args)
 
@@ -774,7 +782,7 @@ def expanded_args(func):
 
     """
 
-    @mywraps(func, doc_prefix=f"expanded_args version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'expanded_args version of {func_name(func)}')
     def _func(*args):
         return func(args)
 
@@ -855,8 +863,8 @@ _no_value_specified_sentinel = cast(int, object())
 
 
 class BufferStats(deque):
-    """A callable (fifo) buffer. Calls add input to it, but also returns a
-    function of it's contents.
+    """A callable (fifo) buffer. Calls add input to it, but also returns some results
+    computed from it's contents.
 
     What "add" means is configurable (through ``add_new_val`` arg). Default
     is append, but can be extend etc.
@@ -931,9 +939,9 @@ class BufferStats(deque):
             has a valid (self, new_val) signature.
         """
         if maxlen is _no_value_specified_sentinel:
-            raise TypeError("You are required to specify maxlen")
+            raise TypeError('You are required to specify maxlen')
         if not isinstance(maxlen, int):
-            raise TypeError(f"maxlen must be an integer, was: {maxlen}")
+            raise TypeError(f'maxlen must be an integer, was: {maxlen}')
 
         super().__init__(values, maxlen=maxlen)
         self.func = func
@@ -941,7 +949,7 @@ class BufferStats(deque):
             add_new_val = getattr(self, add_new_val)  # add_new_val is a method of
             # deque
         self.add_new_val = add_new_val
-        self.__name__ = "BufferStats"
+        self.__name__ = 'BufferStats'
 
     def __call__(self, new_val) -> Stats:
         self.add_new_val(self, new_val)  # add the new value
@@ -953,7 +961,7 @@ def is_not_none(x):
 
 
 def return_buffer_on_stats_condition(
-        stats: Stats, buffer: Iterable, cond: Callable = is_not_none, else_val=None
+    stats: Stats, buffer: Iterable, cond: Callable = is_not_none, else_val=None
 ):
     """
     >>> return_buffer_on_stats_condition(stats=3, buffer=[1,2,3,4], cond=lambda x: x%2 == 1)
@@ -992,8 +1000,99 @@ class Segmenter:
     stats_buffer_callback: Callable[
         [Stats, Iterable], Any
     ] = return_buffer_on_stats_condition
-    __name__ = "Segmenter"
+    __name__ = 'Segmenter'
 
     def __call__(self, new_val):
         stats = self.buffer(new_val)
         return self.stats_buffer_callback(stats, list(self.buffer))
+
+
+# ---------------------------------------------------------------------------------------
+# Adding indices
+
+# from dataclasses import dataclass
+# from typing import Callable, Union
+
+Number = Union[int, float]
+Index = Number
+DataItem = Any
+IndexUpdater = Callable[[Index, DataItem], Index]
+
+
+def count_increments(current_idx, obj, step=1):
+    return current_idx + step
+
+
+def size_increments(current_idx, obj, size_func=len):
+    return current_idx + size_func(obj)
+
+
+@dataclass
+class DynamicIndexer:
+    """
+    :param current_idx: The index to start at (the first data item will have this index)
+    :param idx_updater: The (Index, DataItem) -> Index
+
+    Let's take a finite stream of finite iterables (strings here):
+
+    >>> stream = ['stream', 'of', 'different', 'sized', 'chunks']
+
+    The default ``DynamicIndexer`` just does what ``enumerate`` does:
+
+    >>> counter_index = DynamicIndexer()
+    >>> list(map(counter_index, stream))
+    [(0, 'stream'), (1, 'of'), (2, 'different'), (3, 'sized'), (4, 'chunks')]
+
+    That's because it uses the default ``idx_updater`` function just increments by one.
+    This function, DynamicIndexer.count_increments, is shown below
+
+    >>> def count_increments(current_idx, data_item, step=1):
+    ...     return current_idx + step
+
+    To get the index starting at 10, we can specify ``start_idx=10``, and to step the
+    index by 3 we can partialize ``count_increments``:
+
+    >>> from functools import partial
+    >>> step3 = partial(count_increments, step=3)
+    >>> list(map(DynamicIndexer(start_idx=10, idx_updater=step3), stream))
+    [(10, 'stream'), (13, 'of'), (16, 'different'), (19, 'sized'), (22, 'chunks')]
+
+    You can specify any custom ``idx_updater`` you want: The requirements being that
+    this function should take ``(current_idx, data_item)`` as the input, and
+    return the next "current index", that is, what the index of the next data item will
+    be.
+    Note that ``count_increments`` ignored the ``data_item`` completely, but sometimes
+    you want to take the data item into account.
+    For example, your data item may contain several elements, and you want your
+    index to index these elements, therefore you should update your index by
+    incrementing it with the number of elements.
+
+    We have ``DynamicIndexer.size_increments`` for that, the code is shown below:
+
+    >>> def size_increments(current_idx, data_item, size_func=len):
+    ...     return current_idx + size_func(data_item)
+    >>> size_index = DynamicIndexer(idx_updater=DynamicIndexer.size_increments)
+    >>> list(map(size_index, stream))
+    [(0, 'stream'), (6, 'of'), (8, 'different'), (17, 'sized'), (22, 'chunks')]
+
+    Q: What if I want the index of a data item to be a function of the data item itself?
+
+    A: Then you would use that function to make the ``(idxof(data_item), data_item)``
+    pairs directly. ``DynamicIndexer`` is for the use case where the index of an item
+    depends on the (number of, sizes of, etc.) items that came before it.
+
+    """
+
+    start_idx: Index = 0
+    idx_updater: IndexUpdater = count_increments
+
+    count_increments = staticmethod(count_increments)
+    size_increments = staticmethod(size_increments)
+
+    def __post_init__(self):
+        self.current_idx = self.start_idx
+
+    def __call__(self, x):
+        _current_idx = self.current_idx
+        self.current_idx = self.idx_updater(_current_idx, x)
+        return _current_idx, x
