@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lined.simple &#8212; lined 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for lined.simple</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Simple lightweight utils&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">Signature</span><span class="p">,</span> <span class="n">Parameter</span>
+
+<span class="n">dflt_signature</span> <span class="o">=</span> <span class="n">Signature</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">Parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">),</span>
+        <span class="n">Parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;kwargs&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">signature_from_first_and_last_func</span><span class="p">(</span><span class="n">first_func</span><span class="p">,</span> <span class="n">last_func</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">input_params</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="n">first_func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># function doesn&#39;t have a signature, so take default</span>
+        <span class="n">input_params</span> <span class="o">=</span> <span class="n">dflt_signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="n">last_func</span><span class="p">)</span><span class="o">.</span><span class="n">return_annotation</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># function doesn&#39;t have a signature, so take default</span>
+        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">dflt_signature</span><span class="o">.</span><span class="n">return_annotation</span>
+    <span class="k">return</span> <span class="n">Signature</span><span class="p">(</span><span class="n">input_params</span><span class="p">,</span> <span class="n">return_annotation</span><span class="o">=</span><span class="n">return_annotation</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="compose"><a class="viewcode-back" href="../../module_docs/lined/simple.html#lined.simple.compose">[docs]</a><span class="k">def</span> <span class="nf">compose</span><span class="p">(</span><span class="o">*</span><span class="n">funcs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param funcs:</span>
+<span class="sd">    :return:</span>
+
+<span class="sd">    &gt;&gt;&gt; def foo(a, b=2):</span>
+<span class="sd">    ...     return a + b</span>
+<span class="sd">    &gt;&gt;&gt; f = compose(foo, lambda x: print(f&quot;x: {x}&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; f(3)</span>
+<span class="sd">    x: 5</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - composed functions are normal functions (have a __name__ etc.) but are not pickalable. See Pipe for that.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">composed_funcs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">composed_funcs</span><span class="o">.</span><span class="n">first_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">composed_funcs</span><span class="o">.</span><span class="n">other_funcs</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="n">n_funcs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">funcs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_funcs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You need to specify at least one function!&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">n_funcs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">first_func</span> <span class="o">=</span> <span class="n">last_func</span> <span class="o">=</span> <span class="n">funcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">other_funcs</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">first_func</span><span class="p">,</span> <span class="o">*</span><span class="n">other_funcs</span> <span class="o">=</span> <span class="n">funcs</span>
+        <span class="n">last_func</span> <span class="o">=</span> <span class="n">other_funcs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">composed_funcs</span><span class="o">.</span><span class="n">first_func</span> <span class="o">=</span> <span class="n">first_func</span>
+    <span class="n">composed_funcs</span><span class="o">.</span><span class="n">other_funcs</span> <span class="o">=</span> <span class="n">other_funcs</span>
+    <span class="n">composed_funcs</span><span class="o">.</span><span class="n">__signature__</span> <span class="o">=</span> <span class="n">signature_from_first_and_last_func</span><span class="p">(</span>
+        <span class="n">first_func</span><span class="p">,</span> <span class="n">last_func</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">composed_funcs</span></div>
+
+
+<span class="c1"># Pipe code is completely independent. If you only need simple pipelines, use this, or even copy/paste it where needed.</span>
+<span class="c1"># TODO: Give it a __name__ and make it more like a &quot;normal&quot; function so it works well when so assumed</span>
+<div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../../module_docs/lined/simple.html#lined.simple.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Simple function composition. That is, gives you a callable that implements input -&gt; f_1 -&gt; ... -&gt; f_n -&gt; output.</span>
+
+<span class="sd">    &gt;&gt;&gt; def foo(a, b=2):</span>
+<span class="sd">    ...     return a + b</span>
+<span class="sd">    &gt;&gt;&gt; f = Pipe(foo, lambda x: print(f&quot;x: {x}&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; f(3)</span>
+<span class="sd">    x: 5</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - Pipe instances don&#39;t have a __name__ etc. So some expectations of normal functions are not met.</span>
+<span class="sd">        - Pipe instance are pickalable (as long as the functions that compose them are)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">funcs</span><span class="p">):</span>
+
+        <span class="n">n_funcs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">funcs</span><span class="p">)</span>
+        <span class="n">other_funcs</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">if</span> <span class="n">n_funcs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You need to specify at least one function!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">n_funcs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">first_func</span> <span class="o">=</span> <span class="n">last_func</span> <span class="o">=</span> <span class="n">funcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">first_func</span><span class="p">,</span> <span class="o">*</span><span class="n">other_funcs</span><span class="p">,</span> <span class="n">last_func</span> <span class="o">=</span> <span class="n">funcs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__signature__</span> <span class="o">=</span> <span class="n">signature_from_first_and_last_func</span><span class="p">(</span><span class="n">first_func</span><span class="p">,</span> <span class="n">last_func</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_func</span> <span class="o">=</span> <span class="n">first_func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">other_funcs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">other_funcs</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">last_func</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">other_funcs</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">lined</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined.html">lined</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/base.html">lined.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/examples.html">lined.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/recipes.html">lined.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/simple.html">lined.simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tools.html">lined.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/util.html">lined.util</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NO COPYRIGHT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
