@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lined.tools &#8212; lined 0.1.0 documentation</title>
+    <title>lined.tools &#8212; lined 0.1.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -1040,97 +1040,6 @@
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_val</span><span class="p">):</span>
         <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">new_val</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats_buffer_callback</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">))</span></div>
-
-
-<span class="c1"># ---------------------------------------------------------------------------------------</span>
-<span class="c1"># Adding indices</span>
-
-<span class="c1"># from dataclasses import dataclass</span>
-<span class="c1"># from typing import Callable, Union</span>
-
-<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
-<span class="n">Index</span> <span class="o">=</span> <span class="n">Number</span>
-<span class="n">DataItem</span> <span class="o">=</span> <span class="n">Any</span>
-<span class="n">IndexUpdater</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Index</span><span class="p">,</span> <span class="n">DataItem</span><span class="p">],</span> <span class="n">Index</span><span class="p">]</span>
-
-
-<span class="k">def</span> <span class="nf">count_increments</span><span class="p">(</span><span class="n">current_idx</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">current_idx</span> <span class="o">+</span> <span class="n">step</span>
-
-
-<span class="k">def</span> <span class="nf">size_increments</span><span class="p">(</span><span class="n">current_idx</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">size_func</span><span class="o">=</span><span class="nb">len</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">current_idx</span> <span class="o">+</span> <span class="n">size_func</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="DynamicIndexer"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.DynamicIndexer">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">DynamicIndexer</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param current_idx: The index to start at (the first data item will have this index)</span>
-<span class="sd">    :param idx_updater: The (Index, DataItem) -&gt; Index</span>
-
-<span class="sd">    Let&#39;s take a finite stream of finite iterables (strings here):</span>
-
-<span class="sd">    &gt;&gt;&gt; stream = [&#39;stream&#39;, &#39;of&#39;, &#39;different&#39;, &#39;sized&#39;, &#39;chunks&#39;]</span>
-
-<span class="sd">    The default ``DynamicIndexer`` just does what ``enumerate`` does:</span>
-
-<span class="sd">    &gt;&gt;&gt; counter_index = DynamicIndexer()</span>
-<span class="sd">    &gt;&gt;&gt; list(map(counter_index, stream))</span>
-<span class="sd">    [(0, &#39;stream&#39;), (1, &#39;of&#39;), (2, &#39;different&#39;), (3, &#39;sized&#39;), (4, &#39;chunks&#39;)]</span>
-
-<span class="sd">    That&#39;s because it uses the default ``idx_updater`` function just increments by one.</span>
-<span class="sd">    This function, DynamicIndexer.count_increments, is shown below</span>
-
-<span class="sd">    &gt;&gt;&gt; def count_increments(current_idx, data_item, step=1):</span>
-<span class="sd">    ...     return current_idx + step</span>
-
-<span class="sd">    To get the index starting at 10, we can specify ``start_idx=10``, and to step the</span>
-<span class="sd">    index by 3 we can partialize ``count_increments``:</span>
-
-<span class="sd">    &gt;&gt;&gt; from functools import partial</span>
-<span class="sd">    &gt;&gt;&gt; step3 = partial(count_increments, step=3)</span>
-<span class="sd">    &gt;&gt;&gt; list(map(DynamicIndexer(start_idx=10, idx_updater=step3), stream))</span>
-<span class="sd">    [(10, &#39;stream&#39;), (13, &#39;of&#39;), (16, &#39;different&#39;), (19, &#39;sized&#39;), (22, &#39;chunks&#39;)]</span>
-
-<span class="sd">    You can specify any custom ``idx_updater`` you want: The requirements being that</span>
-<span class="sd">    this function should take ``(current_idx, data_item)`` as the input, and</span>
-<span class="sd">    return the next &quot;current index&quot;, that is, what the index of the next data item will</span>
-<span class="sd">    be.</span>
-<span class="sd">    Note that ``count_increments`` ignored the ``data_item`` completely, but sometimes</span>
-<span class="sd">    you want to take the data item into account.</span>
-<span class="sd">    For example, your data item may contain several elements, and you want your</span>
-<span class="sd">    index to index these elements, therefore you should update your index by</span>
-<span class="sd">    incrementing it with the number of elements.</span>
-
-<span class="sd">    We have ``DynamicIndexer.size_increments`` for that, the code is shown below:</span>
-
-<span class="sd">    &gt;&gt;&gt; def size_increments(current_idx, data_item, size_func=len):</span>
-<span class="sd">    ...     return current_idx + size_func(data_item)</span>
-<span class="sd">    &gt;&gt;&gt; size_index = DynamicIndexer(idx_updater=DynamicIndexer.size_increments)</span>
-<span class="sd">    &gt;&gt;&gt; list(map(size_index, stream))</span>
-<span class="sd">    [(0, &#39;stream&#39;), (6, &#39;of&#39;), (8, &#39;different&#39;), (17, &#39;sized&#39;), (22, &#39;chunks&#39;)]</span>
-
-<span class="sd">    Q: What if I want the index of a data item to be a function of the data item itself?</span>
-
-<span class="sd">    A: Then you would use that function to make the ``(idxof(data_item), data_item)``</span>
-<span class="sd">    pairs directly. ``DynamicIndexer`` is for the use case where the index of an item</span>
-<span class="sd">    depends on the (number of, sizes of, etc.) items that came before it.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">start_idx</span><span class="p">:</span> <span class="n">Index</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">idx_updater</span><span class="p">:</span> <span class="n">IndexUpdater</span> <span class="o">=</span> <span class="n">count_increments</span>
-
-    <span class="n">count_increments</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">count_increments</span><span class="p">)</span>
-    <span class="n">size_increments</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">size_increments</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_idx</span>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">_current_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_updater</span><span class="p">(</span><span class="n">_current_idx</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_current_idx</span><span class="p">,</span> <span class="n">x</span></div>
 </pre></div>
 
           </div>

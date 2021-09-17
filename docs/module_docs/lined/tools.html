@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>lined.tools &#8212; lined 0.1.0 documentation</title>
+    <title>lined.tools &#8212; lined 0.1.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -107,64 +107,6 @@ See <a class="reference external" href="https://github.com/thorwhalen/umpyre/blo
 </pre></div>
 </div>
 <p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Command_pattern">https://en.wikipedia.org/wiki/Command_pattern</a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="lined.tools.DynamicIndexer">
-<em class="property">class </em><code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">DynamicIndexer</code><span class="sig-paren">(</span><em class="sig-param">start_idx: Union[int, float] = 0, idx_updater: Callable[[Union[int, float], Any], Union[int, float]] = &lt;function count_increments&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#DynamicIndexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.DynamicIndexer" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>current_idx</strong> – The index to start at (the first data item will have this index)</p></li>
-<li><p><strong>idx_updater</strong> – The (Index, DataItem) -&gt; Index</p></li>
-</ul>
-</dd>
-</dl>
-<p>Let’s take a finite stream of finite iterables (strings here):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;stream&#39;</span><span class="p">,</span> <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;different&#39;</span><span class="p">,</span> <span class="s1">&#39;sized&#39;</span><span class="p">,</span> <span class="s1">&#39;chunks&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>The default <code class="docutils literal notranslate"><span class="pre">DynamicIndexer</span></code> just does what <code class="docutils literal notranslate"><span class="pre">enumerate</span></code> does:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">counter_index</span> <span class="o">=</span> <span class="n">DynamicIndexer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">counter_index</span><span class="p">,</span> <span class="n">stream</span><span class="p">))</span>
-<span class="go">[(0, &#39;stream&#39;), (1, &#39;of&#39;), (2, &#39;different&#39;), (3, &#39;sized&#39;), (4, &#39;chunks&#39;)]</span>
-</pre></div>
-</div>
-<p>That’s because it uses the default <code class="docutils literal notranslate"><span class="pre">idx_updater</span></code> function just increments by one.
-This function, DynamicIndexer.count_increments, is shown below</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">count_increments</span><span class="p">(</span><span class="n">current_idx</span><span class="p">,</span> <span class="n">data_item</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">current_idx</span> <span class="o">+</span> <span class="n">step</span>
-</pre></div>
-</div>
-<p>To get the index starting at 10, we can specify <code class="docutils literal notranslate"><span class="pre">start_idx=10</span></code>, and to step the
-index by 3 we can partialize <code class="docutils literal notranslate"><span class="pre">count_increments</span></code>:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">step3</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">count_increments</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">DynamicIndexer</span><span class="p">(</span><span class="n">start_idx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">idx_updater</span><span class="o">=</span><span class="n">step3</span><span class="p">),</span> <span class="n">stream</span><span class="p">))</span>
-<span class="go">[(10, &#39;stream&#39;), (13, &#39;of&#39;), (16, &#39;different&#39;), (19, &#39;sized&#39;), (22, &#39;chunks&#39;)]</span>
-</pre></div>
-</div>
-<p>You can specify any custom <code class="docutils literal notranslate"><span class="pre">idx_updater</span></code> you want: The requirements being that
-this function should take <code class="docutils literal notranslate"><span class="pre">(current_idx,</span> <span class="pre">data_item)</span></code> as the input, and
-return the next “current index”, that is, what the index of the next data item will
-be.
-Note that <code class="docutils literal notranslate"><span class="pre">count_increments</span></code> ignored the <code class="docutils literal notranslate"><span class="pre">data_item</span></code> completely, but sometimes
-you want to take the data item into account.
-For example, your data item may contain several elements, and you want your
-index to index these elements, therefore you should update your index by
-incrementing it with the number of elements.</p>
-<p>We have <code class="docutils literal notranslate"><span class="pre">DynamicIndexer.size_increments</span></code> for that, the code is shown below:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">size_increments</span><span class="p">(</span><span class="n">current_idx</span><span class="p">,</span> <span class="n">data_item</span><span class="p">,</span> <span class="n">size_func</span><span class="o">=</span><span class="nb">len</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">current_idx</span> <span class="o">+</span> <span class="n">size_func</span><span class="p">(</span><span class="n">data_item</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">size_index</span> <span class="o">=</span> <span class="n">DynamicIndexer</span><span class="p">(</span><span class="n">idx_updater</span><span class="o">=</span><span class="n">DynamicIndexer</span><span class="o">.</span><span class="n">size_increments</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">size_index</span><span class="p">,</span> <span class="n">stream</span><span class="p">))</span>
-<span class="go">[(0, &#39;stream&#39;), (6, &#39;of&#39;), (8, &#39;different&#39;), (17, &#39;sized&#39;), (22, &#39;chunks&#39;)]</span>
-</pre></div>
-</div>
-<p>Q: What if I want the index of a data item to be a function of the data item itself?</p>
-<p>A: Then you would use that function to make the <code class="docutils literal notranslate"><span class="pre">(idxof(data_item),</span> <span class="pre">data_item)</span></code>
-pairs directly. <code class="docutils literal notranslate"><span class="pre">DynamicIndexer</span></code> is for the use case where the index of an item
-depends on the (number of, sizes of, etc.) items that came before it.</p>
 </dd></dl>
 
 <dl class="py class">
