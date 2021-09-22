@@ -176,7 +176,8 @@ def _normalize_funcs_and_named_funcs(funcs, named_funcs):
             for name, func in named_funcs.items()
         )
         # Override the first fnode to NOT use the first_arg_position_only flag
-        fnode_kwargs[0]["first_arg_position_only"] = False
+        if fnode_kwargs:
+            fnode_kwargs[0]["first_arg_position_only"] = False
         # make fncdes from the funcs
         try:
             fnodes = list(fnode(**kwargs) for kwargs in fnode_kwargs)

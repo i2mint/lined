@@ -934,8 +934,8 @@ class BufferStats(deque):
         :param add_new_val: The function that adds values on the buffer.
         Signature must be (self, new_val)
             Is usually a deque method (``deque.append`` by default, but could
-            be ``deque.extend``,
-            ``deque.appendleft`` etc.). Can also be any other function that
+            be ``deque.extend``, ``deque.appendleft`` etc.).
+            Can also be any other function that
             has a valid (self, new_val) signature.
         """
         if maxlen is _no_value_specified_sentinel:
@@ -946,8 +946,8 @@ class BufferStats(deque):
         super().__init__(values, maxlen=maxlen)
         self.func = func
         if isinstance(add_new_val, str):
-            add_new_val = getattr(self, add_new_val)  # add_new_val is a method of
-            # deque
+            # assume add_new_val is a method of deque:
+            add_new_val = getattr(self, add_new_val)
         self.add_new_val = add_new_val
         self.__name__ = "BufferStats"
 
@@ -964,6 +964,7 @@ def return_buffer_on_stats_condition(
     stats: Stats, buffer: Iterable, cond: Callable = is_not_none, else_val=None
 ):
     """
+
     >>> return_buffer_on_stats_condition(stats=3, buffer=[1,2,3,4], cond=lambda x: x%2 == 1)
     [1, 2, 3, 4]
     >>> return_buffer_on_stats_condition(stats=3, buffer=[1,2,3,4], cond=lambda x: x%2 == 0, else_val='3 is not even!')
@@ -980,6 +981,7 @@ def return_buffer_on_stats_condition(
 @dataclass
 class Segmenter:
     """
+
     >>> gen = iter(range(200))
     >>> bs = BufferStats(maxlen=10, func=sum)
     >>> return_if_stats_is_odd = partial(return_buffer_on_stats_condition, cond=lambda x: x%2 == 1, else_val='The sum is not odd!')
@@ -988,10 +990,12 @@ class Segmenter:
     [1]
 
     Adding 1 + 2 is still odd so:
+
     >>> seg(new_val=2)
     [1, 2]
 
     Now since 1 + 2 + 5 is even, the else_val of return_if_stats_is_odd is returned instead
+
     >>> seg(new_val=5)
     'The sum is not odd!'
     """
