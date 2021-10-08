@@ -4,8 +4,8 @@ from inspect import signature, Signature, Parameter
 
 dflt_signature = Signature(
     [
-        Parameter(name="args", kind=Parameter.VAR_POSITIONAL),
-        Parameter(name="kwargs", kind=Parameter.VAR_KEYWORD),
+        Parameter(name='args', kind=Parameter.VAR_POSITIONAL),
+        Parameter(name='kwargs', kind=Parameter.VAR_KEYWORD),
     ]
 )
 
@@ -46,7 +46,7 @@ def compose(*funcs):
 
     n_funcs = len(funcs)
     if n_funcs == 0:
-        raise ValueError("You need to specify at least one function!")
+        raise ValueError('You need to specify at least one function!')
     elif n_funcs == 1:
         first_func = last_func = funcs[0]
         other_funcs = ()
@@ -74,17 +74,28 @@ class Pipe:
     >>> f(3)
     x: 5
 
+    You can name functions, but this would just be for documentation purposes.
+    The names are completely ignored.
+
+    >>> g = Pipe(
+    ...     add_numbers = lambda x, y: x + y,
+    ...     multiply_by_2 = lambda x: x * 2,
+    ...     stringify = str
+    ... )
+    >>> g(2, 3)
+    '10'
+
     Notes:
         - Pipe instances don't have a __name__ etc. So some expectations of normal functions are not met.
         - Pipe instance are pickalable (as long as the functions that compose them are)
     """
 
-    def __init__(self, *funcs):
-
+    def __init__(self, *funcs, **named_funcs):
+        funcs = list(funcs) + list(named_funcs.values())
         n_funcs = len(funcs)
         other_funcs = ()
         if n_funcs == 0:
-            raise ValueError("You need to specify at least one function!")
+            raise ValueError('You need to specify at least one function!')
         elif n_funcs == 1:
             first_func = last_func = funcs[0]
         else:
