@@ -3,7 +3,7 @@ All kinds of useful tools to use in pipelines.
 """
 from functools import partial, wraps
 from collections import deque
-from typing import Any
+from typing import Any, Mapping
 from dataclasses import dataclass
 from operator import not_
 
@@ -205,13 +205,13 @@ def return_instead_of_raising_exceptions(func=None, *, exceptions=(Exception,)):
         elif isinstance(exceptions, Iterable):
             exceptions = tuple(exceptions)
             assert all(issubclass(e, BaseException) for e in exceptions), (
-                "All elements of exceptions must be subclasses of BaseException: "
-                "Was {exceptions}"
+                'All elements of exceptions must be subclasses of BaseException: '
+                'Was {exceptions}'
             )
         else:
             raise TypeError(
-                f"exceptions must be a BaseException subclass or iterable thereof: "
-                f"{exceptions}"
+                f'exceptions must be a BaseException subclass or iterable thereof: '
+                f'{exceptions}'
             )
         return exceptions
 
@@ -242,8 +242,8 @@ def raise_(exception):
         raise exception()
     else:
         raise TypeError(
-            f"exception must be an BaseException instance or a "
-            f"callable that returns one. Was: {exception}"
+            f'exception must be an BaseException instance or a '
+            f'callable that returns one. Was: {exception}'
         )
 
 
@@ -329,7 +329,7 @@ def _validated_comparison_func(key: Callable):
 
         return comp_func
     assert n_required == 2, (
-        f"key should be a callable with 1 or 2 required " f"arguments"
+        f'key should be a callable with 1 or 2 required ' f'arguments'
     )
     return key
 
@@ -583,21 +583,21 @@ def side_call(x, callback):
 print_and_pass_on = partial_plus(
     side_call,
     callback=print,
-    __name__="print_and_pass_on",
-    __doc__="Passes input through to output, but prints before outputing",
+    __name__='print_and_pass_on',
+    __doc__='Passes input through to output, but prints before outputing',
 )
 
 # Function transformers
 # ###################################################################
 
 
-def extra_wraps(func, name=None, doc_prefix=""):
+def extra_wraps(func, name=None, doc_prefix=''):
     func.__name__ = name or func_name(func)
-    func.__doc__ = doc_prefix + getattr(func, "__name__", "")
+    func.__doc__ = doc_prefix + getattr(func, '__name__', '')
     return func
 
 
-def mywraps(func, name=None, doc_prefix=""):
+def mywraps(func, name=None, doc_prefix=''):
     def wrapper(wrapped):
         return extra_wraps(wraps(func)(wrapped), name=name, doc_prefix=doc_prefix)
 
@@ -637,6 +637,8 @@ def iterize(func, name=None):
     """From an Input->Ouput function, makes a Iterator[Input]->Itertor[Output]
     Some call this "vectorization", but it's not really a vector, but an
     iterable, thus the name.
+
+    `iterize` is a partial of `map`.
 
     >>> f = lambda x: x * 10
     >>> f(2)
@@ -710,9 +712,67 @@ def iterize(func, name=None):
     # made kwargs that made map partial choke.
 
     wrapper = mywraps(
-        func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"
+        func, name=name, doc_prefix=f'generator version of {func_name(func)}:\n'
     )
     return wrapper(partial(map, func))
+
+
+def valmap(d: Mapping, func: Callable, copy_dict: bool = True):
+    """Apply func to the values of a shallow copy of d, unless copy_dict=False,
+    in which case, it will be applied to the input dict itself.
+
+    >>> d = {'a': 2, 'b': 3}
+    >>> valmap(d, lambda x: x * 10)
+    {'a': 20, 'b': 30}
+    >>> d  # see that d unchanged
+    {'a': 2, 'b': 3}
+    >>> valmap(d, lambda x: x * 10, copy_dict=False)  # but if we ask for it
+    {'a': 20, 'b': 30}
+    >>> # we still get a (transformed) dict in the output, but it's the same dict changed
+    >>> d  # now d itself changed
+    {'a': 20, 'b': 30}
+
+    """
+    if copy_dict:
+        return {k: func(v) for k, v in d.items()}
+    else:
+        for k in d:
+            d[k] = func(d[k])  # pylint: disable (mapping needs to also be mutable here!)
+        return d
+
+
+def dictify(func, copy_dict=True, name=None):
+    """Makes a version of the input func that should be called on dictionaries and will
+    return dictionaries. The function will be applied to the values of a shallow
+    copy of the dict, unless copy_dict=False, in which case,
+    it will be applied to the input dict itself.
+
+    `dictify` is a partial of `valmap`
+
+    >>> mult_by_10 = lambda x: x * 10
+    >>> f = dictify(mult_by_10)
+    >>> d = {'a': 2, 'b': 3}
+    >>> f(d)
+    {'a': 20, 'b': 30}
+    >>> d  # see that d unchanged
+    {'a': 2, 'b': 3}
+    >>> f = dictify(mult_by_10, copy_dict=False)  # but if we ask for it
+    >>> f(d)
+    {'a': 20, 'b': 30}
+    >>> # we still get a (transformed) dict in the output, but it's the same dict changed
+    >>> d  # now d itself changed
+    {'a': 20, 'b': 30}
+
+    """
+    wrapper = mywraps(
+        func,
+        name=name,
+        doc_prefix=f'version of {func_name(func)} that should be called on dictionaries'
+        f'and will return dictionaries. The function will be applied to '
+        f'the values of a shallow copy of the dict, unless copy_dict=False, '
+        f' in which case, it will be applied to the input dict itself:\n',
+    )
+    return wrapper(partial(valmap, func=func, copy_dict=copy_dict))
 
 
 def wrap_first_arg_in_list(func):
@@ -742,8 +802,8 @@ def mk_filter(filter_func=None):
     return partial_plus(
         filter,
         filter_func,
-        __name__="mk_filter",
-        __doc__="Makes a filter with a fixed filt func.",
+        __name__='mk_filter',
+        __doc__='Makes a filter with a fixed filt func.',
     )
 
 
@@ -760,7 +820,7 @@ def map_star(func):
     >>> assert singularized_foo([2, 3]) == singularized_foo({2, 3}) == foo(2, 3)
     """
 
-    @mywraps(func, doc_prefix=f"map_star version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'map_star version of {func_name(func)}')
     def func_with_single_arg_input(args):
         return func(*args)
 
@@ -782,7 +842,7 @@ def expanded_args(func):
 
     """
 
-    @mywraps(func, doc_prefix=f"expanded_args version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'expanded_args version of {func_name(func)}')
     def _func(*args):
         return func(args)
 
@@ -939,9 +999,9 @@ class BufferStats(deque):
             has a valid (self, new_val) signature.
         """
         if maxlen is _no_value_specified_sentinel:
-            raise TypeError("You are required to specify maxlen")
+            raise TypeError('You are required to specify maxlen')
         if not isinstance(maxlen, int):
-            raise TypeError(f"maxlen must be an integer, was: {maxlen}")
+            raise TypeError(f'maxlen must be an integer, was: {maxlen}')
 
         super().__init__(values, maxlen=maxlen)
         self.func = func
@@ -949,7 +1009,7 @@ class BufferStats(deque):
             # assume add_new_val is a method of deque:
             add_new_val = getattr(self, add_new_val)
         self.add_new_val = add_new_val
-        self.__name__ = "BufferStats"
+        self.__name__ = 'BufferStats'
 
     def __call__(self, new_val) -> Stats:
         self.add_new_val(self, new_val)  # add the new value
@@ -1004,7 +1064,7 @@ class Segmenter:
     stats_buffer_callback: Callable[
         [Stats, Iterable], Any
     ] = return_buffer_on_stats_condition
-    __name__ = "Segmenter"
+    __name__ = 'Segmenter'
 
     def __call__(self, new_val):
         stats = self.buffer(new_val)

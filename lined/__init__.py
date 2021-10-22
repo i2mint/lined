@@ -16,6 +16,7 @@ from lined.tools import (
     Command,
     items,
     iterize,
+    dictify,
     iterate,
     tail_io,
     map_star,
