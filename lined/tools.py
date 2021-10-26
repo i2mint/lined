@@ -5,7 +5,7 @@ from functools import partial, wraps
 from collections import deque
 from typing import Any, Mapping
 from dataclasses import dataclass
-from operator import not_
+from operator import not_, methodcaller
 
 from lined.util import func_name, partial_plus, n_required_args
 from lined.simple import Pipe
@@ -165,7 +165,19 @@ class Command:
     >>> command()
     hello, world
 
+    Note that the same can be achieved with
+    `operator.methodcaller('__call__', *args, **kwargs)`.
+
+    >>> from operator import methodcaller
+    >>> from functools import partial
+    >>> def mk_command(func, *args, **kwargs):
+    ...     return partial(methodcaller('__call__', *args, **kwargs), func)
+    >>> command = mk_command(print, 'hello', 'world', sep=', ')
+    >>> command()
+    hello, world
+
     See: https://en.wikipedia.org/wiki/Command_pattern
+
     """
 
     def __init__(self, func, *args, **kwargs):
@@ -173,6 +185,62 @@ class Command:
 
     def __call__(self):
         return self.func(*self.args, **self.kwargs)
+
+
+class CommandIter(Command):
+    """An infinite iterator that returns the results of a Command called repeatedly.
+
+    >>> from random import uniform
+    >>> from itertools import islice
+    >>> it = CommandIter(uniform, 0, 10)
+    >>> rand_nums = list(islice(it, 4))
+    >>> assert len(rand_nums) == 4
+    >>> rand_nums  # doctest: +SKIP
+    [4.48171445690221, 7.466083642212892, 0.24120342781796422, 3.694956861724484]
+    """
+
+    def __iter__(self):
+        while True:
+            yield self()
+
+
+def functioncaller(*args, **kwargs):
+    """Call a function given positional and keyword arguments.
+
+
+    >>> import operator
+    >>> import functools
+    >>> from lined import Pipe
+    >>> f = Pipe(
+    ...     functools.partial(getattr, operator),  # get an operator func by name
+    ...     functioncaller(49, 7)  # apply it to 49 and 7
+    ... )
+    >>> f('add')
+    56
+    >>> f('sub')
+    42
+
+    Note: functioncaller just returns
+     `operator.methodcaller('__call__', *args, **kwargs)`.
+
+    """
+    return methodcaller('__call__', *args, **kwargs)
+
+
+def call(func):
+    """Just call the input function with not arguments.
+
+    Equivalent to `functioncaller()`
+
+    >>> from lined import Line
+    >>> from functools import partial
+    >>>
+    >>> line = Line(lambda x: partial(print, f"{x*3=}"), call)
+    >>> line(14)
+    x*3=42
+
+    """
+    return func()
 
 
 class ItemsNotSorted(RuntimeError):
@@ -205,13 +273,13 @@ def return_instead_of_raising_exceptions(func=None, *, exceptions=(Exception,)):
         elif isinstance(exceptions, Iterable):
             exceptions = tuple(exceptions)
             assert all(issubclass(e, BaseException) for e in exceptions), (
-                "All elements of exceptions must be subclasses of BaseException: "
-                "Was {exceptions}"
+                'All elements of exceptions must be subclasses of BaseException: '
+                'Was {exceptions}'
             )
         else:
             raise TypeError(
-                f"exceptions must be a BaseException subclass or iterable thereof: "
-                f"{exceptions}"
+                f'exceptions must be a BaseException subclass or iterable thereof: '
+                f'{exceptions}'
             )
         return exceptions
 
@@ -242,8 +310,8 @@ def raise_(exception):
         raise exception()
     else:
         raise TypeError(
-            f"exception must be an BaseException instance or a "
-            f"callable that returns one. Was: {exception}"
+            f'exception must be an BaseException instance or a '
+            f'callable that returns one. Was: {exception}'
         )
 
 
@@ -329,7 +397,7 @@ def _validated_comparison_func(key: Callable):
 
         return comp_func
     assert n_required == 2, (
-        f"key should be a callable with 1 or 2 required " f"arguments"
+        f'key should be a callable with 1 or 2 required ' f'arguments'
     )
     return key
 
@@ -583,21 +651,21 @@ def side_call(x, callback):
 print_and_pass_on = partial_plus(
     side_call,
     callback=print,
-    __name__="print_and_pass_on",
-    __doc__="Passes input through to output, but prints before outputing",
+    __name__='print_and_pass_on',
+    __doc__='Passes input through to output, but prints before outputing',
 )
 
 # Function transformers
 # ###################################################################
 
 
-def extra_wraps(func, name=None, doc_prefix=""):
+def extra_wraps(func, name=None, doc_prefix=''):
     func.__name__ = name or func_name(func)
-    func.__doc__ = doc_prefix + getattr(func, "__name__", "")
+    func.__doc__ = doc_prefix + getattr(func, '__name__', '')
     return func
 
 
-def mywraps(func, name=None, doc_prefix=""):
+def mywraps(func, name=None, doc_prefix=''):
     def wrapper(wrapped):
         return extra_wraps(wraps(func)(wrapped), name=name, doc_prefix=doc_prefix)
 
@@ -712,7 +780,7 @@ def iterize(func, name=None):
     # made kwargs that made map partial choke.
 
     wrapper = mywraps(
-        func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"
+        func, name=name, doc_prefix=f'generator version of {func_name(func)}:\n'
     )
     return wrapper(partial(map, func))
 
@@ -769,10 +837,10 @@ def dictify(func, copy_dict=True, name=None):
     wrapper = mywraps(
         func,
         name=name,
-        doc_prefix=f"version of {func_name(func)} that should be called on dictionaries"
-        f"and will return dictionaries. The function will be applied to "
-        f"the values of a shallow copy of the dict, unless copy_dict=False, "
-        f" in which case, it will be applied to the input dict itself:\n",
+        doc_prefix=f'version of {func_name(func)} that should be called on dictionaries'
+        f'and will return dictionaries. The function will be applied to '
+        f'the values of a shallow copy of the dict, unless copy_dict=False, '
+        f' in which case, it will be applied to the input dict itself:\n',
     )
     return wrapper(partial(valmap, func=func, copy_dict=copy_dict))
 
@@ -804,8 +872,8 @@ def mk_filter(filter_func=None):
     return partial_plus(
         filter,
         filter_func,
-        __name__="mk_filter",
-        __doc__="Makes a filter with a fixed filt func.",
+        __name__='mk_filter',
+        __doc__='Makes a filter with a fixed filt func.',
     )
 
 
@@ -822,7 +890,7 @@ def map_star(func):
     >>> assert singularized_foo([2, 3]) == singularized_foo({2, 3}) == foo(2, 3)
     """
 
-    @mywraps(func, doc_prefix=f"map_star version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'map_star version of {func_name(func)}')
     def func_with_single_arg_input(args):
         return func(*args)
 
@@ -844,7 +912,7 @@ def expanded_args(func):
 
     """
 
-    @mywraps(func, doc_prefix=f"expanded_args version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'expanded_args version of {func_name(func)}')
     def _func(*args):
         return func(args)
 
@@ -1001,9 +1069,9 @@ class BufferStats(deque):
             has a valid (self, new_val) signature.
         """
         if maxlen is _no_value_specified_sentinel:
-            raise TypeError("You are required to specify maxlen")
+            raise TypeError('You are required to specify maxlen')
         if not isinstance(maxlen, int):
-            raise TypeError(f"maxlen must be an integer, was: {maxlen}")
+            raise TypeError(f'maxlen must be an integer, was: {maxlen}')
 
         super().__init__(values, maxlen=maxlen)
         self.func = func
@@ -1011,7 +1079,7 @@ class BufferStats(deque):
             # assume add_new_val is a method of deque:
             add_new_val = getattr(self, add_new_val)
         self.add_new_val = add_new_val
-        self.__name__ = "BufferStats"
+        self.__name__ = 'BufferStats'
 
     def __call__(self, new_val) -> Stats:
         self.add_new_val(self, new_val)  # add the new value
@@ -1066,7 +1134,7 @@ class Segmenter:
     stats_buffer_callback: Callable[
         [Stats, Iterable], Any
     ] = return_buffer_on_stats_condition
-    __name__ = "Segmenter"
+    __name__ = 'Segmenter'
 
     def __call__(self, new_val):
         stats = self.buffer(new_val)

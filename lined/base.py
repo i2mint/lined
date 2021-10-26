@@ -79,7 +79,7 @@ class Fnode:
         return getattr(self.func, attr)
 
     def __repr__(self):
-        return f"{self.name}{Sig(self)}"
+        return f'{self.name}{Sig(self)}'
 
     def __getstate__(self):
         return dict(
@@ -98,7 +98,7 @@ def fnode(func, name=None, first_arg_position_only=False):
     return Fnode(func, name=name, first_arg_position_only=first_arg_position_only)
 
 
-_line_init_reserved_names = {"pipeline_name", "input_name", "output_name"}
+_line_init_reserved_names = {'pipeline_name', 'input_name', 'output_name'}
 
 
 def _func_to_name_func_pair(func):
@@ -148,7 +148,7 @@ def _mk_first_argument_position_only(func):
 
     if first_argname:  # if there are any arguments
         new_sig = Sig.from_objs(
-            sig.modified(**{first_argname: {"kind": PO}}),
+            sig.modified(**{first_argname: {'kind': PO}}),
             return_annotation=sig.return_annotation,
         )
         return new_sig(func)
@@ -177,7 +177,7 @@ def _normalize_funcs_and_named_funcs(funcs, named_funcs):
         )
         # Override the first fnode to NOT use the first_arg_position_only flag
         if fnode_kwargs:
-            fnode_kwargs[0]["first_arg_position_only"] = False
+            fnode_kwargs[0]['first_arg_position_only'] = False
         # make fncdes from the funcs
         try:
             fnodes = list(fnode(**kwargs) for kwargs in fnode_kwargs)
@@ -186,7 +186,7 @@ def _normalize_funcs_and_named_funcs(funcs, named_funcs):
                 "You can consider using Pipe instead of Line. Pipe doesn't have as "
                 "many goodies as Line, but it's also more lenient with functions."
             )
-            raise ValueError(e.args[0] + "\n" + add_to_msg)
+            raise ValueError(e.args[0] + '\n' + add_to_msg)
 
         fnodes = tuple(fnodes)
         named_funcs = {name: fnode_ for name, fnode_ in zip(named_funcs, fnodes)}
@@ -203,16 +203,16 @@ def name_with_varkind_and_default_marker(param: Parameter) -> str:
 
     def kind_marker(param):
         if param.kind == Parameter.VAR_POSITIONAL:
-            return "*"
+            return '*'
         elif param.kind == Parameter.VAR_KEYWORD:
-            return "**"
+            return '**'
         else:
-            return ""
+            return ''
 
     return (
         kind_marker(param)
-        + f"{param.name}"
-        + ("=" if param.default is not empty else "")
+        + f'{param.name}'
+        + ('=' if param.default is not empty else '')
     )
 
 
@@ -302,7 +302,7 @@ class Line:
 
         # It might make sense that if no funcs are specified, we take the lined to be
         # the identity, but we'll implement only when needed
-        assert len(funcs) > 0, "You need to specify at least one function!"
+        assert len(funcs) > 0, 'You need to specify at least one function!'
         funcs, named_funcs = _normalize_funcs_and_named_funcs(funcs, named_funcs)
 
         self.funcs = funcs
@@ -312,7 +312,7 @@ class Line:
 
         assert all(
             f == ff for f, ff in zip(self.funcs, self.named_funcs.values())
-        ), f"funcs and named_funcs are not aligned after merging"
+        ), f'funcs and named_funcs are not aligned after merging'
         if pipeline_name is not None:
             self.__name__ = pipeline_name
         self.name = pipeline_name or self.__class__.__name__
@@ -372,15 +372,15 @@ class Line:
         4
         """
         if isinstance(k, (int, slice)):
-            item_str = ""
+            item_str = ''
             funcs = []
             if isinstance(k, int):  # TODO: Add str k handling
                 funcs = [self.funcs[k]]
                 item_str = str(k)
             elif isinstance(k, slice):
-                assert k.step is None, f"slices with steps are not handled: {k}"
+                assert k.step is None, f'slices with steps are not handled: {k}'
                 funcs = list(self.funcs[k])
-                item_str = f"{k.start}:{k.stop}"
+                item_str = f'{k.start}:{k.stop}'
             pipeline_name = self.name or type(self).__name__
             if len(funcs) > 0:
                 # Need to get rid of the forced position only first arg
@@ -389,15 +389,15 @@ class Line:
                 underlying_funcs_sig = Sig(first_fnode.func)
                 sig = Sig(underlying_funcs_sig)
                 funcs[0] = fnode(sig(first_fnode.func), first_fnode.name)
-            return type(self)(*funcs, pipeline_name=f"{pipeline_name}[{item_str}]")
+            return type(self)(*funcs, pipeline_name=f'{pipeline_name}[{item_str}]')
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
     def dot_digraph_body(
         self,
         prefix=None,
-        fnode_shape="box",
-        vnode_shape="none",
+        fnode_shape='box',
+        vnode_shape='none',
         input_node=True,
         output_node=False,
         edges_gen=True,
@@ -422,11 +422,11 @@ class Line:
                 for argname, param in signature(self).parameters.items():
                     label = arg_param_to_string(param)
                     yield f'{argname} [shape="{vnode_shape}" label="{label}"]'
-                    yield f"{argname} -> {first_func_name}"
+                    yield f'{argname} -> {first_func_name}'
             elif input_node == str:
-                input_node = self.input_name or "input"
+                input_node = self.input_name or 'input'
                 yield f'{input_node} [shape="{vnode_shape}"]'
-                yield f"{input_node} -> {first_func_name}"
+                yield f'{input_node} -> {first_func_name}'
 
         for fname in func_names:
             yield f'{fname} [shape="{fnode_shape}"]'
@@ -434,7 +434,7 @@ class Line:
         if edges_gen:
             if edges_gen is True:
                 for from_fname, to_fname in zip(func_names[:-1], func_names[1:]):
-                    yield f"{from_fname} -> {to_fname}"
+                    yield f'{from_fname} -> {to_fname}'
             else:
                 yield from edges_gen
 
@@ -442,16 +442,16 @@ class Line:
             output_node = self.output_name
         if output_node:
             if output_node is True:
-                output_node = self.output_name or "output"
+                output_node = self.output_name or 'output'
             yield f'{output_node} [shape="{vnode_shape}"]'
-            yield f"{func_names[-1]} -> {self.output_name}"
+            yield f'{func_names[-1]} -> {self.output_name}'
 
     @wraps(dot_digraph_body)
     def dot_digraph_ascii(self, *args, **kwargs):
         """Get an ascii art string that represents the pipeline"""
         from lined.util import dot_to_ascii
 
-        return dot_to_ascii("\n".join(self.dot_digraph_body(*args, **kwargs)))
+        return dot_to_ascii('\n'.join(self.dot_digraph_body(*args, **kwargs)))
 
     @wraps(dot_digraph_body)
     def dot_digraph(self, *args, **kwargs):
@@ -459,15 +459,15 @@ class Line:
             import graphviz
         except (ModuleNotFoundError, ImportError) as e:
             raise ModuleNotFoundError(
-                f"{e}\nYou may not have graphviz installed. "
-                f"See https://pypi.org/project/graphviz/."
+                f'{e}\nYou may not have graphviz installed. '
+                f'See https://pypi.org/project/graphviz/.'
             )
 
         body = list(self.dot_digraph_body(*args, **kwargs))
         return graphviz.Digraph(body=body)
 
     def __repr__(self):
-        return f"{self._name_of_instance()}{Sig(self)}"
+        return f'{self._name_of_instance()}{Sig(self)}'
         # funcs_str = ', '.join((fname for fname in self.named_funcs))
         # suffix = ''
         # if self.input_name is not None:
@@ -477,7 +477,7 @@ class Line:
         # return f'{self._name_of_instance()}({funcs_str}{suffix})'
 
     def _name_of_instance(self):
-        return getattr(self, "__name__", self.__class__.__name__)
+        return getattr(self, '__name__', self.__class__.__name__)
 
 
 Pipeline = Line  # for back-compatibility
@@ -552,7 +552,7 @@ class Sentinel:
     def filter_in(cls, condition, sentinel_val=None):
         assert isinstance(
             condition, Callable
-        ), f"condition need to be callable, but was {condition}"
+        ), f'condition need to be callable, but was {condition}'
 
         def filt(x):
             if condition(x):
@@ -566,7 +566,7 @@ class Sentinel:
     def filter_out(cls, condition, sentinel_val=None):
         assert isinstance(
             condition, Callable
-        ), f"condition need to be callable, but was {condition}"
+        ), f'condition need to be callable, but was {condition}'
 
         def filt(x):
             if not condition(x):
@@ -612,7 +612,7 @@ class NoSuchConfig:
         return False
 
     def __repr__(self):
-        return "no_such_config"
+        return 'no_such_config'
 
 
 no_such_config = NoSuchConfig()
@@ -644,7 +644,7 @@ class Configs(dict):
         if name in self:
             return self[name]
         else:
-            raise AttributeError("No such attribute: " + name)
+            raise AttributeError('No such attribute: ' + name)
 
     def __setattr__(self, name, value):
         self[name] = value
@@ -653,7 +653,7 @@ class Configs(dict):
         if name in self:
             del self[name]
         else:
-            raise AttributeError("No such attribute: " + name)
+            raise AttributeError('No such attribute: ' + name)
 
     def __missing__(self, name):
         return self._key_missing_callback()
@@ -666,12 +666,12 @@ class Configs(dict):
 from collections import ChainMap
 
 dflt_configs = dict(
-    fnode_shape="box",
-    vnode_shape="none",
+    fnode_shape='box',
+    vnode_shape='none',
     display_all_arguments=True,
-    edge_kind="to_args_on_edge",
+    edge_kind='to_args_on_edge',
     input_node=True,
-    output_node="output",
+    output_node='output',
 )
 
 
@@ -783,10 +783,10 @@ class LineParametrized(Line):
     """
 
     @Sig.from_objs(
-        Line.__init__, ("default_conflict_method", DFLT_DEFAULT_CONFLICT_METHOD)
+        Line.__init__, ('default_conflict_method', DFLT_DEFAULT_CONFLICT_METHOD)
     )
     def __init__(self, *args, **kwargs):
-        default_conflict_method = kwargs.pop("default_conflict_method", None)
+        default_conflict_method = kwargs.pop('default_conflict_method', None)
         super().__init__(*args, **kwargs)
         first_func, *_funcs = self.funcs
 
@@ -799,8 +799,7 @@ class LineParametrized(Line):
         _funcs = map(sig_without_the_first_input, _funcs)
 
         self.__signature__ = Sig.from_objs(
-            *(first_func, *_funcs),
-            default_conflict_method=default_conflict_method,
+            *(first_func, *_funcs), default_conflict_method=default_conflict_method,
         )
 
     def __call__(self, *args, **kwargs):
@@ -818,7 +817,7 @@ class LineParametrized(Line):
     def dot_digraph_body(
         self,
         prefix=None,
-        edge_kind="to_args_on_edge",
+        edge_kind='to_args_on_edge',
         convention=None,
         required_arg_line: Optional[Callable[[str], str]] = None,
         bound_arg_line: Optional[Callable[[str], str]] = None,
@@ -841,7 +840,7 @@ class LineParametrized(Line):
         if bound_arg_line is None:
 
             def bound_arg_line(argname: str) -> str:
-                argname_with_equals = argname + "="
+                argname_with_equals = argname + '='
                 return (
                     f'{argname} [shape="{c.vnode_shape}" label="'
                     f'{argname_with_equals}"]'
@@ -852,7 +851,7 @@ class LineParametrized(Line):
                 yield required_arg_line(argname)
             else:  # this argname is bound (has a default)
                 yield bound_arg_line(argname)
-            yield f"{argname} -> {fname}"
+            yield f'{argname} -> {fname}'
 
         if prefix is None:
             if len(self.funcs) <= 7:
@@ -869,9 +868,9 @@ class LineParametrized(Line):
                 for argname in sig.parameters:
                     yield from lines_for_argname(first_func_name, sig, argname)
             elif c.input_node == str:
-                input_node = self.input_name or "input"
+                input_node = self.input_name or 'input'
                 yield f'{input_node} [shape="{c.vnode_shape}"]'
-                yield f"{input_node} -> {first_func_name}"
+                yield f'{input_node} -> {first_func_name}'
 
         previous_func_name = first_func_name
         for i, (fname, func) in enumerate(self.named_funcs.items()):
@@ -881,13 +880,13 @@ class LineParametrized(Line):
             if i > 0:
                 first_arg = next(iter(sig.names), None)
 
-                on_edge = c.edge_kind.endswith("on_edge")
+                on_edge = c.edge_kind.endswith('on_edge')
                 if on_edge:
                     yield f'{previous_func_name} -> {fname} [label="{first_arg}"]'
                 else:
-                    yield f"{previous_func_name} -> {fname}"
+                    yield f'{previous_func_name} -> {fname}'
 
-                if c.edge_kind.startswith("to_args"):
+                if c.edge_kind.startswith('to_args'):
                     if c.display_all_arguments:
                         for i, argname in enumerate(sig.names):
                             if on_edge and i == 0:
@@ -898,7 +897,7 @@ class LineParametrized(Line):
 
         if c.output_node:
             yield f'{c.output_node} [shape="{c.vnode_shape}"]'
-            yield f"{_func_names[-1]} -> {c.output_node}"
+            yield f'{_func_names[-1]} -> {c.output_node}'
 
     @wraps(dot_digraph_body)
     def dot_digraph_ascii(self, *args, **kwargs):
@@ -965,8 +964,8 @@ def stack(*funcs):
 
     def stacked_funcs(input_tuple):
         assert len(funcs) == len(input_tuple), (
-            "the length of input_tuple ({len(input_tuple)} should be the same length"
-            " (len{funcs}) as the funcs: {input_tuple}"
+            'the length of input_tuple ({len(input_tuple)} should be the same length'
+            ' (len{funcs}) as the funcs: {input_tuple}'
         )
         return tuple(starmap(call, zip(funcs, input_tuple)))
 
@@ -991,7 +990,7 @@ class LayeredPipeline(Line):
 def _signature_of_pipeline(*funcs):
     n_funcs = len(funcs)
     if n_funcs == 0:
-        raise ValueError("You need to specify at least one function!")
+        raise ValueError('You need to specify at least one function!')
     elif n_funcs == 1:
         first_func = last_func = funcs[0]
     else:

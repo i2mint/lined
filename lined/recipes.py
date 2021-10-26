@@ -8,7 +8,7 @@ from lined.tools import map_star, iterize
 
 
 transposer = map_star(zip)
-transposer.__name__ = "transposer"
+transposer.__name__ = 'transposer'
 
 
 def mk_transposer_to_array(dtype=None):
@@ -29,7 +29,7 @@ def mk_transposer_to_array(dtype=None):
         map_star(zip),
         list,
         partial(array, dtype=dtype),
-        pipeline_name="transpose_to_array",
+        pipeline_name='transpose_to_array',
     )
 
 
@@ -39,14 +39,14 @@ def _itemgetter(*items):
 
 mk_mapping_extractor = Line(
     iterize(_itemgetter),
-    lambda funcs: lambda obj: list(map(methodcaller("__call__", obj), funcs)),
+    lambda funcs: lambda obj: list(map(methodcaller('__call__', obj), funcs)),
 )
 # to make it seem it comes from this module (but doctests still don't work):
 mk_mapping_extractor.__module__ = __name__
-mk_mapping_extractor.__doc__ = """
+mk_mapping_extractor.__doc__ = '''
 Make a function that will extract specific fields from a mapping (e.g. dict)
     
     >>> extract_url_and_token = mk_mapping_extractor(['url', 'token'])
     >>> extract_url_and_token({'url': 'http://localhost:8888/', 'token': 42, 'another': 'field'})
     ['http://localhost:8888/', 44]
-"""
+'''

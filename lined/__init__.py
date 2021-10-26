@@ -13,9 +13,12 @@ from lined.base import (
 
 from lined.simple import Pipe
 from lined.tools import (
-    Command,
+    Command,  # implementation of the command pattern
+    CommandIter,  # call a command over and over again
+    functioncaller,  # call a func with fixed arguments
+    call,  # just call a func without arguments
     items,
-    iterize,
+    iterize,  # transform a restul=func(x) in to a results=func(iterable_of_x)
     dictify,
     iterate,
     tail_io,

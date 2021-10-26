@@ -10,8 +10,8 @@ from inspect import Signature, Parameter, signature
 
 dflt_signature = Signature(
     [
-        Parameter(name="args", kind=Parameter.VAR_POSITIONAL),
-        Parameter(name="kwargs", kind=Parameter.VAR_KEYWORD),
+        Parameter(name='args', kind=Parameter.VAR_POSITIONAL),
+        Parameter(name='kwargs', kind=Parameter.VAR_KEYWORD),
     ]
 )
 
@@ -31,15 +31,15 @@ def signature_from_first_and_last_func(first_func, last_func):
 
 
 writable_function_dunders = {
-    "__annotations__",
-    "__call__",
-    "__defaults__",
-    "__dict__",
-    "__doc__",
-    "__globals__",
-    "__kwdefaults__",
-    "__name__",
-    "__qualname__",
+    '__annotations__',
+    '__call__',
+    '__defaults__',
+    '__dict__',
+    '__doc__',
+    '__globals__',
+    '__kwdefaults__',
+    '__name__',
+    '__qualname__',
 }
 
 
@@ -57,7 +57,7 @@ def partial_plus(func, *args, **kwargs):
     >>> f.__doc__
     'foo, but with b=2'
     """
-    kwargs["__name__"] = kwargs.get("__name__", func_name(func))
+    kwargs['__name__'] = kwargs.get('__name__', func_name(func))
 
     dunders_in_kwargs = writable_function_dunders.intersection(kwargs)
 
@@ -77,7 +77,7 @@ def partial_plus(func, *args, **kwargs):
     return partial_func
 
 
-def incremental_str_maker(str_format="{:03.f}"):
+def incremental_str_maker(str_format='{:03.f}'):
     """Make a function that will produce a (incrementally) new string at every call."""
     i = 0
 
@@ -89,8 +89,8 @@ def incremental_str_maker(str_format="{:03.f}"):
     return mk_next_str
 
 
-unnamed_pipeline = incremental_str_maker(str_format="UnnamedPipeline{:03.0f}")
-unnamed_func_name = incremental_str_maker(str_format="unnamed_func_{:03.0f}")
+unnamed_pipeline = incremental_str_maker(str_format='UnnamedPipeline{:03.0f}')
+unnamed_func_name = incremental_str_maker(str_format='unnamed_func_{:03.0f}')
 
 
 def func_name(func):
@@ -98,7 +98,7 @@ def func_name(func):
     To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing"""
     try:
         name = func.__name__
-        if name == "<lambda>":
+        if name == '<lambda>':
             return unnamed_func_name()
         return name
     except AttributeError:
@@ -141,7 +141,7 @@ def dot_to_ascii(dot: str, fancy: bool = True):
     """
     import requests
 
-    url = "https://dot-to-ascii.ggerganov.com/dot-to-ascii.php"
+    url = 'https://dot-to-ascii.ggerganov.com/dot-to-ascii.php'
     boxart = 0
 
     # use nice box drawing char instead of + , | , -
@@ -150,22 +150,22 @@ def dot_to_ascii(dot: str, fancy: bool = True):
 
     stripped_dot_str = dot.strip()
     if not (
-        stripped_dot_str.startswith("graph") or stripped_dot_str.startswith("digraph")
+        stripped_dot_str.startswith('graph') or stripped_dot_str.startswith('digraph')
     ):
-        dot = "graph {\n" + dot + "\n}"
+        dot = 'graph {\n' + dot + '\n}'
 
     params = {
-        "boxart": boxart,
-        "src": dot,
+        'boxart': boxart,
+        'src': dot,
     }
 
     try:
         response = requests.get(url, params=params).text
     except requests.exceptions.ConnectionError:
-        return "ConnectionError: You need the internet to convert dot into ascii!"
+        return 'ConnectionError: You need the internet to convert dot into ascii!'
 
-    if response == "":
-        raise SyntaxError("DOT string is not formatted correctly")
+    if response == '':
+        raise SyntaxError('DOT string is not formatted correctly')
 
     return response
 
