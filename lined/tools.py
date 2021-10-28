@@ -166,7 +166,7 @@ class Command:
     hello, world
 
     Note that the same can be achieved with
-    `operator.methodcaller('__call__', *args, **kwargs)`.
+    `partial(func, *args, **kwargs)`.
 
     >>> from operator import methodcaller
     >>> from functools import partial
