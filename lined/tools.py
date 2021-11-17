@@ -190,6 +190,9 @@ class Command:
 class CommandIter(Command):
     """An infinite iterator that returns the results of a Command called repeatedly.
 
+    Might become deprecated:
+    Use `iter(partial(func, *args, **kwargs), object())` instead.
+
     >>> from random import uniform
     >>> from itertools import islice
     >>> it = CommandIter(uniform, 0, 10)
