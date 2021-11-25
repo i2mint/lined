@@ -792,7 +792,8 @@ class LineParametrized(Line):
 
         def sig_without_the_first_input(func):
             sig = Sig(func)
-            sig = sig - sig.names[0]
+            if len(sig.names) > 0:
+                sig = sig - sig.names[0]
             return sig.ch_kinds(**{name: KO for name in sig.names})
 
         # _funcs = map(normalize_func, _funcs)  # TODO: Test edge cases to assess need
