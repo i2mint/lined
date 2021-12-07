@@ -3,9 +3,15 @@
 from functools import partial, reduce
 from contextlib import suppress
 from operator import methodcaller, itemgetter
-from lined import Line
+from lined import Line, Pipe
 from lined.tools import map_star, iterize
 
+remove_duplicates = Pipe(dict.fromkeys, list)
+remove_duplicates.__doc__ = """
+    Removes duplicates from iterable, but conserving order. Returns list.
+    >>> remove_duplicates([4,2,3,2,3,3])
+    [4, 2, 3]
+"""
 
 transposer = map_star(zip)
 transposer.__name__ = "transposer"
