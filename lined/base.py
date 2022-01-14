@@ -387,7 +387,7 @@ class Line:
                 # TODO: Get rid of this if/when we get rid of forced position only
                 first_fnode, *_ = funcs
                 underlying_funcs_sig = Sig(first_fnode.func)
-                if not hasattr(first_fnode.func, '__func__'):
+                if not hasattr(first_fnode.func, "__func__"):
                     sig = Sig(underlying_funcs_sig)
                     funcs[0] = fnode(sig(first_fnode.func), first_fnode.name)
                 else:  # first_fnode.func is a method, and we get
