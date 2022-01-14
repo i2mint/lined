@@ -387,8 +387,15 @@ class Line:
                 # TODO: Get rid of this if/when we get rid of forced position only
                 first_fnode, *_ = funcs
                 underlying_funcs_sig = Sig(first_fnode.func)
-                sig = Sig(underlying_funcs_sig)
-                funcs[0] = fnode(sig(first_fnode.func), first_fnode.name)
+                if not hasattr(first_fnode.func, '__func__'):
+                    sig = Sig(underlying_funcs_sig)
+                    funcs[0] = fnode(sig(first_fnode.func), first_fnode.name)
+                else:  # first_fnode.func is a method, and we get
+                    # AttributeError: 'method' object has no attribute '__signature__'
+                    # when trying in change signature
+                    # To reproduce, remove not hasattr(first_fnode.func, '__func__')
+                    # condition
+                    pass
             return type(self)(*funcs, pipeline_name=f"{pipeline_name}[{item_str}]")
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
