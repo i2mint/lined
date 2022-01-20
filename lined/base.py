@@ -18,7 +18,6 @@ from i2.signatures import (
     KO,  # KEYWORD_ONLY
 )
 
-
 from lined.util import signature_from_first_and_last_func, func_name
 
 # MultiFuncSpec = Dict[str, Callable]
@@ -102,11 +101,40 @@ _line_init_reserved_names = {"pipeline_name", "input_name", "output_name"}
 
 
 def _func_to_name_func_pair(func):
-    """The func.__name__ of a callable func, or makes and returns one if that fails.
-    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing"""
+    """
+    From a function func, returns a pair (name_of_func, func) where name_of_func is either the existing string
+    func.__name__ or an inferred string using func_name. If func is instead already a pair, a check is performed
+    to ensure that it is of the expected form, i.e., in a (str, callable) form
+
+    :param func: callable or a pair, in the latter case a check is performed
+    :return: (str, callable) pair, where the string is the name of the function
+
+    >>> def my_func(x):
+    ...    return x + 1
+    >>> assert _func_to_name_func_pair(my_func)[0] == 'my_func'
+    >>> assert _func_to_name_func_pair(my_func)[1] is my_func
+
+    A function with no .__name__ attribute, such as a lambda, will be given a unique name automatically in the form of
+    f'unnamed_func_{i}'. The uniqueness is achieved by incrementing i.
+
+    >>> my_lambda_func = lambda x: 2 * x
+    >>> given_name, func = _func_to_name_func_pair(my_lambda_func)
+    >>> assert given_name.startswith('unnamed_func_')
+
+    >>> class my_class:
+    ...    def my_class_method(self, x):
+    ...        return x + 2 * x
+    >>> assert _func_to_name_func_pair(my_class.my_class_method)[0] == 'my_class_method'
+
+    """
     if isinstance(func, tuple) and len(func) == 2:
+        # We could just return func here, but to be clear...
+        # func is actually a name func pair, so let's extract the name and the func
         name, func = func
-        return name, func
+        # and assert these are in fact a name and a function
+        assert isinstance(name, str)
+        assert callable(func)
+        return name, func  # an finally returning it
     else:
         return func_name(func), func
 
@@ -118,19 +146,26 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
         "Can't name a function with any of the following strings: "
         f"{', '.join(_line_init_reserved_names)}"
     )
+
     funcs_obtained_from_named_funcs = tuple(named_funcs.values())
     named_funcs_obtained_from_funcs = dict(map(_func_to_name_func_pair, funcs))
-
     assert named_funcs_obtained_from_funcs.keys().isdisjoint(
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
     funcs = (
-        tuple(named_funcs_obtained_from_funcs.values())
-        + funcs_obtained_from_named_funcs
+            tuple(named_funcs_obtained_from_funcs.values())
+            + funcs_obtained_from_named_funcs
     )
+
+    named_funcs = dict(named_funcs_obtained_from_funcs, **named_funcs)
+    # print(named_funcs.values())
+    # print(funcs)
+    # assert set(named_funcs.values()) == set(funcs), "Some of the functions have the same name," \
+    #                                             " please explicitly provide disjoint names"
+
     return (
         funcs,
-        dict(named_funcs_obtained_from_funcs, **named_funcs),
+        named_funcs,
     )
 
 
@@ -210,9 +245,9 @@ def name_with_varkind_and_default_marker(param: Parameter) -> str:
             return ""
 
     return (
-        kind_marker(param)
-        + f"{param.name}"
-        + ("=" if param.default is not empty else "")
+            kind_marker(param)
+            + f"{param.name}"
+            + ("=" if param.default is not empty else "")
     )
 
 
@@ -222,12 +257,12 @@ def name_with_varkind_and_default_marker(param: Parameter) -> str:
 # TODO: Use .name instead of __name__ for pipeline_name?
 class Line:
     def __init__(
-        self,
-        *funcs: Funcs,
-        pipeline_name=None,
-        input_name=None,
-        output_name=None,
-        # **named_funcs,
+            self,
+            *funcs: Funcs,
+            pipeline_name=None,
+            input_name=None,
+            output_name=None,
+            # **named_funcs,
     ):
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
@@ -401,15 +436,15 @@ class Line:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
     def dot_digraph_body(
-        self,
-        prefix=None,
-        fnode_shape="box",
-        vnode_shape="none",
-        input_node=True,
-        output_node=False,
-        edges_gen=True,
-        arg_param_to_string: Callable = name_with_varkind_and_default_marker,
-        **kwargs,
+            self,
+            prefix=None,
+            fnode_shape="box",
+            vnode_shape="none",
+            input_node=True,
+            output_node=False,
+            edges_gen=True,
+            arg_param_to_string: Callable = name_with_varkind_and_default_marker,
+            **kwargs,
     ):
 
         if len(self.funcs) == 0:
@@ -824,13 +859,13 @@ class LineParametrized(Line):
 
     # TODO: Try merging Line.dot_diagraph_body and this, for reuse
     def dot_digraph_body(
-        self,
-        prefix=None,
-        edge_kind="to_args_on_edge",
-        convention=None,
-        required_arg_line: Optional[Callable[[str], str]] = None,
-        bound_arg_line: Optional[Callable[[str], str]] = None,
-        **kwargs,
+            self,
+            prefix=None,
+            edge_kind="to_args_on_edge",
+            convention=None,
+            required_arg_line: Optional[Callable[[str], str]] = None,
+            bound_arg_line: Optional[Callable[[str], str]] = None,
+            **kwargs,
     ):
 
         c = Configs(
@@ -842,12 +877,10 @@ class LineParametrized(Line):
         )
 
         if required_arg_line is None:
-
             def required_arg_line(argname: str) -> str:
                 return f'{argname} [shape="{c.vnode_shape}"]'
 
         if bound_arg_line is None:
-
             def bound_arg_line(argname: str) -> str:
                 argname_with_equals = argname + "="
                 return (
@@ -1024,6 +1057,7 @@ from i2 import ParallelFuncs
 mk_multi_func = ParallelFuncs  # back-compatibility alias
 
 from collections import defaultdict
+
 
 # Class to represent a graph
 class Digraph:
