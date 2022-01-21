@@ -148,7 +148,10 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
     )
 
     funcs_obtained_from_named_funcs = tuple(named_funcs.values())
-    named_funcs_obtained_from_funcs = dict(map(_func_to_name_func_pair, funcs))
+    named_funcs_obtained_from_funcs = map(_func_to_name_func_pair, funcs)
+    # make sure the names are unique, by adding a suffix to some of the repeating names if necessary
+    named_funcs_obtained_from_funcs = dict(uniquize_funcs_names(named_funcs_obtained_from_funcs))
+
     assert named_funcs_obtained_from_funcs.keys().isdisjoint(
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
@@ -167,6 +170,20 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
         funcs,
         named_funcs,
     )
+
+
+def uniquize_funcs_names(named_funcs_obtained_from_funcs):
+    all_func_names = []
+    prefix_counter = 0
+    unique_named_funcs_obtained_from_funcs = []
+    for func_name_pair in named_funcs_obtained_from_funcs:
+        name, func = func_name_pair
+        if name in all_func_names:
+            name = name + f'_{prefix_counter}'
+            prefix_counter += 1
+        all_func_names.append(name)
+        unique_named_funcs_obtained_from_funcs.append((name, func))
+    return unique_named_funcs_obtained_from_funcs
 
 
 def _mk_first_argument_position_only(func):
@@ -1105,3 +1122,41 @@ class Digraph:
 
                 # Print contents of stack
         return stack
+
+
+if __name__ == "__main__":
+    from lined.base import _merge_funcs_and_named_funcs
+    import pytest
+
+
+    class my_class:
+        """A simple class with one method"""
+
+        def add_one(self, x):
+            return x + 1
+
+
+    class my_other_class:
+        """Another simple class with one method"""
+
+        def add_one(self, x):
+            return x + 2
+
+
+    first = my_class()
+    f = first.add_one
+
+    second = my_class()
+    g = second.add_one
+
+    third = my_other_class()
+    h = third.add_one
+
+    i = lambda x: 2 * x
+
+
+    def j(x: int):
+        return 2 * x + 1
+
+
+    print(len(_merge_funcs_and_named_funcs((f, g, h, i), named_funcs={})[0]))

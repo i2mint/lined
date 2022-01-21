@@ -37,7 +37,7 @@ def j(x: int):
 @pytest.mark.parametrize(
     'funcs_tuple',
     [
-        (f),
+        (f,),
         (f, g),
         (f, g, h),
         (f, g, h, i),
@@ -48,5 +48,5 @@ def j(x: int):
 def test_merge_funcs_and_named_funcs(funcs_tuple):
     """Test that no function is lost after merging"""
     assert len(
-        _merge_funcs_and_named_funcs(funcs_tuple, named_funcs={})
+        _merge_funcs_and_named_funcs(funcs_tuple, named_funcs={})[0]
     ) == len(funcs_tuple), 'Merging resulted in losing at least one function'
