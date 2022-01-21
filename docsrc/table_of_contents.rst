@@ -7,5 +7,6 @@
    module_docs/lined/examples
    module_docs/lined/recipes
    module_docs/lined/simple
+   module_docs/lined/tests/test_base
    module_docs/lined/tools
    module_docs/lined/util
