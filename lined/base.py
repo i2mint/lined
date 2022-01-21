@@ -150,14 +150,16 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
     funcs_obtained_from_named_funcs = tuple(named_funcs.values())
     named_funcs_obtained_from_funcs = map(_func_to_name_func_pair, funcs)
     # make sure the names are unique, by adding a suffix to some of the repeating names if necessary
-    named_funcs_obtained_from_funcs = dict(uniquize_funcs_names(named_funcs_obtained_from_funcs))
+    named_funcs_obtained_from_funcs = dict(
+        uniquize_funcs_names(named_funcs_obtained_from_funcs)
+    )
 
     assert named_funcs_obtained_from_funcs.keys().isdisjoint(
         named_funcs
     ), f"Some names clashed: {', '.join(set(named_funcs_obtained_from_funcs).intersection(named_funcs))}"
     funcs = (
-            tuple(named_funcs_obtained_from_funcs.values())
-            + funcs_obtained_from_named_funcs
+        tuple(named_funcs_obtained_from_funcs.values())
+        + funcs_obtained_from_named_funcs
     )
 
     named_funcs = dict(named_funcs_obtained_from_funcs, **named_funcs)
@@ -183,7 +185,7 @@ def uniquize_funcs_names(named_funcs_obtained_from_funcs):
     for func_name_pair in named_funcs_obtained_from_funcs:
         name, func = func_name_pair
         if name in all_func_names:
-            name = name + f'_{prefix_counter}'
+            name = name + f"_{prefix_counter}"
             prefix_counter += 1
         all_func_names.append(name)
         unique_named_funcs_obtained_from_funcs.append((name, func))
@@ -266,9 +268,9 @@ def name_with_varkind_and_default_marker(param: Parameter) -> str:
             return ""
 
     return (
-            kind_marker(param)
-            + f"{param.name}"
-            + ("=" if param.default is not empty else "")
+        kind_marker(param)
+        + f"{param.name}"
+        + ("=" if param.default is not empty else "")
     )
 
 
@@ -278,12 +280,12 @@ def name_with_varkind_and_default_marker(param: Parameter) -> str:
 # TODO: Use .name instead of __name__ for pipeline_name?
 class Line:
     def __init__(
-            self,
-            *funcs: Funcs,
-            pipeline_name=None,
-            input_name=None,
-            output_name=None,
-            # **named_funcs,
+        self,
+        *funcs: Funcs,
+        pipeline_name=None,
+        input_name=None,
+        output_name=None,
+        # **named_funcs,
     ):
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
@@ -457,15 +459,15 @@ class Line:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
     def dot_digraph_body(
-            self,
-            prefix=None,
-            fnode_shape="box",
-            vnode_shape="none",
-            input_node=True,
-            output_node=False,
-            edges_gen=True,
-            arg_param_to_string: Callable = name_with_varkind_and_default_marker,
-            **kwargs,
+        self,
+        prefix=None,
+        fnode_shape="box",
+        vnode_shape="none",
+        input_node=True,
+        output_node=False,
+        edges_gen=True,
+        arg_param_to_string: Callable = name_with_varkind_and_default_marker,
+        **kwargs,
     ):
 
         if len(self.funcs) == 0:
@@ -880,13 +882,13 @@ class LineParametrized(Line):
 
     # TODO: Try merging Line.dot_diagraph_body and this, for reuse
     def dot_digraph_body(
-            self,
-            prefix=None,
-            edge_kind="to_args_on_edge",
-            convention=None,
-            required_arg_line: Optional[Callable[[str], str]] = None,
-            bound_arg_line: Optional[Callable[[str], str]] = None,
-            **kwargs,
+        self,
+        prefix=None,
+        edge_kind="to_args_on_edge",
+        convention=None,
+        required_arg_line: Optional[Callable[[str], str]] = None,
+        bound_arg_line: Optional[Callable[[str], str]] = None,
+        **kwargs,
     ):
 
         c = Configs(
@@ -898,10 +900,12 @@ class LineParametrized(Line):
         )
 
         if required_arg_line is None:
+
             def required_arg_line(argname: str) -> str:
                 return f'{argname} [shape="{c.vnode_shape}"]'
 
         if bound_arg_line is None:
+
             def bound_arg_line(argname: str) -> str:
                 argname_with_equals = argname + "="
                 return (
@@ -1132,20 +1136,17 @@ if __name__ == "__main__":
     from lined.base import _merge_funcs_and_named_funcs
     import pytest
 
-
     class my_class:
         """A simple class with one method"""
 
         def add_one(self, x):
             return x + 1
 
-
     class my_other_class:
         """Another simple class with one method"""
 
         def add_one(self, x):
             return x + 2
-
 
     first = my_class()
     f = first.add_one
@@ -1158,9 +1159,7 @@ if __name__ == "__main__":
 
     i = lambda x: 2 * x
 
-
     def j(x: int):
         return 2 * x + 1
-
 
     print(len(_merge_funcs_and_named_funcs((f, g, h, i), named_funcs={})[0]))
