@@ -174,13 +174,13 @@ def _merge_funcs_and_named_funcs(funcs, named_funcs):
     )
 
 
-def uniquize_funcs_names(named_funcs_obtained_from_funcs):
+def uniquize_funcs_names(named_funcs_obtained_from_funcs, suffic_counter_start=2):
     """
     Check and make sure that the functions names are all different. This is achieved by adding a suffix to
     the duplicate names
     """
     all_func_names = []
-    prefix_counter = 0
+    prefix_counter = suffic_counter_start
     unique_named_funcs_obtained_from_funcs = []
     for func_name_pair in named_funcs_obtained_from_funcs:
         name, func = func_name_pair
