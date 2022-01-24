@@ -302,7 +302,11 @@ class Line:
 
         # It might make sense that if no funcs are specified, we take the lined to be
         # the identity, but we'll implement only when needed
+        # TODO: Refactor validation as hidden func (underscore-prefixed)
+        # TODO: Move validation just before attr assignment (after normalize)
         assert len(funcs) > 0, "You need to specify at least one function!"
+        assert all(list(map(callable, funcs))), "Hey, some funcs not callable!"
+
         funcs, named_funcs = _normalize_funcs_and_named_funcs(funcs, named_funcs)
 
         self.funcs = funcs
@@ -387,7 +391,7 @@ class Line:
                 # TODO: Get rid of this if/when we get rid of forced position only
                 first_fnode, *_ = funcs
                 underlying_funcs_sig = Sig(first_fnode.func)
-                if not hasattr(first_fnode.func, '__func__'):
+                if not hasattr(first_fnode.func, "__func__"):
                     sig = Sig(underlying_funcs_sig)
                     funcs[0] = fnode(sig(first_fnode.func), first_fnode.name)
                 else:  # first_fnode.func is a method, and we get
