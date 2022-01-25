@@ -433,16 +433,28 @@ class Line:
         >>> fff(4)  # 4 ** 1 == 4
         4
         """
-        if isinstance(k, (int, slice)):
-            item_str = ""
+        if isinstance(k, (int, str, slice)):
+            item_str = _get_item_str(k)
             funcs = []
-            if isinstance(k, int):  # TODO: Add str k handling
-                funcs = [self.funcs[k]]
-                item_str = str(k)
-            elif isinstance(k, slice):
-                assert k.step is None, f"slices with steps are not handled: {k}"
-                funcs = list(self.funcs[k])
-                item_str = f"{k.start}:{k.stop}"
+
+            # if isinstance(k, (str, int)):
+            #     item_str = str(k)
+            #     if isinstance(k, str):  # if k str, replace by index of str
+            #         k = list(self.named_funcs).index(k)
+            #     funcs = [self.funcs[k]]
+            # elif isinstance(k, slice):
+            #     assert k.step is None, f"slices with steps are not handled: {k}"
+            #     funcs = list(self.funcs[k])
+            #     item_str = f"{k.start}:{k.stop}"
+            from lined.util import ensure_numerical_keys
+
+            k = ensure_numerical_keys(k, names=list(self.named_funcs))
+            funcs = _ensure_list(self.funcs[k])
+            #
+            # if isinstance(k, int):
+            #     funcs = [self.funcs[k]]
+            # else:
+            #     funcs = list(self.funcs[k])
             pipeline_name = self.name or type(self).__name__
             if len(funcs) > 0:
                 # Need to get rid of the forced position only first arg
@@ -1144,6 +1156,24 @@ def _add_new_line_if_none(s: str):
     if s and s[-1] != "\n":
         return s + "\n"
     return s
+
+
+def _get_item_str(k):
+    """Returns a string equivalent of ``k`` to use in the repr"""
+    if isinstance(k, (str, int)):  # TODO: Add str k handling
+        return str(k)
+    elif isinstance(k, slice):
+        return f"{k.start}:{k.stop}"
+    else:
+        raise TypeError(f"Unknown key type")
+
+
+def _ensure_list(x):
+    if isinstance(x, (tuple, set)):
+        return list(x)
+    elif not isinstance(x, list):
+        return [x]
+    return x
 
 
 if __name__ == "__main__":

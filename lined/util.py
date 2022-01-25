@@ -8,6 +8,34 @@ import itertools
 from inspect import Signature, Parameter, signature
 
 
+def ensure_numerical_keys(k, names: list = None):
+    """Returns a numerical version of the input key.
+    If ``k`` is None or an integer, will be returned as is.
+    If ``k`` is a string, it will return the (int) index of ``k`` in ``names``.
+    If ``k`` is a slice, it will convert the k.start and k.stop to ints (or None).
+
+    >>> ensure_numerical_keys(42)
+    42
+    >>> ensure_numerical_keys('bob', ['alice', 'bob', 'charlie'])
+    1
+    >>> ensure_numerical_keys(slice('bob', 'charlie'), ['alice', 'bob', 'charlie'])
+    slice(1, 2, None)
+    >>> ensure_numerical_keys(slice('bob'), ['alice', 'bob', 'charlie'])
+    slice(None, 1, None)
+    """
+    if isinstance(k, str):  # if k str, replace by index of str
+        k = names.index(k)
+    elif isinstance(k, slice):
+        assert k.step is None, f"slices with steps are not handled: {k}"
+        k = slice(
+            ensure_numerical_keys(k.start, names), ensure_numerical_keys(k.stop, names)
+        )
+
+    return k
+
+
+
+
 dflt_signature = Signature(
     [
         Parameter(name="args", kind=Parameter.VAR_POSITIONAL),
