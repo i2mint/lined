@@ -532,7 +532,8 @@ class Line:
                 f"See https://pypi.org/project/graphviz/."
             )
 
-        body = list(self.dot_digraph_body(*args, **kwargs))
+        # Note: Since graphviz 0.18, need to have a newline in body lines!
+        body = list(map(_add_new_line_if_none, self.dot_digraph_body(*args, **kwargs)))
         return graphviz.Digraph(body=body)
 
     def __repr__(self):
@@ -1134,6 +1135,15 @@ class Digraph:
 
                 # Print contents of stack
         return stack
+
+
+def _add_new_line_if_none(s: str):
+    """Since graphviz 0.18, need to have a newline in body lines.
+    This util is there to address that, adding newlines to body lines
+    when missing."""
+    if s and s[-1] != "\n":
+        return s + "\n"
+    return s
 
 
 if __name__ == "__main__":
