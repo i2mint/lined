@@ -981,7 +981,7 @@ class LineParametrized(Line):
 
         if c.output_node:
             yield f'{c.output_node} [shape="{c.vnode_shape}"]'
-            yield f"{_func_names[-1]} -> {c.output_node}"
+            yield f"{previous_func_name} -> {c.output_node}"
 
     @wraps(dot_digraph_body)
     def dot_digraph_ascii(self, *args, **kwargs):
