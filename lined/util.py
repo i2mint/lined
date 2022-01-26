@@ -4,8 +4,20 @@ from functools import partial, partialmethod
 from typing import Callable
 from types import MethodType
 import itertools
+import re
 
 from inspect import Signature, Parameter, signature
+
+
+def clean(varStr):
+    return re.sub("\W|^(?=\d)", "_", varStr)
+
+
+non_id_char_p = re.compile(r"\W|^(?=\d)")
+
+
+def name_to_id(s: str, repl_str="_") -> str:
+    return non_id_char_p.sub(repl_str, s)
 
 
 def ensure_numerical_keys(k, names: list = None):

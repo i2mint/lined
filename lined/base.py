@@ -18,7 +18,12 @@ from i2.signatures import (
     KO,  # KEYWORD_ONLY
 )
 
-from lined.util import signature_from_first_and_last_func, func_name
+from lined.util import (
+    signature_from_first_and_last_func,
+    func_name,
+    name_to_id,
+    ensure_numerical_keys,
+)
 
 # MultiFuncSpec = Dict[str, Callable]
 Funcs = Union[Iterable[Callable], Callable]
@@ -396,7 +401,22 @@ class Line:
         return len(self.funcs)
 
     def __getitem__(self, k):
-        """Get a sub-pipeline
+        """Get a sub-pipeline through a [...] interface"""
+        if isinstance(k, tuple):
+            assert len(k) == 2, f"a tuple key should have two elements only: {k}"
+            k, name = k
+            return self.subline(k, name)
+        else:
+            return self.subline(k)
+
+    def subline(self, k, name=None):
+        """Get a sub-pipeline.
+
+        A more natural interface to subline is the [...] one, that is, using
+        ``line[k]`` instead of ``line.subline(k)`` and
+        ``line[k, name]`` instead of ``line.subline(k, name)``.
+
+        This is what we'll demo here.
 
         >>> from lined import Line
         >>>
@@ -415,47 +435,67 @@ class Line:
         >>> f(4)  # ((4 + 3) * 2) ** 1 == 7 * 2 == 14
         14
 
-        A Line instance acts a bit like a lit of the functions that compose it.
+        A Line instance acts a bit like a list of the functions that compose it.
+        That is, you can access individual elements like so
 
-        You can get a sub-line by getting a slice of the line:
+        >>> just_the_mult = f[1]
+        >>> just_the_mult(10, 3)  # 10 * 3 == 30
+        30
 
-        >>> ff = f[1:]
-        >>> ff
-        line[1:None](x, y=2)
-        >>> ff(4)  # (4 * 2) ** 1 == 8
+        Or slices like so:
+
+        >>> from_mult_onward = f[1:]
+        >>> from_mult_onward(4)  # (4 * 2) ** 1 == 8
         8
 
-        You can ask for only one node of the line:
+        Even use names in the slices:
 
-        >>> fff = f[2]
-        >>> fff
-        line[2](m, n=1)
-        >>> fff(4)  # 4 ** 1 == 4
-        4
+        >>> from_add_to_just_before_exp = f['add':'exp']  # equivalent to f[0:2]
+        >>> from_add_to_just_before_exp(4)  # (4 + 3) * 2 == 14
+        14
+
+        Note what the ``repr`` of these sublines are:
+
+        >>> just_the_mult
+        line[1](x, y=2)
+        >>> from_mult_onward
+        line[1:None](x, y=2)
+        >>> from_add_to_just_before_exp
+        line[add:exp](a, b=3)
+
+        Indeed, the names of these objects are:
+
+        >>> just_the_mult.name
+        'line[1]'
+        >>> from_mult_onward.name
+        'line[1:None]'
+        >>> from_add_to_just_before_exp.name
+        'line[add:exp]'
+
+        Useful default, since it gives you information on what part of the original
+        line we extracted as well as what the signature of this subline is.
+        But sometimes you'd like to give our own name to the subline, and we can,
+        like so:
+
+        >>> just_the_mult = f[1, 'multiplier']
+        >>> just_the_mult
+        multiplier(x, y=2)
+        >>> just_the_mult.name
+        'multiplier'
+
+        Note that the `__name__` is also assigned:
+
+        >>> just_the_mult.__name__
+        'multiplier'
+
         """
         if isinstance(k, (int, str, slice)):
             item_str = _get_item_str(k)
-            funcs = []
-
-            # if isinstance(k, (str, int)):
-            #     item_str = str(k)
-            #     if isinstance(k, str):  # if k str, replace by index of str
-            #         k = list(self.named_funcs).index(k)
-            #     funcs = [self.funcs[k]]
-            # elif isinstance(k, slice):
-            #     assert k.step is None, f"slices with steps are not handled: {k}"
-            #     funcs = list(self.funcs[k])
-            #     item_str = f"{k.start}:{k.stop}"
-            from lined.util import ensure_numerical_keys
-
             k = ensure_numerical_keys(k, names=list(self.named_funcs))
             funcs = _ensure_list(self.funcs[k])
-            #
-            # if isinstance(k, int):
-            #     funcs = [self.funcs[k]]
-            # else:
-            #     funcs = list(self.funcs[k])
-            pipeline_name = self.name or type(self).__name__
+            if name is None:
+                name = self.name or type(self).__name__
+                name = f"{name}[{item_str}]"
             if len(funcs) > 0:
                 # Need to get rid of the forced position only first arg
                 # TODO: Get rid of this if/when we get rid of forced position only
@@ -470,7 +510,11 @@ class Line:
                     # To reproduce, remove not hasattr(first_fnode.func, '__func__')
                     # condition
                     pass
-            return type(self)(*funcs, pipeline_name=f"{pipeline_name}[{item_str}]")
+            sub_obj = type(self)(*funcs, pipeline_name=f"{name}")
+            # if name is not None:
+            #     sub_obj.name = name
+            #     # sub_obj.__name__ = name
+            return sub_obj
         else:
             raise TypeError(f"Don't know how to handle that type of key: {k}")
 
@@ -496,26 +540,27 @@ class Line:
             yield prefix
 
         func_names = list(self.named_funcs)
+        func_ids = list(map(name_to_id, func_names))
 
         if input_node:
-            first_func_name = func_names[0]
+            first_func_id = func_ids[0]
             if input_node is True:
                 for argname, param in signature(self).parameters.items():
                     label = arg_param_to_string(param)
                     yield f'{argname} [shape="{vnode_shape}" label="{label}"]'
-                    yield f"{argname} -> {first_func_name}"
+                    yield f"{argname} -> {first_func_id}"
             elif input_node == str:
                 input_node = self.input_name or "input"
                 yield f'{input_node} [shape="{vnode_shape}"]'
-                yield f"{input_node} -> {first_func_name}"
+                yield f"{input_node} -> {first_func_id}"
 
-        for fname in func_names:
-            yield f'{fname} [shape="{fnode_shape}"]'
+        for func_id, fname in zip(func_ids, func_names):
+            yield f'{func_id} [shape="{fnode_shape}" label="{fname}"]'
 
         if edges_gen:
             if edges_gen is True:
-                for from_fname, to_fname in zip(func_names[:-1], func_names[1:]):
-                    yield f"{from_fname} -> {to_fname}"
+                for from_func_id, to_func_id in zip(func_ids[:-1], func_ids[1:]):
+                    yield f"{from_func_id} -> {to_func_id}"
             else:
                 yield from edges_gen
 
@@ -930,12 +975,12 @@ class LineParametrized(Line):
                     f'{argname_with_equals}"]'
                 )
 
-        def lines_for_argname(fname, sig, argname):
+        def lines_for_argname(func_id, sig, argname):
             if argname not in sig.defaults:
                 yield required_arg_line(argname)
             else:  # this argname is bound (has a default)
                 yield bound_arg_line(argname)
-            yield f"{argname} -> {fname}"
+            yield f"{argname} -> {func_id}"
 
         if prefix is None:
             if len(self.funcs) <= 7:
@@ -944,44 +989,48 @@ class LineParametrized(Line):
             yield prefix
 
         first_func, *_funcs = self.funcs
-        first_func_name, *_func_names = list(self.named_funcs)
+        func_ids = list(map(name_to_id, self.named_funcs))
+
+        for func_id, func_name in zip(func_ids, self.named_funcs):
+            yield f'{func_id} [shape="{c.fnode_shape}" label="{func_name}"]'
+
+        first_func_id, *_func_ids = func_ids
 
         if c.input_node:
             if c.input_node is True:
                 sig = Sig(first_func)
                 for argname in sig.parameters:
-                    yield from lines_for_argname(first_func_name, sig, argname)
+                    yield from lines_for_argname(first_func_id, sig, argname)
             elif c.input_node == str:
                 input_node = self.input_name or "input"
                 yield f'{input_node} [shape="{c.vnode_shape}"]'
-                yield f"{input_node} -> {first_func_name}"
+                yield f"{input_node} -> {first_func_id}"
+                yield f"{input_node} -> {first_func_id}"
 
-        previous_func_name = first_func_name
-        for i, (fname, func) in enumerate(self.named_funcs.items()):
-            yield f'{fname} [shape="{c.fnode_shape}"]'
-
+        previous_func_id = first_func_id
+        for i, (func_id, func) in enumerate(zip(func_ids, self.named_funcs.values())):
             sig = Sig(func)
             if i > 0:
                 first_arg = next(iter(sig.names), None)
 
                 on_edge = c.edge_kind.endswith("on_edge")
                 if on_edge:
-                    yield f'{previous_func_name} -> {fname} [label="{first_arg}"]'
+                    yield f'{previous_func_id} -> {func_id} [label="{first_arg}"]'
                 else:
-                    yield f"{previous_func_name} -> {fname}"
+                    yield f"{previous_func_id} -> {func_id}"
 
                 if c.edge_kind.startswith("to_args"):
                     if c.display_all_arguments:
                         for i, argname in enumerate(sig.names):
                             if on_edge and i == 0:
                                 continue  # skip first arg if on_edge mode
-                            yield from lines_for_argname(fname, sig, argname)
+                            yield from lines_for_argname(func_id, sig, argname)
 
-                previous_func_name = fname
+                previous_func_id = func_id
 
         if c.output_node:
             yield f'{c.output_node} [shape="{c.vnode_shape}"]'
-            yield f"{previous_func_name} -> {c.output_node}"
+            yield f"{func_id} -> {c.output_node}"
 
     @wraps(dot_digraph_body)
     def dot_digraph_ascii(self, *args, **kwargs):
