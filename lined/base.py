@@ -282,7 +282,7 @@ def name_with_varkind_and_default_marker(param: Parameter) -> str:
 # TODO: Deprecate of named_funcs? Use (name, func) mechanism only?
 # TODO: add validation option (e.g. all downstream functions single-argumented)
 # TODO: Handle names with spaces
-# TODO: Use .name instead of __name__ for pipeline_name?
+# TODO: Better default naming (line_001, line_002, etc.?)
 class Line:
     def __init__(
         self,
@@ -383,6 +383,7 @@ class Line:
         if pipeline_name is not None:
             self.__name__ = pipeline_name
         self.name = pipeline_name or self.__class__.__name__
+        self.__name__ = self.name
         self.__signature__ = _signature_of_pipeline(*self.funcs)
 
     # Note: Did this to lighten __init__, but made signature(Line) not work
