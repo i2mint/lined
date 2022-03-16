@@ -1,4 +1,0 @@
-lined
-=====
-.. automodule:: lined
-   :members:
