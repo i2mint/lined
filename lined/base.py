@@ -295,13 +295,15 @@ class Line:
         """Performs function composition.
         That is, get a callable that is equivalent to a chain of callables.
         For example, if `f`, `h`, and `g` are three functions, the function
-        ```
+
+        .. code-block::
             c = Compose(f, h, g)
-        ```
+
         is such that, for any valid inputs `args, kwargs` of `f`,
-        ```
+
+        .. code-block::
         c(*args, **kwargs) == g(h(f(*args, **kwargs)))
-        ```
+
         (assuming the functions are deterministic of course).
 
         :param funcs: The functions of the pipeline
@@ -634,20 +636,19 @@ def log_calls(line: Line, logger: Callable = print, what_to_log=_call_signature)
     >>> t
     '3.0'
 
-    Note that some other pairs than the default
-        '(logger=print, what_to_log=_call_signature)'
-    pair can be useful in some situations.
+    We're using the ``(logger=print, what_to_log=_call_signature)`` default here,
+    but other pair can be useful in some situations.
 
     For example, some of these calls may involve objects whose string representation
     is no informative, or two large to be useful.
-    In this case, one could instead set (logger, what_to_log) to serialize the
+    In this case, one could instead set ``(logger, what_to_log)`` to serialize the
     calls and save in a DB or pickle files that could then be studied.
 
     Note: This function logs all the calls.
 
     If you want to log only some calls, you might want to use lined.tools.side_call
-    or lined.tools.print_and_pass_on.
-    You can also provide a custome (logger, what_to_log) pair that will do something
+    or ``lined.tools.print_and_pass_on``.
+    You can also provide a custome ``(logger, what_to_log)`` pair that will do something
     special according to the function (namely, log the call or not).
 
     """
@@ -810,7 +811,7 @@ class LineParametrized(Line):
 
     `Line(f, g)` would be a function with `a` and `b` as your inputs.
 
-    ```
+    .. code-block::
             ┌───┐     ┌───┐
      a  ──▶ │ f │ ──▶ │ g │ ──▶  output
             └───┘     └───┘
@@ -819,10 +820,11 @@ class LineParametrized(Line):
               │
 
               b=
-    ```
+
 
     On the other hand, `LineParametrized(f, g)` will give you control over `y`.
 
+    .. code-block::
             ┌───┐  x   ┌───┐
      a  ──▶ │ f │ ───▶ │ g │ ──▶  output
             └───┘      └───┘
