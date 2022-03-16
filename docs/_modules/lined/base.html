@@ -1,37 +1,79 @@
-
 <!DOCTYPE html>
-
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lined.base &#8212; lined 0.1.1 documentation</title>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lined.base &mdash; lined 0.1.22 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> lined
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined.html">lined</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/base.html">lined.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/examples.html">lined.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/recipes.html">lined.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/simple.html">lined.simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tests/test_base.html">lined.tests.test_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tools.html">lined.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/util.html">lined.util</a></li>
+</ul>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+        </div>
+      </div>
+    </nav>
 
-          <div class="body" role="main">
-            
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lined</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>lined.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <h1>Source code for lined.base</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The base objects of lined.</span>
@@ -53,8 +95,12 @@
     <span class="n">KO</span><span class="p">,</span>  <span class="c1"># KEYWORD_ONLY</span>
 <span class="p">)</span>
 
-
-<span class="kn">from</span> <span class="nn">lined.util</span> <span class="kn">import</span> <span class="n">signature_from_first_and_last_func</span><span class="p">,</span> <span class="n">func_name</span>
+<span class="kn">from</span> <span class="nn">lined.util</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signature_from_first_and_last_func</span><span class="p">,</span>
+    <span class="n">func_name</span><span class="p">,</span>
+    <span class="n">name_to_id</span><span class="p">,</span>
+    <span class="n">ensure_numerical_keys</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1"># MultiFuncSpec = Dict[str, Callable]</span>
 <span class="n">Funcs</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span> <span class="n">Callable</span><span class="p">]</span>
@@ -137,11 +183,40 @@
 
 
 <span class="k">def</span> <span class="nf">_func_to_name_func_pair</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The func.__name__ of a callable func, or makes and returns one if that fails.</span>
-<span class="sd">    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    From a function func, returns a pair (name_of_func, func) where name_of_func is either the existing string</span>
+<span class="sd">    func.__name__ or an inferred string using func_name. If func is instead already a pair, a check is performed</span>
+<span class="sd">    to ensure that it is of the expected form, i.e., in a (str, callable) form</span>
+
+<span class="sd">    :param func: callable or a pair, in the latter case a check is performed</span>
+<span class="sd">    :return: (str, callable) pair, where the string is the name of the function</span>
+
+<span class="sd">    &gt;&gt;&gt; def my_func(x):</span>
+<span class="sd">    ...    return x + 1</span>
+<span class="sd">    &gt;&gt;&gt; assert _func_to_name_func_pair(my_func)[0] == &#39;my_func&#39;</span>
+<span class="sd">    &gt;&gt;&gt; assert _func_to_name_func_pair(my_func)[1] is my_func</span>
+
+<span class="sd">    A function with no .__name__ attribute, such as a lambda, will be given a unique name automatically in the form of</span>
+<span class="sd">    f&#39;unnamed_func_{i}&#39;. The uniqueness is achieved by incrementing i.</span>
+
+<span class="sd">    &gt;&gt;&gt; my_lambda_func = lambda x: 2 * x</span>
+<span class="sd">    &gt;&gt;&gt; given_name, func = _func_to_name_func_pair(my_lambda_func)</span>
+<span class="sd">    &gt;&gt;&gt; assert given_name.startswith(&#39;unnamed_func_&#39;)</span>
+
+<span class="sd">    &gt;&gt;&gt; class my_class:</span>
+<span class="sd">    ...    def my_class_method(self, x):</span>
+<span class="sd">    ...        return x + 2 * x</span>
+<span class="sd">    &gt;&gt;&gt; assert _func_to_name_func_pair(my_class.my_class_method)[0] == &#39;my_class_method&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># We could just return func here, but to be clear...</span>
+        <span class="c1"># func is actually a name func pair, so let&#39;s extract the name and the func</span>
         <span class="n">name</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
-        <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">func</span>
+        <span class="c1"># and assert these are in fact a name and a function</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">func</span>  <span class="c1"># an finally returning it</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">),</span> <span class="n">func</span>
 
@@ -153,8 +228,13 @@
         <span class="s2">&quot;Can&#39;t name a function with any of the following strings: &quot;</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_line_init_reserved_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
+
     <span class="n">funcs_obtained_from_named_funcs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">named_funcs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-    <span class="n">named_funcs_obtained_from_funcs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_func_to_name_func_pair</span><span class="p">,</span> <span class="n">funcs</span><span class="p">))</span>
+    <span class="n">named_funcs_obtained_from_funcs</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">_func_to_name_func_pair</span><span class="p">,</span> <span class="n">funcs</span><span class="p">)</span>
+    <span class="c1"># make sure the names are unique, by adding a suffix to some of the repeating names if necessary</span>
+    <span class="n">named_funcs_obtained_from_funcs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">uniquize_funcs_names</span><span class="p">(</span><span class="n">named_funcs_obtained_from_funcs</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">named_funcs_obtained_from_funcs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span>
         <span class="n">named_funcs</span>
@@ -163,10 +243,35 @@
         <span class="nb">tuple</span><span class="p">(</span><span class="n">named_funcs_obtained_from_funcs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
         <span class="o">+</span> <span class="n">funcs_obtained_from_named_funcs</span>
     <span class="p">)</span>
+
+    <span class="n">named_funcs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">named_funcs_obtained_from_funcs</span><span class="p">,</span> <span class="o">**</span><span class="n">named_funcs</span><span class="p">)</span>
+    <span class="c1"># print(named_funcs.values())</span>
+    <span class="c1"># print(funcs)</span>
+    <span class="c1"># assert set(named_funcs.values()) == set(funcs), &quot;Some of the functions have the same name,&quot; \</span>
+    <span class="c1">#                                             &quot; please explicitly provide disjoint names&quot;</span>
+
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">funcs</span><span class="p">,</span>
-        <span class="nb">dict</span><span class="p">(</span><span class="n">named_funcs_obtained_from_funcs</span><span class="p">,</span> <span class="o">**</span><span class="n">named_funcs</span><span class="p">),</span>
+        <span class="n">named_funcs</span><span class="p">,</span>
     <span class="p">)</span>
+
+
+<div class="viewcode-block" id="uniquize_funcs_names"><a class="viewcode-back" href="../../module_docs/lined/base.html#lined.base.uniquize_funcs_names">[docs]</a><span class="k">def</span> <span class="nf">uniquize_funcs_names</span><span class="p">(</span><span class="n">named_funcs_obtained_from_funcs</span><span class="p">,</span> <span class="n">suffic_counter_start</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check and make sure that the functions names are all different. This is achieved by adding a suffix to</span>
+<span class="sd">    the duplicate names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_func_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">prefix_counter</span> <span class="o">=</span> <span class="n">suffic_counter_start</span>
+    <span class="n">unique_named_funcs_obtained_from_funcs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">func_name_pair</span> <span class="ow">in</span> <span class="n">named_funcs_obtained_from_funcs</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">func_name_pair</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_func_names</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">prefix_counter</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">prefix_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">all_func_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">unique_named_funcs_obtained_from_funcs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">unique_named_funcs_obtained_from_funcs</span></div>
 
 
 <span class="k">def</span> <span class="nf">_mk_first_argument_position_only</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -211,7 +316,8 @@
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">named_funcs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">)</span>
         <span class="c1"># Override the first fnode to NOT use the first_arg_position_only flag</span>
-        <span class="n">fnode_kwargs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;first_arg_position_only&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">fnode_kwargs</span><span class="p">:</span>
+            <span class="n">fnode_kwargs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;first_arg_position_only&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># make fncdes from the funcs</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fnodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fnode</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="n">fnode_kwargs</span><span class="p">)</span>
@@ -253,7 +359,7 @@
 <span class="c1"># TODO: Deprecate of named_funcs? Use (name, func) mechanism only?</span>
 <span class="c1"># TODO: add validation option (e.g. all downstream functions single-argumented)</span>
 <span class="c1"># TODO: Handle names with spaces</span>
-<span class="c1"># TODO: Use .name instead of __name__ for pipeline_name?</span>
+<span class="c1"># TODO: Better default naming (line_001, line_002, etc.?)</span>
 <span class="k">class</span> <span class="nc">Line</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -266,13 +372,15 @@
         <span class="sd">&quot;&quot;&quot;Performs function composition.</span>
 <span class="sd">        That is, get a callable that is equivalent to a chain of callables.</span>
 <span class="sd">        For example, if `f`, `h`, and `g` are three functions, the function</span>
-<span class="sd">        ```</span>
+
+<span class="sd">        .. code-block::</span>
 <span class="sd">            c = Compose(f, h, g)</span>
-<span class="sd">        ```</span>
+
 <span class="sd">        is such that, for any valid inputs `args, kwargs` of `f`,</span>
-<span class="sd">        ```</span>
+
+<span class="sd">        .. code-block::</span>
 <span class="sd">        c(*args, **kwargs) == g(h(f(*args, **kwargs)))</span>
-<span class="sd">        ```</span>
+
 <span class="sd">        (assuming the functions are deterministic of course).</span>
 
 <span class="sd">        :param funcs: The functions of the pipeline</span>
@@ -336,7 +444,11 @@
 
         <span class="c1"># It might make sense that if no funcs are specified, we take the lined to be</span>
         <span class="c1"># the identity, but we&#39;ll implement only when needed</span>
+        <span class="c1"># TODO: Refactor validation as hidden func (underscore-prefixed)</span>
+        <span class="c1"># TODO: Move validation just before attr assignment (after normalize)</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">funcs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;You need to specify at least one function!&quot;</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">callable</span><span class="p">,</span> <span class="n">funcs</span><span class="p">))),</span> <span class="s2">&quot;Hey, some funcs not callable!&quot;</span>
+
         <span class="n">funcs</span><span class="p">,</span> <span class="n">named_funcs</span> <span class="o">=</span> <span class="n">_normalize_funcs_and_named_funcs</span><span class="p">(</span><span class="n">funcs</span><span class="p">,</span> <span class="n">named_funcs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">funcs</span> <span class="o">=</span> <span class="n">funcs</span>
@@ -350,6 +462,7 @@
         <span class="k">if</span> <span class="n">pipeline_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">pipeline_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">pipeline_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__signature__</span> <span class="o">=</span> <span class="n">_signature_of_pipeline</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">funcs</span><span class="p">)</span>
 
     <span class="c1"># Note: Did this to lighten __init__, but made signature(Line) not work</span>
@@ -368,7 +481,22 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">funcs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get a sub-pipeline</span>
+        <span class="sd">&quot;&quot;&quot;Get a sub-pipeline through a [...] interface&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;a tuple key should have two elements only: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">k</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subline</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subline</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">subline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a sub-pipeline.</span>
+
+<span class="sd">        A more natural interface to subline is the [...] one, that is, using</span>
+<span class="sd">        ``line[k]`` instead of ``line.subline(k)`` and</span>
+<span class="sd">        ``line[k, name]`` instead of ``line.subline(k, name)``.</span>
+
+<span class="sd">        This is what we&#39;ll demo here.</span>
 
 <span class="sd">        &gt;&gt;&gt; from lined import Line</span>
 <span class="sd">        &gt;&gt;&gt;</span>
@@ -387,43 +515,86 @@
 <span class="sd">        &gt;&gt;&gt; f(4)  # ((4 + 3) * 2) ** 1 == 7 * 2 == 14</span>
 <span class="sd">        14</span>
 
-<span class="sd">        A Line instance acts a bit like a lit of the functions that compose it.</span>
+<span class="sd">        A Line instance acts a bit like a list of the functions that compose it.</span>
+<span class="sd">        That is, you can access individual elements like so</span>
 
-<span class="sd">        You can get a sub-line by getting a slice of the line:</span>
+<span class="sd">        &gt;&gt;&gt; just_the_mult = f[1]</span>
+<span class="sd">        &gt;&gt;&gt; just_the_mult(10, 3)  # 10 * 3 == 30</span>
+<span class="sd">        30</span>
 
-<span class="sd">        &gt;&gt;&gt; ff = f[1:]</span>
-<span class="sd">        &gt;&gt;&gt; ff</span>
-<span class="sd">        line[1:None](x, y=2)</span>
-<span class="sd">        &gt;&gt;&gt; ff(4)  # (4 * 2) ** 1 == 8</span>
+<span class="sd">        Or slices like so:</span>
+
+<span class="sd">        &gt;&gt;&gt; from_mult_onward = f[1:]</span>
+<span class="sd">        &gt;&gt;&gt; from_mult_onward(4)  # (4 * 2) ** 1 == 8</span>
 <span class="sd">        8</span>
 
-<span class="sd">        You can ask for only one node of the line:</span>
+<span class="sd">        Even use names in the slices:</span>
 
-<span class="sd">        &gt;&gt;&gt; fff = f[2]</span>
-<span class="sd">        &gt;&gt;&gt; fff</span>
-<span class="sd">        line[2](m, n=1)</span>
-<span class="sd">        &gt;&gt;&gt; fff(4)  # 4 ** 1 == 4</span>
-<span class="sd">        4</span>
+<span class="sd">        &gt;&gt;&gt; from_add_to_just_before_exp = f[&#39;add&#39;:&#39;exp&#39;]  # equivalent to f[0:2]</span>
+<span class="sd">        &gt;&gt;&gt; from_add_to_just_before_exp(4)  # (4 + 3) * 2 == 14</span>
+<span class="sd">        14</span>
+
+<span class="sd">        Note what the ``repr`` of these sublines are:</span>
+
+<span class="sd">        &gt;&gt;&gt; just_the_mult</span>
+<span class="sd">        line[1](x, y=2)</span>
+<span class="sd">        &gt;&gt;&gt; from_mult_onward</span>
+<span class="sd">        line[1:None](x, y=2)</span>
+<span class="sd">        &gt;&gt;&gt; from_add_to_just_before_exp</span>
+<span class="sd">        line[add:exp](a, b=3)</span>
+
+<span class="sd">        Indeed, the names of these objects are:</span>
+
+<span class="sd">        &gt;&gt;&gt; just_the_mult.name</span>
+<span class="sd">        &#39;line[1]&#39;</span>
+<span class="sd">        &gt;&gt;&gt; from_mult_onward.name</span>
+<span class="sd">        &#39;line[1:None]&#39;</span>
+<span class="sd">        &gt;&gt;&gt; from_add_to_just_before_exp.name</span>
+<span class="sd">        &#39;line[add:exp]&#39;</span>
+
+<span class="sd">        Useful default, since it gives you information on what part of the original</span>
+<span class="sd">        line we extracted as well as what the signature of this subline is.</span>
+<span class="sd">        But sometimes you&#39;d like to give our own name to the subline, and we can,</span>
+<span class="sd">        like so:</span>
+
+<span class="sd">        &gt;&gt;&gt; just_the_mult = f[1, &#39;multiplier&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; just_the_mult</span>
+<span class="sd">        multiplier(x, y=2)</span>
+<span class="sd">        &gt;&gt;&gt; just_the_mult.name</span>
+<span class="sd">        &#39;multiplier&#39;</span>
+
+<span class="sd">        Note that the `__name__` is also assigned:</span>
+
+<span class="sd">        &gt;&gt;&gt; just_the_mult.__name__</span>
+<span class="sd">        &#39;multiplier&#39;</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)):</span>
-            <span class="n">item_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-            <span class="n">funcs</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>  <span class="c1"># TODO: Add str k handling</span>
-                <span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">funcs</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span>
-                <span class="n">item_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
-                <span class="k">assert</span> <span class="n">k</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;slices with steps are not handled: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="n">funcs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">funcs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-                <span class="n">item_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">start</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">stop</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">pipeline_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)):</span>
+            <span class="n">item_str</span> <span class="o">=</span> <span class="n">_get_item_str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">ensure_numerical_keys</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="p">))</span>
+            <span class="n">funcs</span> <span class="o">=</span> <span class="n">_ensure_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">funcs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">item_str</span><span class="si">}</span><span class="s2">]&quot;</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">funcs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># Need to get rid of the forced position only first arg</span>
                 <span class="c1"># TODO: Get rid of this if/when we get rid of forced position only</span>
                 <span class="n">first_fnode</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">funcs</span>
                 <span class="n">underlying_funcs_sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">first_fnode</span><span class="o">.</span><span class="n">func</span><span class="p">)</span>
-                <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">underlying_funcs_sig</span><span class="p">)</span>
-                <span class="n">funcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">fnode</span><span class="p">(</span><span class="n">sig</span><span class="p">(</span><span class="n">first_fnode</span><span class="o">.</span><span class="n">func</span><span class="p">),</span> <span class="n">first_fnode</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="o">*</span><span class="n">funcs</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pipeline_name</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">item_str</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">first_fnode</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__func__&quot;</span><span class="p">):</span>
+                    <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">underlying_funcs_sig</span><span class="p">)</span>
+                    <span class="n">funcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">fnode</span><span class="p">(</span><span class="n">sig</span><span class="p">(</span><span class="n">first_fnode</span><span class="o">.</span><span class="n">func</span><span class="p">),</span> <span class="n">first_fnode</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># first_fnode.func is a method, and we get</span>
+                    <span class="c1"># AttributeError: &#39;method&#39; object has no attribute &#39;__signature__&#39;</span>
+                    <span class="c1"># when trying in change signature</span>
+                    <span class="c1"># To reproduce, remove not hasattr(first_fnode.func, &#39;__func__&#39;)</span>
+                    <span class="c1"># condition</span>
+                    <span class="k">pass</span>
+            <span class="n">sub_obj</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="o">*</span><span class="n">funcs</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># if name is not None:</span>
+            <span class="c1">#     sub_obj.name = name</span>
+            <span class="c1">#     # sub_obj.__name__ = name</span>
+            <span class="k">return</span> <span class="n">sub_obj</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Don&#39;t know how to handle that type of key: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -449,26 +620,27 @@
             <span class="k">yield</span> <span class="n">prefix</span>
 
         <span class="n">func_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="p">)</span>
+        <span class="n">func_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">name_to_id</span><span class="p">,</span> <span class="n">func_names</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">input_node</span><span class="p">:</span>
-            <span class="n">first_func_name</span> <span class="o">=</span> <span class="n">func_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">first_func_id</span> <span class="o">=</span> <span class="n">func_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">input_node</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">argname</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">label</span> <span class="o">=</span> <span class="n">arg_param_to_string</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
                     <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">argname</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">vnode_shape</span><span class="si">}</span><span class="s1">&quot; label=&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
-                    <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argname</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">first_func_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argname</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">first_func_id</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">elif</span> <span class="n">input_node</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
                 <span class="n">input_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_name</span> <span class="ow">or</span> <span class="s2">&quot;input&quot;</span>
                 <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">vnode_shape</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
-                <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">first_func_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">first_func_id</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">func_names</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">fnode_shape</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
+        <span class="k">for</span> <span class="n">func_id</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">func_ids</span><span class="p">,</span> <span class="n">func_names</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">func_id</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">fnode_shape</span><span class="si">}</span><span class="s1">&quot; label=&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
 
         <span class="k">if</span> <span class="n">edges_gen</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">edges_gen</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">from_fname</span><span class="p">,</span> <span class="n">to_fname</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">func_names</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">func_names</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-                    <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">from_fname</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">to_fname</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">for</span> <span class="n">from_func_id</span><span class="p">,</span> <span class="n">to_func_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">func_ids</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">func_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                    <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">from_func_id</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">to_func_id</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">yield from</span> <span class="n">edges_gen</span>
 
@@ -497,7 +669,8 @@
                 <span class="sa">f</span><span class="s2">&quot;See https://pypi.org/project/graphviz/.&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">body</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dot_digraph_body</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="c1"># Note: Since graphviz 0.18, need to have a newline in body lines!</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_add_new_line_if_none</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot_digraph_body</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">Digraph</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -540,20 +713,19 @@
 <span class="sd">    &gt;&gt;&gt; t</span>
 <span class="sd">    &#39;3.0&#39;</span>
 
-<span class="sd">    Note that some other pairs than the default</span>
-<span class="sd">        &#39;(logger=print, what_to_log=_call_signature)&#39;</span>
-<span class="sd">    pair can be useful in some situations.</span>
+<span class="sd">    We&#39;re using the ``(logger=print, what_to_log=_call_signature)`` default here,</span>
+<span class="sd">    but other pair can be useful in some situations.</span>
 
 <span class="sd">    For example, some of these calls may involve objects whose string representation</span>
 <span class="sd">    is no informative, or two large to be useful.</span>
-<span class="sd">    In this case, one could instead set (logger, what_to_log) to serialize the</span>
+<span class="sd">    In this case, one could instead set ``(logger, what_to_log)`` to serialize the</span>
 <span class="sd">    calls and save in a DB or pickle files that could then be studied.</span>
 
 <span class="sd">    Note: This function logs all the calls.</span>
 
 <span class="sd">    If you want to log only some calls, you might want to use lined.tools.side_call</span>
-<span class="sd">    or lined.tools.print_and_pass_on.</span>
-<span class="sd">    You can also provide a custome (logger, what_to_log) pair that will do something</span>
+<span class="sd">    or ``lined.tools.print_and_pass_on``.</span>
+<span class="sd">    You can also provide a custome ``(logger, what_to_log)`` pair that will do something</span>
 <span class="sd">    special according to the function (namely, log the call or not).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -716,7 +888,7 @@
 
 <span class="sd">    `Line(f, g)` would be a function with `a` and `b` as your inputs.</span>
 
-<span class="sd">    ```</span>
+<span class="sd">    .. code-block::</span>
 <span class="sd">            ┌───┐     ┌───┐</span>
 <span class="sd">     a  ──▶ │ f │ ──▶ │ g │ ──▶  output</span>
 <span class="sd">            └───┘     └───┘</span>
@@ -725,10 +897,11 @@
 <span class="sd">              │</span>
 
 <span class="sd">              b=</span>
-<span class="sd">    ```</span>
+
 
 <span class="sd">    On the other hand, `LineParametrized(f, g)` will give you control over `y`.</span>
 
+<span class="sd">    .. code-block::</span>
 <span class="sd">            ┌───┐  x   ┌───┐</span>
 <span class="sd">     a  ──▶ │ f │ ───▶ │ g │ ──▶  output</span>
 <span class="sd">            └───┘      └───┘</span>
@@ -826,7 +999,8 @@
 
         <span class="k">def</span> <span class="nf">sig_without_the_first_input</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
             <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-            <span class="n">sig</span> <span class="o">=</span> <span class="n">sig</span> <span class="o">-</span> <span class="n">sig</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">sig</span> <span class="o">=</span> <span class="n">sig</span> <span class="o">-</span> <span class="n">sig</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">sig</span><span class="o">.</span><span class="n">ch_kinds</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">KO</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">names</span><span class="p">})</span>
 
         <span class="c1"># _funcs = map(normalize_func, _funcs)  # TODO: Test edge cases to assess need</span>
@@ -881,12 +1055,12 @@
                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">argname_with_equals</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
                 <span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">lines_for_argname</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">argname</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">lines_for_argname</span><span class="p">(</span><span class="n">func_id</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">argname</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">argname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">defaults</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">required_arg_line</span><span class="p">(</span><span class="n">argname</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># this argname is bound (has a default)</span>
                 <span class="k">yield</span> <span class="n">bound_arg_line</span><span class="p">(</span><span class="n">argname</span><span class="p">)</span>
-            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argname</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argname</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">func_id</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="k">if</span> <span class="n">prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">funcs</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span>
@@ -895,44 +1069,48 @@
             <span class="k">yield</span> <span class="n">prefix</span>
 
         <span class="n">first_func</span><span class="p">,</span> <span class="o">*</span><span class="n">_funcs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">funcs</span>
-        <span class="n">first_func_name</span><span class="p">,</span> <span class="o">*</span><span class="n">_func_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="p">)</span>
+        <span class="n">func_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">name_to_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">func_id</span><span class="p">,</span> <span class="n">func_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">func_ids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">func_id</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">fnode_shape</span><span class="si">}</span><span class="s1">&quot; label=&quot;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
+
+        <span class="n">first_func_id</span><span class="p">,</span> <span class="o">*</span><span class="n">_func_ids</span> <span class="o">=</span> <span class="n">func_ids</span>
 
         <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">input_node</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">input_node</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">first_func</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">argname</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-                    <span class="k">yield from</span> <span class="n">lines_for_argname</span><span class="p">(</span><span class="n">first_func_name</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">argname</span><span class="p">)</span>
+                    <span class="k">yield from</span> <span class="n">lines_for_argname</span><span class="p">(</span><span class="n">first_func_id</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">argname</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">c</span><span class="o">.</span><span class="n">input_node</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
                 <span class="n">input_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_name</span> <span class="ow">or</span> <span class="s2">&quot;input&quot;</span>
                 <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">vnode_shape</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
-                <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">first_func_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">first_func_id</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">first_func_id</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="n">previous_func_name</span> <span class="o">=</span> <span class="n">first_func_name</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-            <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">fnode_shape</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
-
+        <span class="n">previous_func_id</span> <span class="o">=</span> <span class="n">first_func_id</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">func_id</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">func_ids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="o">.</span><span class="n">values</span><span class="p">())):</span>
             <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">first_arg</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">names</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 
                 <span class="n">on_edge</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">edge_kind</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;on_edge&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">on_edge</span><span class="p">:</span>
-                    <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">previous_func_name</span><span class="si">}</span><span class="s1"> -&gt; </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1"> [label=&quot;</span><span class="si">{</span><span class="n">first_arg</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
+                    <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">previous_func_id</span><span class="si">}</span><span class="s1"> -&gt; </span><span class="si">{</span><span class="n">func_id</span><span class="si">}</span><span class="s1"> [label=&quot;</span><span class="si">{</span><span class="n">first_arg</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">previous_func_name</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">previous_func_id</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">func_id</span><span class="si">}</span><span class="s2">&quot;</span>
 
                 <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">edge_kind</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;to_args&quot;</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">display_all_arguments</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">argname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">names</span><span class="p">):</span>
                             <span class="k">if</span> <span class="n">on_edge</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                                 <span class="k">continue</span>  <span class="c1"># skip first arg if on_edge mode</span>
-                            <span class="k">yield from</span> <span class="n">lines_for_argname</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">argname</span><span class="p">)</span>
+                            <span class="k">yield from</span> <span class="n">lines_for_argname</span><span class="p">(</span><span class="n">func_id</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">argname</span><span class="p">)</span>
 
-                <span class="n">previous_func_name</span> <span class="o">=</span> <span class="n">fname</span>
+                <span class="n">previous_func_id</span> <span class="o">=</span> <span class="n">func_id</span>
 
         <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">output_node</span><span class="p">:</span>
             <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">output_node</span><span class="si">}</span><span class="s1"> [shape=&quot;</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">vnode_shape</span><span class="si">}</span><span class="s1">&quot;]&#39;</span>
-            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_func_names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">output_node</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">func_id</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">output_node</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">dot_digraph_body</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">dot_digraph_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1045,84 +1223,12 @@
     <span class="c1">#     return None</span>
 
 
-<div class="viewcode-block" id="ParallelFuncs"><a class="viewcode-back" href="../../module_docs/lined/base.html#lined.base.ParallelFuncs">[docs]</a><span class="k">class</span> <span class="nc">ParallelFuncs</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Make a multi-channel function from a {name: func, ...} specification.</span>
-
-<span class="sd">    &gt;&gt;&gt; multi_func = ParallelFuncs(</span>
-<span class="sd">    ...     say_hello=lambda x: f&quot;hello {x}&quot;, say_goodbye=lambda x: f&quot;goodbye {x}&quot;</span>
-<span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; multi_func({&#39;say_hello&#39;: &#39;world&#39;, &#39;say_goodbye&#39;: &#39;Lenin&#39;})</span>
-<span class="sd">    {&#39;say_hello&#39;: &#39;hello world&#39;, &#39;say_goodbye&#39;: &#39;goodbye Lenin&#39;}</span>
-
-<span class="sd">    :param spec: A map between a name (str) and a function associated to that name</span>
-<span class="sd">    :return: A function that takes a dict as an (multi-channel) input and a dict as a</span>
-<span class="sd">    (multi-channel) output</span>
-
-<span class="sd">    Q: Why can I specify the specs both with named_funcs_dict and **named_funcs?</span>
-<span class="sd">    A: Look at the ``dict(...)`` interface. You see the same thing there.</span>
-<span class="sd">    Different reason though (here we assert that the keys don&#39;t overlap).</span>
-<span class="sd">    Usually named_funcs is more convenient, but if you need to use keys that are not</span>
-<span class="sd">    valid python variable names,</span>
-<span class="sd">    you can always use named_funcs_dict to express that!</span>
-
-<span class="sd">    &gt;&gt;&gt; multi_func = ParallelFuncs({</span>
-<span class="sd">    ...     &#39;x+y&#39;: lambda d: f&quot;sum is {d}&quot;,</span>
-<span class="sd">    ...     &#39;x*y&#39;: lambda d: f&quot;prod is {d}&quot;}</span>
-<span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; multi_func({</span>
-<span class="sd">    ...     &#39;x+y&#39;: 5,</span>
-<span class="sd">    ...     &#39;x*y&#39;: 6</span>
-<span class="sd">    ... })</span>
-<span class="sd">    {&#39;x+y&#39;: &#39;sum is 5&#39;, &#39;x*y&#39;: &#39;prod is 6&#39;}</span>
-
-<span class="sd">    You can also use both. Like with ``dict(...)``.</span>
-
-<span class="sd">    Here&#39;s a more significant example.</span>
-
-<span class="sd">    &gt;&gt;&gt; chunkers = {</span>
-<span class="sd">    ...     &#39;a&#39;: lambda x: x[0] + x[1],</span>
-<span class="sd">    ...     &#39;b&#39;: lambda x: x[0] * x[1]</span>
-<span class="sd">    ... }</span>
-<span class="sd">    &gt;&gt;&gt; featurizers = {</span>
-<span class="sd">    ...     &#39;a&#39;: lambda z: str(z),</span>
-<span class="sd">    ...     &#39;b&#39;: lambda z: [z] * 3</span>
-<span class="sd">    ... }</span>
-<span class="sd">    &gt;&gt;&gt; multi_chunker = ParallelFuncs(**chunkers)</span>
-<span class="sd">    &gt;&gt;&gt; multi_chunker({&#39;a&#39;: (1, 2), &#39;b&#39;: (3, 4)})</span>
-<span class="sd">    {&#39;a&#39;: 3, &#39;b&#39;: 12}</span>
-<span class="sd">    &gt;&gt;&gt; multi_featurizer = ParallelFuncs(**featurizers)</span>
-<span class="sd">    &gt;&gt;&gt; multi_featurizer({&#39;a&#39;: 3, &#39;b&#39;: 12})</span>
-<span class="sd">    {&#39;a&#39;: &#39;3&#39;, &#39;b&#39;: [12, 12, 12]}</span>
-<span class="sd">    &gt;&gt;&gt; my_pipe = Line(multi_chunker, multi_featurizer)</span>
-<span class="sd">    &gt;&gt;&gt; my_pipe({&#39;a&#39;: (1, 2), &#39;b&#39;: (3, 4)})</span>
-<span class="sd">    {&#39;a&#39;: &#39;3&#39;, &#39;b&#39;: [12, 12, 12]}</span>
-
-<span class="sd">    #{&#39;a&#39;: &#39;(1, 2)&#39;, &#39;b&#39;: [(3, 4), (3, 4), (3, 4)]}</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">named_funcs_dict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">**</span><span class="n">named_funcs</span><span class="p">):</span>
-        <span class="n">named_funcs_dict</span> <span class="o">=</span> <span class="n">named_funcs_dict</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="k">assert</span> <span class="n">named_funcs_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">named_funcs</span><span class="p">),</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;named_funcs_dict and named_funcs can&#39;t share keys. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Yet they share </span><span class="si">{</span><span class="n">named_funcs_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">named_funcs</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">named_funcs_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">named_funcs</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
-            <span class="nb">map</span><span class="p">(</span><span class="n">callable</span><span class="p">,</span> <span class="n">named_funcs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;At least one value of named_funcs was not callable&quot;</span>
-
-    <span class="k">def</span> <span class="nf">_key_output_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_funcs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">yield</span> <span class="n">key</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_output_gen</span><span class="p">(</span><span class="n">d</span><span class="p">))</span></div>
-
+<span class="kn">from</span> <span class="nn">i2</span> <span class="kn">import</span> <span class="n">ParallelFuncs</span>
 
 <span class="n">mk_multi_func</span> <span class="o">=</span> <span class="n">ParallelFuncs</span>  <span class="c1"># back-compatibility alias</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
 
 <span class="c1"># Class to represent a graph</span>
 <div class="viewcode-block" id="Digraph"><a class="viewcode-back" href="../../module_docs/lined/base.html#lined.base.Digraph">[docs]</a><span class="k">class</span> <span class="nc">Digraph</span><span class="p">:</span>
@@ -1170,77 +1276,93 @@
 
                 <span class="c1"># Print contents of stack</span>
         <span class="k">return</span> <span class="n">stack</span></div>
+
+
+<span class="k">def</span> <span class="nf">_add_new_line_if_none</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Since graphviz 0.18, need to have a newline in body lines.</span>
+<span class="sd">    This util is there to address that, adding newlines to body lines</span>
+<span class="sd">    when missing.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+
+<span class="k">def</span> <span class="nf">_get_item_str</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a string equivalent of ``k`` to use in the repr&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>  <span class="c1"># TODO: Add str k handling</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">start</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">stop</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown key type&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_ensure_list</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">lined.base</span> <span class="kn">import</span> <span class="n">_merge_funcs_and_named_funcs</span>
+    <span class="kn">import</span> <span class="nn">pytest</span>
+
+    <span class="k">class</span> <span class="nc">my_class</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;A simple class with one method&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">class</span> <span class="nc">my_other_class</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Another simple class with one method&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>
+
+    <span class="n">first</span> <span class="o">=</span> <span class="n">my_class</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">first</span><span class="o">.</span><span class="n">add_one</span>
+
+    <span class="n">second</span> <span class="o">=</span> <span class="n">my_class</span><span class="p">()</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">second</span><span class="o">.</span><span class="n">add_one</span>
+
+    <span class="n">third</span> <span class="o">=</span> <span class="n">my_other_class</span><span class="p">()</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">third</span><span class="o">.</span><span class="n">add_one</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">j</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_merge_funcs_and_named_funcs</span><span class="p">((</span><span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">named_funcs</span><span class="o">=</span><span class="p">{})[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 
+           </div>
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">lined</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined.html">lined</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/base.html">lined.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/examples.html">lined.examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/recipes.html">lined.recipes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/simple.html">lined.simple</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tools.html">lined.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/util.html">lined.util</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;NO COPYRIGHT.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

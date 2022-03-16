@@ -1,46 +1,88 @@
-
 <!DOCTYPE html>
-
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lined.tools &#8212; lined 0.1.1 documentation</title>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lined.tools &mdash; lined 0.1.22 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> lined
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined.html">lined</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/base.html">lined.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/examples.html">lined.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/recipes.html">lined.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/simple.html">lined.simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tests/test_base.html">lined.tests.test_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tools.html">lined.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/util.html">lined.util</a></li>
+</ul>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+        </div>
+      </div>
+    </nav>
 
-          <div class="body" role="main">
-            
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lined</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>lined.tools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <h1>Source code for lined.tools</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">All kinds of useful tools to use in pipelines.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">not_</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">not_</span><span class="p">,</span> <span class="n">methodcaller</span>
 
 <span class="kn">from</span> <span class="nn">lined.util</span> <span class="kn">import</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">partial_plus</span><span class="p">,</span> <span class="n">n_required_args</span>
 <span class="kn">from</span> <span class="nn">lined.simple</span> <span class="kn">import</span> <span class="n">Pipe</span>
@@ -200,7 +242,19 @@
 <span class="sd">    &gt;&gt;&gt; command()</span>
 <span class="sd">    hello, world</span>
 
+<span class="sd">    Note that the same can be achieved with</span>
+<span class="sd">    `partial(func, *args, **kwargs)`.</span>
+
+<span class="sd">    &gt;&gt;&gt; from operator import methodcaller</span>
+<span class="sd">    &gt;&gt;&gt; from functools import partial</span>
+<span class="sd">    &gt;&gt;&gt; def mk_command(func, *args, **kwargs):</span>
+<span class="sd">    ...     return partial(methodcaller(&#39;__call__&#39;, *args, **kwargs), func)</span>
+<span class="sd">    &gt;&gt;&gt; command = mk_command(print, &#39;hello&#39;, &#39;world&#39;, sep=&#39;, &#39;)</span>
+<span class="sd">    &gt;&gt;&gt; command()</span>
+<span class="sd">    hello, world</span>
+
 <span class="sd">    See: https://en.wikipedia.org/wiki/Command_pattern</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -208,6 +262,65 @@
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommandIter"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.CommandIter">[docs]</a><span class="k">class</span> <span class="nc">CommandIter</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An infinite iterator that returns the results of a Command called repeatedly.</span>
+
+<span class="sd">    Might become deprecated:</span>
+<span class="sd">    Use `iter(partial(func, *args, **kwargs), object())` instead.</span>
+
+<span class="sd">    &gt;&gt;&gt; from random import uniform</span>
+<span class="sd">    &gt;&gt;&gt; from itertools import islice</span>
+<span class="sd">    &gt;&gt;&gt; it = CommandIter(uniform, 0, 10)</span>
+<span class="sd">    &gt;&gt;&gt; rand_nums = list(islice(it, 4))</span>
+<span class="sd">    &gt;&gt;&gt; assert len(rand_nums) == 4</span>
+<span class="sd">    &gt;&gt;&gt; rand_nums  # doctest: +SKIP</span>
+<span class="sd">    [4.48171445690221, 7.466083642212892, 0.24120342781796422, 3.694956861724484]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="functioncaller"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.functioncaller">[docs]</a><span class="k">def</span> <span class="nf">functioncaller</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Call a function given positional and keyword arguments.</span>
+
+
+<span class="sd">    &gt;&gt;&gt; import operator</span>
+<span class="sd">    &gt;&gt;&gt; import functools</span>
+<span class="sd">    &gt;&gt;&gt; from lined import Pipe</span>
+<span class="sd">    &gt;&gt;&gt; f = Pipe(</span>
+<span class="sd">    ...     functools.partial(getattr, operator),  # get an operator func by name</span>
+<span class="sd">    ...     functioncaller(49, 7)  # apply it to 49 and 7</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; f(&#39;add&#39;)</span>
+<span class="sd">    56</span>
+<span class="sd">    &gt;&gt;&gt; f(&#39;sub&#39;)</span>
+<span class="sd">    42</span>
+
+<span class="sd">    Note: functioncaller just returns</span>
+<span class="sd">     `operator.methodcaller(&#39;__call__&#39;, *args, **kwargs)`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">methodcaller</span><span class="p">(</span><span class="s2">&quot;__call__&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="call"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.call">[docs]</a><span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Just call the input function with not arguments.</span>
+
+<span class="sd">    Equivalent to `functioncaller()`</span>
+
+<span class="sd">    &gt;&gt;&gt; from lined import Line</span>
+<span class="sd">    &gt;&gt;&gt; from functools import partial</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; line = Line(lambda x: partial(print, f&quot;{x*3=}&quot;), call)</span>
+<span class="sd">    &gt;&gt;&gt; line(14)</span>
+<span class="sd">    x*3=42</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="ItemsNotSorted"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.ItemsNotSorted">[docs]</a><span class="k">class</span> <span class="nc">ItemsNotSorted</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
@@ -673,6 +786,8 @@
 <span class="sd">    Some call this &quot;vectorization&quot;, but it&#39;s not really a vector, but an</span>
 <span class="sd">    iterable, thus the name.</span>
 
+<span class="sd">    `iterize` is a partial of `map`.</span>
+
 <span class="sd">    &gt;&gt;&gt; f = lambda x: x * 10</span>
 <span class="sd">    &gt;&gt;&gt; f(2)</span>
 <span class="sd">    20</span>
@@ -748,6 +863,66 @@
         <span class="n">func</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;generator version of </span><span class="si">{</span><span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="n">func</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="valmap"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.valmap">[docs]</a><span class="k">def</span> <span class="nf">valmap</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">copy_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply func to the values of a shallow copy of d, unless copy_dict=False,</span>
+<span class="sd">    in which case, it will be applied to the input dict itself.</span>
+
+<span class="sd">    &gt;&gt;&gt; d = {&#39;a&#39;: 2, &#39;b&#39;: 3}</span>
+<span class="sd">    &gt;&gt;&gt; valmap(d, lambda x: x * 10)</span>
+<span class="sd">    {&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="sd">    &gt;&gt;&gt; d  # see that d unchanged</span>
+<span class="sd">    {&#39;a&#39;: 2, &#39;b&#39;: 3}</span>
+<span class="sd">    &gt;&gt;&gt; valmap(d, lambda x: x * 10, copy_dict=False)  # but if we ask for it</span>
+<span class="sd">    {&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="sd">    &gt;&gt;&gt; # we still get a (transformed) dict in the output, but it&#39;s the same dict changed</span>
+<span class="sd">    &gt;&gt;&gt; d  # now d itself changed</span>
+<span class="sd">    {&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">copy_dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="p">)</span>  <span class="c1"># pylint: disable (mapping needs to also be mutable here!)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="dictify"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.dictify">[docs]</a><span class="k">def</span> <span class="nf">dictify</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Makes a version of the input func that should be called on dictionaries and will</span>
+<span class="sd">    return dictionaries. The function will be applied to the values of a shallow</span>
+<span class="sd">    copy of the dict, unless copy_dict=False, in which case,</span>
+<span class="sd">    it will be applied to the input dict itself.</span>
+
+<span class="sd">    `dictify` is a partial of `valmap`</span>
+
+<span class="sd">    &gt;&gt;&gt; mult_by_10 = lambda x: x * 10</span>
+<span class="sd">    &gt;&gt;&gt; f = dictify(mult_by_10)</span>
+<span class="sd">    &gt;&gt;&gt; d = {&#39;a&#39;: 2, &#39;b&#39;: 3}</span>
+<span class="sd">    &gt;&gt;&gt; f(d)</span>
+<span class="sd">    {&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="sd">    &gt;&gt;&gt; d  # see that d unchanged</span>
+<span class="sd">    {&#39;a&#39;: 2, &#39;b&#39;: 3}</span>
+<span class="sd">    &gt;&gt;&gt; f = dictify(mult_by_10, copy_dict=False)  # but if we ask for it</span>
+<span class="sd">    &gt;&gt;&gt; f(d)</span>
+<span class="sd">    {&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="sd">    &gt;&gt;&gt; # we still get a (transformed) dict in the output, but it&#39;s the same dict changed</span>
+<span class="sd">    &gt;&gt;&gt; d  # now d itself changed</span>
+<span class="sd">    {&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">mywraps</span><span class="p">(</span>
+        <span class="n">func</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">doc_prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;version of </span><span class="si">{</span><span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2"> that should be called on dictionaries&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;and will return dictionaries. The function will be applied to &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;the values of a shallow copy of the dict, unless copy_dict=False, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot; in which case, it will be applied to the input dict itself:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">valmap</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="n">copy_dict</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="wrap_first_arg_in_list"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.wrap_first_arg_in_list">[docs]</a><span class="k">def</span> <span class="nf">wrap_first_arg_in_list</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -969,8 +1144,8 @@
 <span class="sd">        :param add_new_val: The function that adds values on the buffer.</span>
 <span class="sd">        Signature must be (self, new_val)</span>
 <span class="sd">            Is usually a deque method (``deque.append`` by default, but could</span>
-<span class="sd">            be ``deque.extend``,</span>
-<span class="sd">            ``deque.appendleft`` etc.). Can also be any other function that</span>
+<span class="sd">            be ``deque.extend``, ``deque.appendleft`` etc.).</span>
+<span class="sd">            Can also be any other function that</span>
 <span class="sd">            has a valid (self, new_val) signature.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">maxlen</span> <span class="ow">is</span> <span class="n">_no_value_specified_sentinel</span><span class="p">:</span>
@@ -981,8 +1156,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">add_new_val</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">add_new_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">add_new_val</span><span class="p">)</span>  <span class="c1"># add_new_val is a method of</span>
-            <span class="c1"># deque</span>
+            <span class="c1"># assume add_new_val is a method of deque:</span>
+            <span class="n">add_new_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">add_new_val</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_new_val</span> <span class="o">=</span> <span class="n">add_new_val</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;BufferStats&quot;</span>
 
@@ -999,6 +1174,7 @@
     <span class="n">stats</span><span class="p">:</span> <span class="n">Stats</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">cond</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">is_not_none</span><span class="p">,</span> <span class="n">else_val</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">    &gt;&gt;&gt; return_buffer_on_stats_condition(stats=3, buffer=[1,2,3,4], cond=lambda x: x%2 == 1)</span>
 <span class="sd">    [1, 2, 3, 4]</span>
 <span class="sd">    &gt;&gt;&gt; return_buffer_on_stats_condition(stats=3, buffer=[1,2,3,4], cond=lambda x: x%2 == 0, else_val=&#39;3 is not even!&#39;)</span>
@@ -1015,6 +1191,7 @@
 <div class="viewcode-block" id="Segmenter"><a class="viewcode-back" href="../../module_docs/lined/tools.html#lined.tools.Segmenter">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Segmenter</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">    &gt;&gt;&gt; gen = iter(range(200))</span>
 <span class="sd">    &gt;&gt;&gt; bs = BufferStats(maxlen=10, func=sum)</span>
 <span class="sd">    &gt;&gt;&gt; return_if_stats_is_odd = partial(return_buffer_on_stats_condition, cond=lambda x: x%2 == 1, else_val=&#39;The sum is not odd!&#39;)</span>
@@ -1023,10 +1200,12 @@
 <span class="sd">    [1]</span>
 
 <span class="sd">    Adding 1 + 2 is still odd so:</span>
+
 <span class="sd">    &gt;&gt;&gt; seg(new_val=2)</span>
 <span class="sd">    [1, 2]</span>
 
 <span class="sd">    Now since 1 + 2 + 5 is even, the else_val of return_if_stats_is_odd is returned instead</span>
+
 <span class="sd">    &gt;&gt;&gt; seg(new_val=5)</span>
 <span class="sd">    &#39;The sum is not odd!&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1042,75 +1221,31 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats_buffer_callback</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">))</span></div>
 </pre></div>
 
+           </div>
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">lined</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined.html">lined</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/base.html">lined.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/examples.html">lined.examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/recipes.html">lined.recipes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/simple.html">lined.simple</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tools.html">lined.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/util.html">lined.util</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;NO COPYRIGHT.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

@@ -1,40 +1,82 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>lined.tools &#8212; lined 0.1.1 documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lined.tools &mdash; lined 0.1.22 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="lined.util" href="util.html" />
-    <link rel="prev" title="lined.simple" href="simple.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="prev" title="lined.tests.test_base" href="tests/test_base.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> lined
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lined.html">lined</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">lined.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">lined.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">lined.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple.html">lined.simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/test_base.html">lined.tests.test_base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">lined.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">lined.util</a></li>
+</ul>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+        </div>
+      </div>
+    </nav>
 
-          <div class="body" role="main">
-            
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lined</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>lined.tools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/lined/tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="module-lined.tools">
 <span id="lined-tools"></span><h1>lined.tools<a class="headerlink" href="#module-lined.tools" title="Permalink to this headline">¶</a></h1>
 <p>All kinds of useful tools to use in pipelines.</p>
@@ -106,7 +148,35 @@ See <a class="reference external" href="https://github.com/thorwhalen/umpyre/blo
 <span class="go">hello, world</span>
 </pre></div>
 </div>
+<p>Note that the same can be achieved with
+<cite>partial(func, *args, **kwargs)</cite>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">methodcaller</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">mk_command</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">methodcaller</span><span class="p">(</span><span class="s1">&#39;__call__&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">func</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">mk_command</span><span class="p">(</span><span class="nb">print</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">()</span>
+<span class="go">hello, world</span>
+</pre></div>
+</div>
 <p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Command_pattern">https://en.wikipedia.org/wiki/Command_pattern</a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="lined.tools.CommandIter">
+<em class="property">class </em><code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">CommandIter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#CommandIter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.CommandIter" title="Permalink to this definition">¶</a></dt>
+<dd><p>An infinite iterator that returns the results of a Command called repeatedly.</p>
+<p>Might become deprecated:
+Use <cite>iter(partial(func, *args, **kwargs), object())</cite> instead.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">it</span> <span class="o">=</span> <span class="n">CommandIter</span><span class="p">(</span><span class="n">uniform</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rand_nums</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rand_nums</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rand_nums</span>  
+<span class="go">[4.48171445690221, 7.466083642212892, 0.24120342781796422, 3.694956861724484]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
@@ -150,12 +220,16 @@ order</p>
 <span class="go">[1]</span>
 </pre></div>
 </div>
-<p>Adding 1 + 2 is still odd so:
-&gt;&gt;&gt; seg(new_val=2)
-[1, 2]</p>
-<p>Now since 1 + 2 + 5 is even, the else_val of return_if_stats_is_odd is returned instead
-&gt;&gt;&gt; seg(new_val=5)
-‘The sum is not odd!’</p>
+<p>Adding 1 + 2 is still odd so:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seg</span><span class="p">(</span><span class="n">new_val</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[1, 2]</span>
+</pre></div>
+</div>
+<p>Now since 1 + 2 + 5 is even, the else_val of return_if_stats_is_odd is returned instead</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seg</span><span class="p">(</span><span class="n">new_val</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">&#39;The sum is not odd!&#39;</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt id="lined.tools.Segmenter.stats_buffer_callback">
 <code class="sig-name descname">stats_buffer_callback</code><span class="sig-paren">(</span><em class="sig-param">buffer: Iterable</em>, <em class="sig-param">cond: Callable = &lt;function is_not_none&gt;</em>, <em class="sig-param">else_val=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.Segmenter.stats_buffer_callback" title="Permalink to this definition">¶</a></dt>
@@ -239,6 +313,21 @@ The output is meant to be bound by currying (functools.partial)</p>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">false_no_matter_what</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="lined.tools.call">
+<code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Just call the input function with not arguments.</p>
+<p>Equivalent to <cite>functioncaller()</cite></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lined</span> <span class="kn">import</span> <span class="n">Line</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">partial</span><span class="p">(</span><span class="nb">print</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="o">*</span><span class="mi">3</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">call</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+<span class="go">x*3=42</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -423,6 +512,31 @@ Intended to be applied to a stream of Mappings, using partial to fix fields</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="lined.tools.dictify">
+<code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">dictify</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">copy_dict</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#dictify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.dictify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a version of the input func that should be called on dictionaries and will
+return dictionaries. The function will be applied to the values of a shallow
+copy of the dict, unless copy_dict=False, in which case,
+it will be applied to the input dict itself.</p>
+<p><cite>dictify</cite> is a partial of <cite>valmap</cite></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mult_by_10</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">dictify</span><span class="p">(</span><span class="n">mult_by_10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># see that d unchanged</span>
+<span class="go">{&#39;a&#39;: 2, &#39;b&#39;: 3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">dictify</span><span class="p">(</span><span class="n">mult_by_10</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># but if we ask for it</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># we still get a (transformed) dict in the output, but it&#39;s the same dict changed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># now d itself changed</span>
+<span class="go">{&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt id="lined.tools.enumerate_groups">
 <code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">enumerate_groups</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterable</span></em>, <em class="sig-param"><span class="n">key</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#enumerate_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.enumerate_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get enumeration of groups during a groupby call.</p>
@@ -487,11 +601,35 @@ The output is meant to be bound by currying (functools.partial)</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="lined.tools.functioncaller">
+<code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">functioncaller</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#functioncaller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.functioncaller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call a function given positional and keyword arguments.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">operator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lined</span> <span class="kn">import</span> <span class="n">Pipe</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">operator</span><span class="p">),</span>  <span class="c1"># get an operator func by name</span>
+<span class="gp">... </span>    <span class="n">functioncaller</span><span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>  <span class="c1"># apply it to 49 and 7</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">)</span>
+<span class="go">56</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;sub&#39;</span><span class="p">)</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Note: functioncaller just returns</dt><dd><p><cite>operator.methodcaller(‘__call__’, *args, **kwargs)</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="lined.tools.generator_version">
 <code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">generator_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.generator_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>From an Input-&gt;Ouput function, makes a Iterator[Input]-&gt;Itertor[Output]
 Some call this “vectorization”, but it’s not really a vector, but an
 iterable, thus the name.</p>
+<p><cite>iterize</cite> is a partial of <cite>map</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">20</span>
@@ -633,6 +771,7 @@ consuming loop for you.</p>
 <dd><p>From an Input-&gt;Ouput function, makes a Iterator[Input]-&gt;Itertor[Output]
 Some call this “vectorization”, but it’s not really a vector, but an
 iterable, thus the name.</p>
+<p><cite>iterize</cite> is a partial of <cite>map</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">20</span>
@@ -870,6 +1009,25 @@ The output is meant to be bound by currying (functools.partial)</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="lined.tools.valmap">
+<code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">valmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span></em>, <em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">copy_dict</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#valmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.valmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply func to the values of a shallow copy of d, unless copy_dict=False,
+in which case, it will be applied to the input dict itself.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">valmap</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># see that d unchanged</span>
+<span class="go">{&#39;a&#39;: 2, &#39;b&#39;: 3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">valmap</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># but if we ask for it</span>
+<span class="go">{&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># we still get a (transformed) dict in the output, but it&#39;s the same dict changed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># now d itself changed</span>
+<span class="go">{&#39;a&#39;: 20, &#39;b&#39;: 30}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt id="lined.tools.with_cursor">
 <code class="sig-prename descclassname">lined.tools.</code><code class="sig-name descname">with_cursor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">step</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/tools.html#with_cursor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.tools.with_cursor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator a function so it enumerates the number of calls.
@@ -901,78 +1059,34 @@ be defined (default is start=0 and step=1)</p>
 </section>
 
 
+           </div>
           </div>
-          
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tests/test_base.html" class="btn btn-neutral float-left" title="lined.tests.test_base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="util.html" class="btn btn-neutral float-right" title="lined.util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">lined</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../lined.html">lined</a></li>
-<li class="toctree-l1"><a class="reference internal" href="base.html">lined.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">lined.examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">lined.recipes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simple.html">lined.simple</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">lined.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">lined.util</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="simple.html" title="previous chapter">lined.simple</a></li>
-      <li>Next: <a href="util.html" title="next chapter">lined.util</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;NO COPYRIGHT.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="../../_sources/module_docs/lined/tools.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>
