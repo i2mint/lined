@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lined.util &mdash; lined 0.1.22 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> lined
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined.html">lined</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/base.html">lined.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/examples.html">lined.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/recipes.html">lined.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/simple.html">lined.simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tests/test_base.html">lined.tests.test_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/tools.html">lined.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/lined/util.html">lined.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lined</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>lined.util</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lined.util</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Util functions&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">partialmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">MethodType</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">Signature</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">signature</span>
+
+
+<span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="n">varStr</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;\W|^(?=\d)&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">varStr</span><span class="p">)</span>
+
+
+<span class="n">non_id_char_p</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W|^(?=\d)&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">name_to_id</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">repl_str</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">non_id_char_p</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">repl_str</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ensure_numerical_keys"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.ensure_numerical_keys">[docs]</a><span class="k">def</span> <span class="nf">ensure_numerical_keys</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a numerical version of the input key.</span>
+<span class="sd">    If ``k`` is None or an integer, will be returned as is.</span>
+<span class="sd">    If ``k`` is a string, it will return the (int) index of ``k`` in ``names``.</span>
+<span class="sd">    If ``k`` is a slice, it will convert the k.start and k.stop to ints (or None).</span>
+
+<span class="sd">    &gt;&gt;&gt; ensure_numerical_keys(42)</span>
+<span class="sd">    42</span>
+<span class="sd">    &gt;&gt;&gt; ensure_numerical_keys(&#39;bob&#39;, [&#39;alice&#39;, &#39;bob&#39;, &#39;charlie&#39;])</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; ensure_numerical_keys(slice(&#39;bob&#39;, &#39;charlie&#39;), [&#39;alice&#39;, &#39;bob&#39;, &#39;charlie&#39;])</span>
+<span class="sd">    slice(1, 2, None)</span>
+<span class="sd">    &gt;&gt;&gt; ensure_numerical_keys(slice(&#39;bob&#39;), [&#39;alice&#39;, &#39;bob&#39;, &#39;charlie&#39;])</span>
+<span class="sd">    slice(None, 1, None)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># if k str, replace by index of str</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">k</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;slices with steps are not handled: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span>
+            <span class="n">ensure_numerical_keys</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">names</span><span class="p">),</span> <span class="n">ensure_numerical_keys</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">k</span></div>
+
+
+<span class="n">dflt_signature</span> <span class="o">=</span> <span class="n">Signature</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">Parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">),</span>
+        <span class="n">Parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;kwargs&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="signature_from_first_and_last_func"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.signature_from_first_and_last_func">[docs]</a><span class="k">def</span> <span class="nf">signature_from_first_and_last_func</span><span class="p">(</span><span class="n">first_func</span><span class="p">,</span> <span class="n">last_func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a signature using the first_func for it&#39;s params and last_func for</span>
+<span class="sd">    return annotations, both only if possible&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">input_params</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="n">first_func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># function doesn&#39;t have a signature, so take default</span>
+        <span class="n">input_params</span> <span class="o">=</span> <span class="n">dflt_signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="n">last_func</span><span class="p">)</span><span class="o">.</span><span class="n">return_annotation</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># function doesn&#39;t have a signature, so take default</span>
+        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">dflt_signature</span><span class="o">.</span><span class="n">return_annotation</span>
+    <span class="k">return</span> <span class="n">Signature</span><span class="p">(</span><span class="n">input_params</span><span class="p">,</span> <span class="n">return_annotation</span><span class="o">=</span><span class="n">return_annotation</span><span class="p">)</span></div>
+
+
+<span class="n">writable_function_dunders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;__annotations__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__call__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__defaults__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__dict__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__doc__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__globals__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__kwdefaults__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__name__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__qualname__&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="partial_plus"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.partial_plus">[docs]</a><span class="k">def</span> <span class="nf">partial_plus</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Like partial, but with the ability to add &#39;normal function&#39; stuff</span>
+<span class="sd">    (name, doc) to the curried function.</span>
+
+<span class="sd">    Note: if no writable_function_dunders is specified will just act as the</span>
+<span class="sd">    builtin partial (which it calls first).</span>
+
+<span class="sd">    &gt;&gt;&gt; def foo(a, b): return a + b</span>
+<span class="sd">    &gt;&gt;&gt; f = partial_plus(foo, b=2, __name__=&#39;bar&#39;, __doc__=&#39;foo, but with b=2&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; f.__name__</span>
+<span class="sd">    &#39;bar&#39;</span>
+<span class="sd">    &gt;&gt;&gt; f.__doc__</span>
+<span class="sd">    &#39;foo, but with b=2&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;__name__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
+
+    <span class="n">dunders_in_kwargs</span> <span class="o">=</span> <span class="n">writable_function_dunders</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dunder</span> <span class="ow">in</span> <span class="n">dunders_in_kwargs</span><span class="p">:</span>
+            <span class="n">dunder_val</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">dunder</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">dunder</span><span class="p">,</span> <span class="n">dunder_val</span>
+
+    <span class="n">dunders_to_write</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span>  <span class="c1"># will remove dunders from kwargs</span>
+
+    <span class="c1"># partial_func = CachedInstancePartial(func, *args, **kwargs)</span>
+    <span class="n">partial_func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">dunder</span><span class="p">,</span> <span class="n">dunder_val</span> <span class="ow">in</span> <span class="n">dunders_to_write</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">partial_func</span><span class="p">,</span> <span class="n">dunder</span><span class="p">,</span> <span class="n">dunder_val</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">partial_func</span></div>
+
+
+<div class="viewcode-block" id="incremental_str_maker"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.incremental_str_maker">[docs]</a><span class="k">def</span> <span class="nf">incremental_str_maker</span><span class="p">(</span><span class="n">str_format</span><span class="o">=</span><span class="s2">&quot;{:03.f}&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a function that will produce a (incrementally) new string at every call.&quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">mk_next_str</span><span class="p">():</span>
+        <span class="k">nonlocal</span> <span class="n">i</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">str_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mk_next_str</span></div>
+
+
+<span class="n">unnamed_pipeline</span> <span class="o">=</span> <span class="n">incremental_str_maker</span><span class="p">(</span><span class="n">str_format</span><span class="o">=</span><span class="s2">&quot;UnnamedPipeline</span><span class="si">{:03.0f}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">unnamed_func_name</span> <span class="o">=</span> <span class="n">incremental_str_maker</span><span class="p">(</span><span class="n">str_format</span><span class="o">=</span><span class="s2">&quot;unnamed_func_</span><span class="si">{:03.0f}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="func_name"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.func_name">[docs]</a><span class="k">def</span> <span class="nf">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The func.__name__ of a callable func, or makes and returns one if that fails.</span>
+<span class="sd">    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&lt;lambda&gt;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">unnamed_func_name</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">name</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">unnamed_func_name</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="dot_to_ascii"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.dot_to_ascii">[docs]</a><span class="k">def</span> <span class="nf">dot_to_ascii</span><span class="p">(</span><span class="n">dot</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fancy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a dot string to an ascii rendering of the diagram.</span>
+
+<span class="sd">    Needs a connection to the internet to work.</span>
+
+
+<span class="sd">    &gt;&gt;&gt; graph_dot = &#39;&#39;&#39;</span>
+<span class="sd">    ...     graph {</span>
+<span class="sd">    ...         rankdir=LR</span>
+<span class="sd">    ...         0 -- {1 2}</span>
+<span class="sd">    ...         1 -- {2}</span>
+<span class="sd">    ...         2 -&gt; {0 1 3}</span>
+<span class="sd">    ...         3</span>
+<span class="sd">    ...     }</span>
+<span class="sd">    ... &#39;&#39;&#39;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; graph_ascii = dot_to_ascii(graph_dot)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; print(graph_ascii)  # doctest: +SKIP</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">                     ┌─────────┐</span>
+<span class="sd">                     ▼         │</span>
+<span class="sd">         ┌───┐     ┌───┐     ┌───┐     ┌───┐</span>
+<span class="sd">      ┌▶ │ 0 │ ─── │ 1 │ ─── │   │ ──▶ │ 3 │</span>
+<span class="sd">      │  └───┘     └───┘     │   │     └───┘</span>
+<span class="sd">      │    │                 │   │</span>
+<span class="sd">      │    └──────────────── │ 2 │</span>
+<span class="sd">      │                      │   │</span>
+<span class="sd">      │                      │   │</span>
+<span class="sd">      └───────────────────── │   │</span>
+<span class="sd">                             └───┘</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">requests</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://dot-to-ascii.ggerganov.com/dot-to-ascii.php&quot;</span>
+    <span class="n">boxart</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># use nice box drawing char instead of + , | , -</span>
+    <span class="k">if</span> <span class="n">fancy</span><span class="p">:</span>
+        <span class="n">boxart</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">stripped_dot_str</span> <span class="o">=</span> <span class="n">dot</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+        <span class="n">stripped_dot_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">stripped_dot_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;digraph&quot;</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">dot</span> <span class="o">=</span> <span class="s2">&quot;graph {</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">dot</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">}&quot;</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;boxart&quot;</span><span class="p">:</span> <span class="n">boxart</span><span class="p">,</span>
+        <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">dot</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;ConnectionError: You need the internet to convert dot into ascii!&quot;</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">(</span><span class="s2">&quot;DOT string is not formatted correctly&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">response</span></div>
+
+
+<span class="c1"># ───────────────────────────────────────────────────────────────────────────────────────</span>
+
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">Parameter</span>
+
+
+<span class="k">def</span> <span class="nf">param_is_required</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="o">==</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+        <span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">,</span>
+        <span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="n_required_args"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.n_required_args">[docs]</a><span class="k">def</span> <span class="nf">n_required_args</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Number of required arguments.</span>
+
+<span class="sd">    A required argument is one that doesn&#39;t have a default, nor is VAR_POSITIONAL (*args) or VAR_KEYWORD (**kwargs).</span>
+<span class="sd">    Note: Sometimes a minimum number of arguments in VAR_POSITIONAL and VAR_KEYWORD are in fact required,</span>
+<span class="sd">    but we can&#39;t see this from the signature, so we can&#39;t tell you about that! You do the math.</span>
+
+<span class="sd">    &gt;&gt;&gt; n_required_args(lambda x, y, z=None, *args, **kwargs: ...)</span>
+<span class="sd">    2</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">param_is_required</span><span class="p">,</span> <span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span></div>
+
+
+<span class="c1"># ───────────────────────────────────────────────────────────────────────────────────────</span>
+<span class="c1"># Vendorized from boltons (https://github.com/mahmoud/boltons)</span>
+
+<span class="n">make_method</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">desc</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">MethodType</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="mro_items"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.mro_items">[docs]</a><span class="k">def</span> <span class="nf">mro_items</span><span class="p">(</span><span class="n">type_obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes a type and returns an iterator over all class variables</span>
+<span class="sd">    throughout the type hierarchy (respecting the MRO).</span>
+
+<span class="sd">    &gt;&gt;&gt; sorted(set([k for k, v in mro_items(int) if not k.startswith(&#39;__&#39;)</span>
+<span class="sd">    ...     and &#39;bytes&#39; not in k and not callable(v)]))</span>
+<span class="sd">    [&#39;denominator&#39;, &#39;imag&#39;, &#39;numerator&#39;, &#39;real&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: handle slots?</span>
+    <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">type_obj</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CachedInstancePartial"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.CachedInstancePartial">[docs]</a><span class="k">class</span> <span class="nc">CachedInstancePartial</span><span class="p">(</span><span class="n">partial</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The ``CachedInstancePartial`` is virtually the same as</span>
+<span class="sd">    :class:`InstancePartial`, adding support for method-usage to</span>
+<span class="sd">    :class:`functools.partial`, except that upon first access, it</span>
+<span class="sd">    caches the bound method on the associated object, speeding it up</span>
+<span class="sd">    for future accesses, and bringing the method call overhead to</span>
+<span class="sd">    about the same as non-``partial`` methods.</span>
+
+<span class="sd">    See the :class:`InstancePartial` docstring for more details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">):</span>
+        <span class="c1"># These assignments could&#39;ve been in __init__, but there was</span>
+        <span class="c1"># no simple way to do it without breaking one of PyPy or Py3.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__module__</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">mro_items</span><span class="p">(</span><span class="n">obj_type</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="bp">self</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">make_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># since this is a data descriptor, this block</span>
+            <span class="c1"># is probably only hit once (per object)</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">make_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
