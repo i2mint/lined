@@ -2,9 +2,7 @@
 All kinds of useful tools to use in pipelines.
 """
 from functools import partial, wraps
-from collections import deque
 from typing import Any, Mapping
-from dataclasses import dataclass
 from operator import not_, methodcaller
 
 from lined.util import func_name, partial_plus, n_required_args
@@ -152,9 +150,6 @@ cast_to_tuple_if_non_iterable_or_a_string = partial(
 # ------------ Tools for iterables ---------------------------------------------
 
 
-from itertools import groupby
-
-
 class Command:
     """Make a no-input callable that will execute a specific function call.
 
@@ -227,7 +222,7 @@ def functioncaller(*args, **kwargs):
      `operator.methodcaller('__call__', *args, **kwargs)`.
 
     """
-    return methodcaller("__call__", *args, **kwargs)
+    return methodcaller('__call__', *args, **kwargs)
 
 
 def call(func):
@@ -276,13 +271,13 @@ def return_instead_of_raising_exceptions(func=None, *, exceptions=(Exception,)):
         elif isinstance(exceptions, Iterable):
             exceptions = tuple(exceptions)
             assert all(issubclass(e, BaseException) for e in exceptions), (
-                "All elements of exceptions must be subclasses of BaseException: "
-                "Was {exceptions}"
+                'All elements of exceptions must be subclasses of BaseException: '
+                'Was {exceptions}'
             )
         else:
             raise TypeError(
-                f"exceptions must be a BaseException subclass or iterable thereof: "
-                f"{exceptions}"
+                f'exceptions must be a BaseException subclass or iterable thereof: '
+                f'{exceptions}'
             )
         return exceptions
 
@@ -313,8 +308,8 @@ def raise_(exception):
         raise exception()
     else:
         raise TypeError(
-            f"exception must be an BaseException instance or a "
-            f"callable that returns one. Was: {exception}"
+            f'exception must be an BaseException instance or a '
+            f'callable that returns one. Was: {exception}'
         )
 
 
@@ -400,7 +395,7 @@ def _validated_comparison_func(key: Callable):
 
         return comp_func
     assert n_required == 2, (
-        f"key should be a callable with 1 or 2 required " f"arguments"
+        f'key should be a callable with 1 or 2 required ' f'arguments'
     )
     return key
 
@@ -654,21 +649,21 @@ def side_call(x, callback):
 print_and_pass_on = partial_plus(
     side_call,
     callback=print,
-    __name__="print_and_pass_on",
-    __doc__="Passes input through to output, but prints before outputing",
+    __name__='print_and_pass_on',
+    __doc__='Passes input through to output, but prints before outputing',
 )
 
 # Function transformers
 # ###################################################################
 
 
-def extra_wraps(func, name=None, doc_prefix=""):
+def extra_wraps(func, name=None, doc_prefix=''):
     func.__name__ = name or func_name(func)
-    func.__doc__ = doc_prefix + getattr(func, "__name__", "")
+    func.__doc__ = doc_prefix + getattr(func, '__name__', '')
     return func
 
 
-def mywraps(func, name=None, doc_prefix=""):
+def mywraps(func, name=None, doc_prefix=''):
     def wrapper(wrapped):
         return extra_wraps(wraps(func)(wrapped), name=name, doc_prefix=doc_prefix)
 
@@ -783,7 +778,7 @@ def iterize(func, name=None):
     # made kwargs that made map partial choke.
 
     wrapper = mywraps(
-        func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"
+        func, name=name, doc_prefix=f'generator version of {func_name(func)}:\n'
     )
     return wrapper(partial(map, func))
 
@@ -840,10 +835,10 @@ def dictify(func, copy_dict=True, name=None):
     wrapper = mywraps(
         func,
         name=name,
-        doc_prefix=f"version of {func_name(func)} that should be called on dictionaries"
-        f"and will return dictionaries. The function will be applied to "
-        f"the values of a shallow copy of the dict, unless copy_dict=False, "
-        f" in which case, it will be applied to the input dict itself:\n",
+        doc_prefix=f'version of {func_name(func)} that should be called on dictionaries'
+        f'and will return dictionaries. The function will be applied to '
+        f'the values of a shallow copy of the dict, unless copy_dict=False, '
+        f' in which case, it will be applied to the input dict itself:\n',
     )
     return wrapper(partial(valmap, func=func, copy_dict=copy_dict))
 
@@ -875,8 +870,8 @@ def mk_filter(filter_func=None):
     return partial_plus(
         filter,
         filter_func,
-        __name__="mk_filter",
-        __doc__="Makes a filter with a fixed filt func.",
+        __name__='mk_filter',
+        __doc__='Makes a filter with a fixed filt func.',
     )
 
 
@@ -893,7 +888,7 @@ def map_star(func):
     >>> assert singularized_foo([2, 3]) == singularized_foo({2, 3}) == foo(2, 3)
     """
 
-    @mywraps(func, doc_prefix=f"map_star version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'map_star version of {func_name(func)}')
     def func_with_single_arg_input(args):
         return func(*args)
 
@@ -915,7 +910,7 @@ def expanded_args(func):
 
     """
 
-    @mywraps(func, doc_prefix=f"expanded_args version of {func_name(func)}")
+    @mywraps(func, doc_prefix=f'expanded_args version of {func_name(func)}')
     def _func(*args):
         return func(args)
 
@@ -985,160 +980,6 @@ def with_cursor(func, start=0, step=1):
     return _func
 
 
-Stats = Any
+from creek import BufferStats, Segmenter
 
-from typing import cast
-
-_no_value_specified_sentinel = cast(int, object())
-
-
-# _no_value_specified_sentinel = object()
-
-
-class BufferStats(deque):
-    """A callable (fifo) buffer. Calls add input to it, but also returns some results
-    computed from it's contents.
-
-    What "add" means is configurable (through ``add_new_val`` arg). Default
-    is append, but can be extend etc.
-
-    >>> bs = BufferStats(maxlen=4, func=sum)
-    >>> list(map(bs, range(7)))
-    [0, 1, 3, 6, 10, 14, 18]
-
-    See what happens when you feed the same sequence again:
-
-    >>> list(map(bs, range(7)))
-    [15, 12, 9, 6, 10, 14, 18]
-
-    More examples:
-
-    >>> list(map(BufferStats(maxlen=4, func=''.join), 'abcdefgh'))
-    ['a', 'ab', 'abc', 'abcd', 'bcde', 'cdef', 'defg', 'efgh']
-
-    >>> from math import prod
-    >>> list(map(BufferStats(maxlen=4, func=prod), range(7)))
-    [0, 0, 0, 0, 24, 120, 360]
-
-    With a different ``add_new_val`` choice.
-
-    >>> bs = BufferStats(maxlen=4, func=''.join, add_new_val=deque.appendleft)
-    >>> list(map(bs, 'abcdefgh'))
-    ['a', 'ba', 'cba', 'dcba', 'edcb', 'fedc', 'gfed', 'hgfe']
-
-    With ``add_new_val=deque.extend``, data can be fed in chunks.
-    In the following, also see how we use iterize to get a function that
-    takes an iterator and returns an iterator
-
-    >>> from lined import iterize
-    >>> window_stats = iterize(BufferStats(
-    ... maxlen=4, func=''.join, add_new_val=deque.extend))
-    >>> chks = ['a', 'bc', 'def', 'gh']
-    >>> for x in window_stats(chks):
-    ...     print(x)
-    a
-    abc
-    cdef
-    efgh
-
-    Note: To those who might think that they can optimize this for special
-    cases: Yes you can.
-    But SHOULD you? Is it worth the increase in complexity and reduction in
-    flexibility?
-    See https://github.com/thorwhalen/umpyre/blob/master/misc
-    /performance_of_rolling_window_stats.md
-
-    """
-
-    # __name__ = 'BufferStats'
-
-    def __init__(
-        self,
-        values=(),
-        maxlen: int = _no_value_specified_sentinel,
-        func: Callable = sum,
-        add_new_val: Callable = deque.append,
-    ):
-        """
-
-        :param maxlen: Size of the buffer
-        :param func: The function to be computed (on buffer contents) and
-        returned when buffer is "called"
-        :param add_new_val: The function that adds values on the buffer.
-        Signature must be (self, new_val)
-            Is usually a deque method (``deque.append`` by default, but could
-            be ``deque.extend``, ``deque.appendleft`` etc.).
-            Can also be any other function that
-            has a valid (self, new_val) signature.
-        """
-        if maxlen is _no_value_specified_sentinel:
-            raise TypeError("You are required to specify maxlen")
-        if not isinstance(maxlen, int):
-            raise TypeError(f"maxlen must be an integer, was: {maxlen}")
-
-        super().__init__(values, maxlen=maxlen)
-        self.func = func
-        if isinstance(add_new_val, str):
-            # assume add_new_val is a method of deque:
-            add_new_val = getattr(self, add_new_val)
-        self.add_new_val = add_new_val
-        self.__name__ = "BufferStats"
-
-    def __call__(self, new_val) -> Stats:
-        self.add_new_val(self, new_val)  # add the new value
-        return self.func(self)
-
-
-def is_not_none(x):
-    return x is not None
-
-
-def return_buffer_on_stats_condition(
-    stats: Stats, buffer: Iterable, cond: Callable = is_not_none, else_val=None
-):
-    """
-
-    >>> return_buffer_on_stats_condition(stats=3, buffer=[1,2,3,4], cond=lambda x: x%2 == 1)
-    [1, 2, 3, 4]
-    >>> return_buffer_on_stats_condition(stats=3, buffer=[1,2,3,4], cond=lambda x: x%2 == 0, else_val='3 is not even!')
-    '3 is not even!'
-    """
-
-    if cond(stats):
-        return buffer
-    else:
-        return else_val
-
-
-# @add_name
-@dataclass
-class Segmenter:
-    """
-
-    >>> gen = iter(range(200))
-    >>> bs = BufferStats(maxlen=10, func=sum)
-    >>> return_if_stats_is_odd = partial(return_buffer_on_stats_condition, cond=lambda x: x%2 == 1, else_val='The sum is not odd!')
-    >>> seg = Segmenter(buffer=bs, stats_buffer_callback=return_if_stats_is_odd)
-    >>> seg(new_val=1) # since the sum of the values in the buffer [1] is odd, the buffer is returned
-    [1]
-
-    Adding 1 + 2 is still odd so:
-
-    >>> seg(new_val=2)
-    [1, 2]
-
-    Now since 1 + 2 + 5 is even, the else_val of return_if_stats_is_odd is returned instead
-
-    >>> seg(new_val=5)
-    'The sum is not odd!'
-    """
-
-    buffer: BufferStats
-    stats_buffer_callback: Callable[
-        [Stats, Iterable], Any
-    ] = return_buffer_on_stats_condition
-    __name__ = "Segmenter"
-
-    def __call__(self, new_val):
-        stats = self.buffer(new_val)
-        return self.stats_buffer_callback(stats, list(self.buffer))
+_ = (BufferStats, Segmenter)  # to make sure imports are not greyed out and deleted

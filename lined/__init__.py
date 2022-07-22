@@ -12,6 +12,7 @@ from lined.base import (
 )
 
 from lined.simple import Pipe
+
 from lined.tools import (
     Command,  # implementation of the command pattern
     CommandIter,  # call a command over and over again
@@ -25,9 +26,11 @@ from lined.tools import (
     map_star,
     singularize_arg_input,  # old alias of map_star,
     with_cursor,
-    BufferStats,
     mk_filter,
     side_call,
     print_and_pass_on,
+    BufferStats,  # in creek
+    Segmenter,  # in creek
 )
+
 from lined.util import partial_plus, n_required_args, dot_to_ascii
