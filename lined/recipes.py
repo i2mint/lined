@@ -1,5 +1,6 @@
 """Recipes to demo uses of lined functionalities"""
 
+from pathlib import Path
 from functools import partial, reduce
 from contextlib import suppress
 from operator import methodcaller, itemgetter
@@ -13,13 +14,16 @@ remove_duplicates.__doc__ = """
     [4, 2, 3]
 """
 
+read_text = Pipe(Path, methodcaller('read_text'))
+read_bytes = Pipe(Path, methodcaller('read_bytes'))
+
 transposer = map_star(zip)
 transposer.__name__ = "transposer"
 
 
 def mk_transposer_to_array(dtype=None):
-    """Make a transposer that transposes an iterable of n iterables of size k into an iterable
-    of k arrays of size n.
+    """Make a transposer that transposes an iterable of ``n`` iterables of size ``k``
+    into an iterable of ``k`` arrays of size ``n``.
 
     ## Commented out to avoid CI choking on the absence of numpy
     # >>> from numpy import array
