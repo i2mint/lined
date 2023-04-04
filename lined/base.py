@@ -609,6 +609,19 @@ class Line:
     def _name_of_instance(self):
         return getattr(self, "__name__", self.__class__.__name__)
 
+    def to_jdict(self):
+        return {
+            'funcs': self.funcs,
+            'pipeline_name': self.name,
+            'input_name': self.input_name,
+            'output_name': self.output_name
+        }
+
+    @classmethod
+    def from_jdict(cls, jdict):
+        funcs = jdict.pop('funcs')
+        return cls(*funcs, **jdict)
+
 
 Pipeline = Line  # for back-compatibility
 
