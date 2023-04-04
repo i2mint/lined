@@ -133,7 +133,8 @@ unnamed_func_name = incremental_str_maker(str_format="unnamed_func_{:03.0f}")
 
 def func_name(func):
     """The func.__name__ of a callable func, or makes and returns one if that fails.
-    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing"""
+    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing
+    """
     try:
         name = func.__name__
         if name == "<lambda>":

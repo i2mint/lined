@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>lined.simple &mdash; lined 0.1.23 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>lined.simple &mdash; lined 0.1.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -28,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> lined
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            lined
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -63,9 +67,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>lined.simple</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lined.simple</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -100,7 +104,7 @@
 
 
 <div class="viewcode-block" id="compose"><a class="viewcode-back" href="../../module_docs/lined/simple.html#lined.simple.compose">[docs]</a><span class="k">def</span> <span class="nf">compose</span><span class="p">(</span><span class="o">*</span><span class="n">funcs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    :param funcs:</span>
 <span class="sd">    :return:</span>
@@ -143,7 +147,7 @@
 <span class="c1"># Pipe code is completely independent. If you only need simple pipelines, use this, or even copy/paste it where needed.</span>
 <span class="c1"># TODO: Give it a __name__ and make it more like a &quot;normal&quot; function so it works well when so assumed</span>
 <div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../../module_docs/lined/simple.html#lined.simple.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Simple function composition. That is, gives you a callable that implements input -&gt; f_1 -&gt; ... -&gt; f_n -&gt; output.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple function composition. That is, gives you a callable that implements input -&gt; f_1 -&gt; ... -&gt; f_n -&gt; output.</span>
 
 <span class="sd">    &gt;&gt;&gt; def foo(a, b=2):</span>
 <span class="sd">    ...     return a + b</span>

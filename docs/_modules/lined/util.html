@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>lined.util &mdash; lined 0.1.23 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>lined.util &mdash; lined 0.1.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -28,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> lined
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            lined
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -63,9 +67,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>lined.util</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lined.util</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -98,7 +102,7 @@
 
 
 <div class="viewcode-block" id="ensure_numerical_keys"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.ensure_numerical_keys">[docs]</a><span class="k">def</span> <span class="nf">ensure_numerical_keys</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a numerical version of the input key.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a numerical version of the input key.</span>
 <span class="sd">    If ``k`` is None or an integer, will be returned as is.</span>
 <span class="sd">    If ``k`` is a string, it will return the (int) index of ``k`` in ``names``.</span>
 <span class="sd">    If ``k`` is a slice, it will convert the k.start and k.stop to ints (or None).</span>
@@ -132,7 +136,7 @@
 
 
 <div class="viewcode-block" id="signature_from_first_and_last_func"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.signature_from_first_and_last_func">[docs]</a><span class="k">def</span> <span class="nf">signature_from_first_and_last_func</span><span class="p">(</span><span class="n">first_func</span><span class="p">,</span> <span class="n">last_func</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a signature using the first_func for it&#39;s params and last_func for</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a signature using the first_func for it&#39;s params and last_func for</span>
 <span class="sd">    return annotations, both only if possible&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">input_params</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="n">first_func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
@@ -159,7 +163,7 @@
 
 
 <div class="viewcode-block" id="partial_plus"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.partial_plus">[docs]</a><span class="k">def</span> <span class="nf">partial_plus</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Like partial, but with the ability to add &#39;normal function&#39; stuff</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Like partial, but with the ability to add &#39;normal function&#39; stuff</span>
 <span class="sd">    (name, doc) to the curried function.</span>
 
 <span class="sd">    Note: if no writable_function_dunders is specified will just act as the</span>
@@ -193,7 +197,7 @@
 
 
 <div class="viewcode-block" id="incremental_str_maker"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.incremental_str_maker">[docs]</a><span class="k">def</span> <span class="nf">incremental_str_maker</span><span class="p">(</span><span class="n">str_format</span><span class="o">=</span><span class="s2">&quot;{:03.f}&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Make a function that will produce a (incrementally) new string at every call.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a function that will produce a (incrementally) new string at every call.&quot;&quot;&quot;</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">def</span> <span class="nf">mk_next_str</span><span class="p">():</span>
@@ -209,8 +213,9 @@
 
 
 <div class="viewcode-block" id="func_name"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.func_name">[docs]</a><span class="k">def</span> <span class="nf">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The func.__name__ of a callable func, or makes and returns one if that fails.</span>
-<span class="sd">    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The func.__name__ of a callable func, or makes and returns one if that fails.</span>
+<span class="sd">    To make one, it calls unamed_func_name which produces incremental names to reduce the chances of clashing</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&lt;lambda&gt;&quot;</span><span class="p">:</span>
@@ -221,7 +226,7 @@
 
 
 <div class="viewcode-block" id="dot_to_ascii"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.dot_to_ascii">[docs]</a><span class="k">def</span> <span class="nf">dot_to_ascii</span><span class="p">(</span><span class="n">dot</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fancy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a dot string to an ascii rendering of the diagram.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a dot string to an ascii rendering of the diagram.</span>
 
 <span class="sd">    Needs a connection to the internet to work.</span>
 
@@ -298,7 +303,7 @@
 
 
 <div class="viewcode-block" id="n_required_args"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.n_required_args">[docs]</a><span class="k">def</span> <span class="nf">n_required_args</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Number of required arguments.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of required arguments.</span>
 
 <span class="sd">    A required argument is one that doesn&#39;t have a default, nor is VAR_POSITIONAL (*args) or VAR_KEYWORD (**kwargs).</span>
 <span class="sd">    Note: Sometimes a minimum number of arguments in VAR_POSITIONAL and VAR_KEYWORD are in fact required,</span>
@@ -318,7 +323,7 @@
 
 
 <div class="viewcode-block" id="mro_items"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.mro_items">[docs]</a><span class="k">def</span> <span class="nf">mro_items</span><span class="p">(</span><span class="n">type_obj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Takes a type and returns an iterator over all class variables</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Takes a type and returns an iterator over all class variables</span>
 <span class="sd">    throughout the type hierarchy (respecting the MRO).</span>
 
 <span class="sd">    &gt;&gt;&gt; sorted(set([k for k, v in mro_items(int) if not k.startswith(&#39;__&#39;)</span>
@@ -330,7 +335,7 @@
 
 
 <div class="viewcode-block" id="CachedInstancePartial"><a class="viewcode-back" href="../../module_docs/lined/util.html#lined.util.CachedInstancePartial">[docs]</a><span class="k">class</span> <span class="nc">CachedInstancePartial</span><span class="p">(</span><span class="n">partial</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The ``CachedInstancePartial`` is virtually the same as</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The ``CachedInstancePartial`` is virtually the same as</span>
 <span class="sd">    :class:`InstancePartial`, adding support for method-usage to</span>
 <span class="sd">    :class:`functools.partial`, except that upon first access, it</span>
 <span class="sd">    caches the bound method on the associated object, speeding it up</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>lined.recipes &mdash; lined 0.1.23 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>lined.recipes &mdash; lined 0.1.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -28,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> lined
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            lined
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -63,9 +67,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>lined.recipes</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lined.recipes</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -77,6 +81,7 @@
   <h1>Source code for lined.recipes</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Recipes to demo uses of lined functionalities&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">reduce</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">methodcaller</span><span class="p">,</span> <span class="n">itemgetter</span>
@@ -90,13 +95,18 @@
 <span class="s2">    [4, 2, 3]</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
+<span class="n">read_text</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">methodcaller</span><span class="p">(</span><span class="s2">&quot;read_text&quot;</span><span class="p">))</span>
+<span class="n">write_text</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">methodcaller</span><span class="p">(</span><span class="s2">&quot;write_text&quot;</span><span class="p">))</span>
+<span class="n">read_bytes</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">methodcaller</span><span class="p">(</span><span class="s2">&quot;read_bytes&quot;</span><span class="p">))</span>
+<span class="n">write_bytes</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">methodcaller</span><span class="p">(</span><span class="s2">&quot;write_bytes&quot;</span><span class="p">))</span>
+
 <span class="n">transposer</span> <span class="o">=</span> <span class="n">map_star</span><span class="p">(</span><span class="nb">zip</span><span class="p">)</span>
 <span class="n">transposer</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;transposer&quot;</span>
 
 
 <div class="viewcode-block" id="mk_transposer_to_array"><a class="viewcode-back" href="../../module_docs/lined/recipes.html#lined.recipes.mk_transposer_to_array">[docs]</a><span class="k">def</span> <span class="nf">mk_transposer_to_array</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Make a transposer that transposes an iterable of n iterables of size k into an iterable</span>
-<span class="sd">    of k arrays of size n.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a transposer that transposes an iterable of ``n`` iterables of size ``k``</span>
+<span class="sd">    into an iterable of ``k`` arrays of size ``n``.</span>
 
 <span class="sd">    ## Commented out to avoid CI choking on the absence of numpy</span>
 <span class="sd">    # &gt;&gt;&gt; from numpy import array</span>

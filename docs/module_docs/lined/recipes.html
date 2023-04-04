@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>lined.recipes &mdash; lined 0.1.23 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>lined.recipes &mdash; lined 0.1.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -31,11 +31,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> lined
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            lined
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -66,8 +70,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lined.recipes</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lined.recipes</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/module_docs/lined/recipes.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,8 +87,8 @@
 <dl class="py function">
 <dt id="lined.recipes.mk_transposer_to_array">
 <code class="sig-prename descclassname">lined.recipes.</code><code class="sig-name descname">mk_transposer_to_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lined/recipes.html#mk_transposer_to_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lined.recipes.mk_transposer_to_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a transposer that transposes an iterable of n iterables of size k into an iterable
-of k arrays of size n.</p>
+<dd><p>Make a transposer that transposes an iterable of <code class="docutils literal notranslate"><span class="pre">n</span></code> iterables of size <code class="docutils literal notranslate"><span class="pre">k</span></code>
+into an iterable of <code class="docutils literal notranslate"><span class="pre">k</span></code> arrays of size <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
 <p>## Commented out to avoid CI choking on the absence of numpy
 # &gt;&gt;&gt; from numpy import array
 # &gt;&gt;&gt; transpose = mk_transposer_to_array(dtype=int)

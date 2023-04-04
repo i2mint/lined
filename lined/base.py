@@ -532,7 +532,6 @@ class Line:
         arg_param_to_string: Callable = name_with_varkind_and_default_marker,
         **kwargs,
     ):
-
         if len(self.funcs) == 0:
             return  # no functions, so just return
 
@@ -611,15 +610,15 @@ class Line:
 
     def to_jdict(self):
         return {
-            'funcs': self.funcs,
-            'pipeline_name': self.name,
-            'input_name': self.input_name,
-            'output_name': self.output_name
+            "funcs": self.funcs,
+            "pipeline_name": self.name,
+            "input_name": self.input_name,
+            "output_name": self.output_name,
         }
 
     @classmethod
     def from_jdict(cls, jdict):
-        funcs = jdict.pop('funcs')
+        funcs = jdict.pop("funcs")
         return cls(*funcs, **jdict)
 
 
@@ -968,7 +967,6 @@ class LineParametrized(Line):
         bound_arg_line: Optional[Callable[[str], str]] = None,
         **kwargs,
     ):
-
         c = Configs(
             ChainMap(
                 convention or {},
@@ -1184,7 +1182,6 @@ class Digraph:
         # A recursive function used by topologicalSort
 
     def _helper(self, v, visited, stack):
-
         # Mark the current node as visited.
         visited[v] = True
 
