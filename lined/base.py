@@ -3,7 +3,8 @@ The base objects of lined.
 """
 
 from functools import wraps
-from typing import Callable, Dict, Iterable, Optional, Union, Mapping
+from typing import Dict, Optional, Union
+from collections.abc import Callable, Iterable, Mapping
 from inspect import signature, Parameter
 from itertools import starmap
 from dataclasses import dataclass
@@ -66,7 +67,7 @@ class Fnode:
     """
 
     func: Callable
-    name: Optional[str] = None
+    name: str | None = None
     first_arg_position_only: bool = False
 
     def __post_init__(self):
@@ -963,8 +964,8 @@ class LineParametrized(Line):
         prefix=None,
         edge_kind="to_args_on_edge",
         convention=None,
-        required_arg_line: Optional[Callable[[str], str]] = None,
-        bound_arg_line: Optional[Callable[[str], str]] = None,
+        required_arg_line: Callable[[str], str] | None = None,
+        bound_arg_line: Callable[[str], str] | None = None,
         **kwargs,
     ):
         c = Configs(

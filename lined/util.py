@@ -1,7 +1,7 @@
 """Util functions"""
 
 from functools import partial, partialmethod
-from typing import Callable
+from collections.abc import Callable
 from types import MethodType
 import itertools
 import re
@@ -10,7 +10,7 @@ from inspect import Signature, Parameter, signature
 
 
 def clean(varStr):
-    return re.sub("\W|^(?=\d)", "_", varStr)
+    return re.sub(r"\W|^(?=\d)", "_", varStr)
 
 
 non_id_char_p = re.compile(r"\W|^(?=\d)")

@@ -2,7 +2,8 @@
 All kinds of useful tools to use in pipelines.
 """
 from functools import partial, wraps
-from typing import Any, Mapping
+from typing import Any
+from collections.abc import Mapping
 from operator import not_, methodcaller
 
 from lined.util import func_name, partial_plus, n_required_args
@@ -83,7 +84,8 @@ def _extract_first_argument(args: tuple, kwargs: dict):
 # ------------------------------------------------------------------------------
 
 from operator import le
-from typing import Union, Callable, Generator, Iterable
+from typing import Union
+from collections.abc import Callable, Generator, Iterable
 from itertools import tee
 
 
@@ -360,7 +362,7 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-def raise_exception(exception: Union[Callable, BaseException], *args, **kwargs):
+def raise_exception(exception: Callable | BaseException, *args, **kwargs):
     """Raise an exception (from an exception instance, or a callable that
     makes one"""
     if isinstance(exception, Callable):
@@ -403,7 +405,7 @@ def _validated_comparison_func(key: Callable):
 def check_sorted_during_iteration(
     iterable: Iterable,
     key: Callable[[Any, Any], bool] = le,
-    not_sorted_callback: Union[Callable, BaseException] = raise_not_sorted_error,
+    not_sorted_callback: Callable | BaseException = raise_not_sorted_error,
 ) -> Generator:
     r"""Wrap an iterable so that ordering of the elements is checked at runtime.
 
@@ -512,7 +514,7 @@ def keys_extractor(keys):
     """Deprecated: Use operator.itemgetter(*keys) instead."""
 
     def extract(x):
-        return tuple((x[i] for i in keys))
+        return tuple(x[i] for i in keys)
 
     return extract
 
