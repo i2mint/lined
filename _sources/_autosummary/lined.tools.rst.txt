@@ -1,0 +1,63 @@
+lined.tools
+===========
+
+.. automodule:: lined.tools
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_name
+      append_output_to_input
+      apply_to_single_item
+      blind
+      call
+      check_sorted_during_iteration
+      consume_until_error
+      deiterize
+      del_fields
+      dictify
+      enumerate_groups
+      expanded_args
+      extra_wraps
+      functioncaller
+      generator_version
+      identity
+      if_then_else
+      is_a_str
+      is_not_iterable_or_is_a_str
+      items
+      iterate
+      iterize
+      keys_extractor
+      make_it_a_tuple
+      map_star
+      mk_filter
+      mywraps
+      negate
+      pairwise
+      raise_
+      raise_exception
+      return_instead_of_raising_exceptions
+      side_call
+      singularize_arg_input
+      tail_io
+      valmap
+      with_cursor
+      wrap_first_arg_in_list
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Command
+      CommandIter
+      Enumerate
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      ItemsNotSorted
+   

@@ -1,0 +1,19 @@
+lined.simple
+============
+
+.. automodule:: lined.simple
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compose
+      signature_from_first_and_last_func
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Pipe
+   

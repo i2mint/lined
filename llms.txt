@@ -1,0 +1,24 @@
+# lined
+
+> Building simple pipelines simply.
+
+
+## Pages
+
+- [lined](index.html.md): Install: &#96;pip install lined&#96;
+- [API reference](api.html.md): | &#96;lined&#96;   | Making pipelines easily, and being able to visualize and diagnose them.   |
+- [lined](_autosummary/lined.html.md): Making pipelines easily, and being able to visualize and diagnose them.
+- [lined.base](_autosummary/lined.base.html.md): The base objects of lined.
+- [lined.recipes](_autosummary/lined.recipes.html.md): Recipes to demo uses of lined functionalities
+- [lined.simple](_autosummary/lined.simple.html.md): Simple lightweight utils
+- [lined.tools](_autosummary/lined.tools.html.md): All kinds of useful tools to use in pipelines.
+- [lined.util](_autosummary/lined.util.html.md): Util functions
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-11-22 22:47 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
+
+## Optional
+
+- [lined.md](lined.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

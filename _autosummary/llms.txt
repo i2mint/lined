@@ -1,0 +1,17 @@
+# lined
+
+> Building simple pipelines simply.
+
+
+## Pages in this subsection
+
+- [lined](lined.html.md): Making pipelines easily, and being able to visualize and diagnose them.
+- [lined.base](lined.base.html.md): The base objects of lined.
+- [lined.recipes](lined.recipes.html.md): Recipes to demo uses of lined functionalities
+- [lined.simple](lined.simple.html.md): Simple lightweight utils
+- [lined.tools](lined.tools.html.md): All kinds of useful tools to use in pipelines.
+- [lined.util](lined.util.html.md): Util functions
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

@@ -1,0 +1,12 @@
+lined.recipes
+=============
+
+.. automodule:: lined.recipes
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      mk_transposer_to_array
+   

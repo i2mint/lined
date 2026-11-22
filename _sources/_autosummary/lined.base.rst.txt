@@ -1,0 +1,35 @@
+lined.base
+==========
+
+.. automodule:: lined.base
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      fnode
+      inject_names_if_missing
+      log_calls
+      name_with_varkind_and_default_marker
+      normalize_func
+      stack
+      uniquize_funcs_names
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Conditions
+      Configs
+      Digraph
+      Fnode
+      LayeredPipeline
+      Line
+      LineParametrized
+      LineSentineled
+      NoSuchConfig
+      Pipeline
+      Sentinel
+      SentineledPipeline
+   

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>lined</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="API reference" href="api.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx_autodoc_typehints.css?v=057ac668" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="lined"/>
+    <meta name="twitter:card" content="summary"/>
+  
+<link rel="alternate" type="text/markdown" href="index.html.md">
+<link rel="describedby" href="llms.txt" type="text/markdown">
+</head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="#">
+      
+      
+      <strong>lined</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/lined.html">lined</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lined.base.html">lined.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lined.recipes.html">lined.recipes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lined.simple.html">lined.simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lined.tools.html">lined.tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lined.util.html">lined.util</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#">lined</a></li>
+<li><a class="reference internal" href="#more">More?</a><ul>
+<li><a class="reference internal" href="#string-and-dot-digraph-representations">string and dot digraph representations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tools">Tools</a><ul>
+<li><a class="reference internal" href="#iterize-and-iterate">iterize and iterate</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ramblings">Ramblings</a><ul>
+<li><a class="reference internal" href="#decorating">Decorating</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="#"><span itemprop="name">lined</span></a>
+        <meta itemprop="position" content="1" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <!-- generated by epythet -->
+<p>Install: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lined</span></code></p>
+<p><a class="reference external" href="https://otosense.github.io/lined/">Documentation</a></p>
+<section id="lined">
+<h1>lined<a class="headerlink" href="#lined" title="Link to this heading">#</a></h1>
+<p>Building simple pipelines, simply.</p>
+<p>And lightly too! No dependencies. All with pure builtin python.</p>
+<p>A really simple example:</p>
+<div class="highlight-pydocstring notranslate"><div class="highlight"><pre><span></span><span data-line="1">&gt;&gt;&gt; from lined import Line
+</span><span data-line="2">&gt;&gt;&gt; p = Line(sum, str)
+</span><span data-line="3">&gt;&gt;&gt; p([2, 3])
+</span><span data-line="4">'5'
+</span></pre></div>
+</div>
+<p>A still quite simple example:</p>
+<div class="highlight-pydocstring notranslate"><div class="highlight"><pre><span></span><span data-line="1">&gt;&gt;&gt; def first(a, b=1):
+</span><span data-line="2">...     return a * b
+</span><span data-line="3">&gt;&gt;&gt;
+</span><span data-line="4">&gt;&gt;&gt; def last(c) -&gt; float:
+</span><span data-line="5">...     return c + 10
+</span><span data-line="6">&gt;&gt;&gt;
+</span><span data-line="7">&gt;&gt;&gt; f = Line(first, last)
+</span><span data-line="8">&gt;&gt;&gt;
+</span><span data-line="9">&gt;&gt;&gt; assert f(2) == 12
+</span><span data-line="10">&gt;&gt;&gt; assert f(2, 10) == 30
+</span></pre></div>
+</div>
+<p>Let’s check out the signature of f:</p>
+<div class="highlight-pydocstring notranslate"><div class="highlight"><pre><span></span><span data-line="1">&gt;&gt;&gt; from inspect import signature
+</span><span data-line="2">&gt;&gt;&gt;
+</span><span data-line="3">&gt;&gt;&gt; assert str(signature(f)) == '(a, b=1) -&gt; float'
+</span><span data-line="4">&gt;&gt;&gt; assert signature(f).parameters == signature(first).parameters
+</span><span data-line="5">&gt;&gt;&gt; assert signature(f).return_annotation == signature(last).return_annotation == float
+</span></pre></div>
+</div>
+<p>Border case: One function only</p>
+<div class="highlight-pydocstring notranslate"><div class="highlight"><pre><span></span><span data-line="1">&gt;&gt;&gt; same_as_first = Line(first)
+</span><span data-line="2">&gt;&gt;&gt; assert same_as_first(42) == first(42)
+</span></pre></div>
+</div>
+</section>
+<section id="more">
+<h1>More?<a class="headerlink" href="#more" title="Link to this heading">#</a></h1>
+<section id="string-and-dot-digraph-representations">
+<h2>string and dot digraph representations<a class="headerlink" href="#string-and-dot-digraph-representations" title="Link to this heading">#</a></h2>
+<p>Line’s string representation (<code class="docutils literal notranslate"><span class="pre">__repr__</span></code>) and how it deals with callables that don’t have a <code class="docutils literal notranslate"><span class="pre">__name__</span></code> (hint: it makes one up):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">lined.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">pipe</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">print</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="o">=</span><span class="s1">'some_name'</span><span class="p">)</span>
+</span><span data-line="5"><span class="n">pipe</span>
+</span></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Line</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">print</span><span class="p">,</span> <span class="n">unnamed_func_001</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="o">=</span><span class="s1">'some_name'</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p>If you have <a class="reference external" href="https://pypi.org/project/graphviz/">graphviz</a> installed, you can also do this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">pipe</span><span class="o">.</span><span class="n">dot_digraph</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<p><img alt="image" src="https://user-images.githubusercontent.com/1906276/107063948-d23b0680-678f-11eb-88ce-1c0638175569.png" /></p>
+<p>And if you don’t, but have some other <a class="reference external" href="https://www.graphviz.org/doc/info/lang.html">dot language</a> interpreter, you can just get the body (and fiddle with it):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">dot_digraph_body</span><span class="p">()))</span>
+</span></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">rankdir</span><span class="o">=</span><span class="s2">"LR"</span>
+</span><span data-line="2"><span class="nb">sum</span> <span class="p">[</span><span class="n">shape</span><span class="o">=</span><span class="s2">"box"</span><span class="p">]</span>
+</span><span data-line="3"><span class="n">log</span> <span class="p">[</span><span class="n">shape</span><span class="o">=</span><span class="s2">"box"</span><span class="p">]</span>
+</span><span data-line="4"><span class="nb">str</span> <span class="p">[</span><span class="n">shape</span><span class="o">=</span><span class="s2">"box"</span><span class="p">]</span>
+</span><span data-line="5"><span class="nb">print</span> <span class="p">[</span><span class="n">shape</span><span class="o">=</span><span class="s2">"box"</span><span class="p">]</span>
+</span><span data-line="6"><span class="n">unnamed_func_001</span> <span class="p">[</span><span class="n">shape</span><span class="o">=</span><span class="s2">"box"</span><span class="p">]</span>
+</span><span data-line="7"><span class="nb">sum</span> <span class="o">-&gt;</span> <span class="n">log</span>
+</span><span data-line="8"><span class="n">log</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</span><span data-line="9"><span class="nb">str</span> <span class="o">-&gt;</span> <span class="nb">print</span>
+</span><span data-line="10"><span class="nb">print</span> <span class="o">-&gt;</span> <span class="n">unnamed_func_001</span>
+</span></pre></div>
+</div>
+<p>Optionally, a pipeline can have an <code class="docutils literal notranslate"><span class="pre">input_name</span></code> and/or an <code class="docutils literal notranslate"><span class="pre">output_name</span></code>.
+These will be used in the string representation and the dot digraph.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">pipe</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">print</span><span class="p">,</span> <span class="n">input_name</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">output_name</span><span class="o">=</span><span class="s1">'y'</span><span class="p">)</span>
+</span><span data-line="2"><span class="nb">str</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="s2">"Line(sum, log, str, print, pipeline_name='some_name')"</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">pipe</span><span class="o">.</span><span class="n">dot_digraph</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<p><img alt="image" src="https://user-images.githubusercontent.com/1906276/107064180-175f3880-6790-11eb-87e0-5b75840a6f73.png" /></p>
+</section>
+</section>
+<section id="tools">
+<h1>Tools<a class="headerlink" href="#tools" title="Link to this heading">#</a></h1>
+<section id="iterize-and-iterate">
+<h2>iterize and iterate<a class="headerlink" href="#iterize-and-iterate" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">pipe</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> 
+</span><span data-line="4">            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span data-line="5"><span class="n">pipe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">'hello 2'
+</span></pre></div>
+</div>
+<p>But what if you wanted to use the pipeline on a “stream” of data. The following wouldn’t work:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">try</span><span class="p">:</span>
+</span><span data-line="2">    <span class="n">pipe</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+</span><span data-line="3"><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="4">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">TypeError: unsupported operand type(s) for *: 'list_iterator' and 'int'
+</span></pre></div>
+</div>
+<p>Remember that error: You’ll surely encounter it at some point.</p>
+<p>The solution to it is (often): <code class="docutils literal notranslate"><span class="pre">iterize</span></code>, which transforms a function that is meant to be applied to a single object, into a function that is meant to be applied to an array, or any iterable of such objects.
+(You might be familiar (if you use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> for example) with the related concept of “vectorization”, or <a class="reference external" href="https://en.wikipedia.org/wiki/Array_programming">array programming</a>.)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line</span><span class="p">,</span> <span class="n">iterize</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">pipe</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> 
+</span><span data-line="5">            <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+</span><span data-line="6"><span class="n">iterable</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span><span data-line="7"><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span>  <span class="c1"># see that the result is an iterable</span>
+</span><span data-line="8"><span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>  <span class="c1"># consume the iterable and gather it's items</span>
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">['hello 2', 'hello 4', 'hello 6']
+</span></pre></div>
+</div>
+<p>Instead of just computing the string, say that the last step actually printed the string (called a “callback” function whose result was less important than it’s effect – like storing something, etc.).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line</span><span class="p">,</span> <span class="n">iterize</span><span class="p">,</span> <span class="n">iterate</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">pipe</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> 
+</span><span data-line="4">            <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
+</span><span data-line="5">            <span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]):</span>
+</span><span data-line="8">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">hello 2
+</span><span data-line="2">hello 4
+</span><span data-line="3">hello 6
+</span></pre></div>
+</div>
+<p>It could be a bit awkward to have to “consume” the iterable to have it take effect.</p>
+<p>Just doing a</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span></pre></div>
+</div>
+<p>to get those prints seems like a more natural way.</p>
+<p>This is where you can use <code class="docutils literal notranslate"><span class="pre">iterate</span></code>. It basically “launches” that consuming loop for you.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line</span><span class="p">,</span> <span class="n">iterize</span><span class="p">,</span> <span class="n">iterate</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">pipe</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> 
+</span><span data-line="4">            <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
+</span><span data-line="5">            <span class="n">iterate</span>
+</span><span data-line="6">            <span class="p">)</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">hello 2
+</span><span data-line="2">hello 4
+</span><span data-line="3">hello 6
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="ramblings">
+<h1>Ramblings<a class="headerlink" href="#ramblings" title="Link to this heading">#</a></h1>
+<section id="decorating">
+<h2>Decorating<a class="headerlink" href="#decorating" title="Link to this heading">#</a></h2>
+<p>Toddlers write lines of code.
+Grown-ups write functions. Plenty of them.</p>
+<p>Why break lines of code into small functions? Where to start…</p>
+<ul class="simple">
+<li><p>It’s called modularity, and that’s good</p></li>
+<li><p>You can reuse functions (and no, copy/paste isn’t D.R.Y. –
+and if you don’t know what D.R.Y. is,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself!">grow up</a>).</p></li>
+<li><p>Because <a class="reference external" href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">7+-2</a>,
+a.k.a <a class="reference external" href="https://en.wikipedia.org/wiki/Chunking_(psychology)">chunking</a> or Miller’s Law.</p></li>
+<li><p>You can <a class="reference external" href="https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Decorators">decorate</a>
+functions, not lines of code.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">lined</span></code> sets you up to take advantage of these goodies.</p>
+<p>Note this line (currently 117) of lined/base.py , in the init of Line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">self.funcs = tuple(map(fnode, self.funcs))
+</span></pre></div>
+</div>
+<p>That is, every function is cast to with <code class="docutils literal notranslate"><span class="pre">fnode</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fnode</span></code> is:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">def fnode(func, name=None):
+</span><span data-line="2">    return Fnode(func, name)
+</span></pre></div>
+</div>
+<p>and <code class="docutils literal notranslate"><span class="pre">Fnode</span></code> is just a class that “transparently” wraps the function.
+This is so that we can then use <code class="docutils literal notranslate"><span class="pre">Fnode</span></code> to do all kinds of things to the function
+(without actually touching the function itself).</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span data-line="1">@dataclass
+</span><span data-line="2">class Fnode:
+</span><span data-line="3">    func: Callable
+</span><span data-line="4">    __name__: Optional[str] = None
+</span><span data-line="5">
+</span><span data-line="6">def __post_init__(self):
+</span><span data-line="7">    wraps(self.func)(self)
+</span><span data-line="8">    self.__name__ = self.__name__ or func_name(self.func)
+</span><span data-line="9">
+</span><span data-line="10">def __call__(self, *args, **kwargs):
+</span><span data-line="11">    return self.func(*args, **kwargs)
+</span></pre></div>
+</div>
+<p class="epythet-aggregates">This documentation as a single file: <a href="lined.md">lined.md</a> (Markdown, for agents).</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-11-22 22:47 UTC from <a href="https://github.com/i2mint/lined/commit/df209a19f59f3b3d679a6906821971d221572c2c">df209a1</a> (master) · lined 0.1.24 · <a href="about-this-build.html">about this build</a></p>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-next">
+    <a href="api.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">API reference</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=ebdbb45b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=fd10adb8"></script>
+      <script src="_static/shibuya.js?v=50760d75"></script></body>
+</html>

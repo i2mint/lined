@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>lined.tools - lined</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="lined.util" href="lined.util.html" /><link rel="prev" title="lined.simple" href="lined.simple.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="lined.tools"/>
+    <meta name="twitter:card" content="summary"/>
+  
+<link rel="alternate" type="text/markdown" href="lined.tools.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+</head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>lined</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="lined.html">lined</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="lined.base.html">lined.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lined.recipes.html">lined.recipes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lined.simple.html">lined.simple</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lined.tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lined.util.html">lined.util</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#lined.tools.Command"><code class="docutils literal notranslate"><span class="pre">Command</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.CommandIter"><code class="docutils literal notranslate"><span class="pre">CommandIter</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.Enumerate"><code class="docutils literal notranslate"><span class="pre">Enumerate</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.ItemsNotSorted"><code class="docutils literal notranslate"><span class="pre">ItemsNotSorted</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.append_output_to_input"><code class="docutils literal notranslate"><span class="pre">append_output_to_input()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.apply_to_single_item"><code class="docutils literal notranslate"><span class="pre">apply_to_single_item()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.blind"><code class="docutils literal notranslate"><span class="pre">blind()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.call"><code class="docutils literal notranslate"><span class="pre">call()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.cast_to_tuple_if_non_iterable_or_a_string"><code class="docutils literal notranslate"><span class="pre">cast_to_tuple_if_non_iterable_or_a_string()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.cast_to_tuple_if_string"><code class="docutils literal notranslate"><span class="pre">cast_to_tuple_if_string()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.check_sorted_during_iteration"><code class="docutils literal notranslate"><span class="pre">check_sorted_during_iteration()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.consume_until_error"><code class="docutils literal notranslate"><span class="pre">consume_until_error()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.deiterize"><code class="docutils literal notranslate"><span class="pre">deiterize()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.del_fields"><code class="docutils literal notranslate"><span class="pre">del_fields()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.dictify"><code class="docutils literal notranslate"><span class="pre">dictify()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.enumerate_groups"><code class="docutils literal notranslate"><span class="pre">enumerate_groups()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.expanded_args"><code class="docutils literal notranslate"><span class="pre">expanded_args()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.false_no_matter_what"><code class="docutils literal notranslate"><span class="pre">false_no_matter_what()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.functioncaller"><code class="docutils literal notranslate"><span class="pre">functioncaller()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.generator_version"><code class="docutils literal notranslate"><span class="pre">generator_version()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.if_then_else"><code class="docutils literal notranslate"><span class="pre">if_then_else()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.items"><code class="docutils literal notranslate"><span class="pre">items()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.iterate"><code class="docutils literal notranslate"><span class="pre">iterate()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.iterize"><code class="docutils literal notranslate"><span class="pre">iterize()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.keys_extractor"><code class="docutils literal notranslate"><span class="pre">keys_extractor()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.map_star"><code class="docutils literal notranslate"><span class="pre">map_star()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.negate"><code class="docutils literal notranslate"><span class="pre">negate()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.pairwise"><code class="docutils literal notranslate"><span class="pre">pairwise()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.print_and_pass_on"><code class="docutils literal notranslate"><span class="pre">print_and_pass_on()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.raise_"><code class="docutils literal notranslate"><span class="pre">raise_()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.raise_exception"><code class="docutils literal notranslate"><span class="pre">raise_exception()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.return_instead_of_raising_exceptions"><code class="docutils literal notranslate"><span class="pre">return_instead_of_raising_exceptions()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.side_call"><code class="docutils literal notranslate"><span class="pre">side_call()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.singularize_arg_input"><code class="docutils literal notranslate"><span class="pre">singularize_arg_input()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.tail_io"><code class="docutils literal notranslate"><span class="pre">tail_io()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.true_no_matter_what"><code class="docutils literal notranslate"><span class="pre">true_no_matter_what()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.valmap"><code class="docutils literal notranslate"><span class="pre">valmap()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.with_cursor"><code class="docutils literal notranslate"><span class="pre">with_cursor()</span></code></a></li>
+<li><a class="reference internal" href="#lined.tools.wrap_first_arg_in_list"><code class="docutils literal notranslate"><span class="pre">wrap_first_arg_in_list()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">lined</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../api.html"><span itemprop="name">API reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="lined.html"><span itemprop="name">lined</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">lined.tools</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <section id="module-lined.tools">
+<span id="lined-tools"></span><h1>lined.tools<a class="headerlink" href="#module-lined.tools" title="Link to this heading">#</a></h1>
+<p>All kinds of useful tools to use in pipelines.</p>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_name</span></code>(obj[, name])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.append_output_to_input" title="lined.tools.append_output_to_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append_output_to_input</span></code></a>(func[, appender])</p></td>
+<td><p>Decorator that makes the function into a function returning its input with output</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.apply_to_single_item" title="lined.tools.apply_to_single_item"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_single_item</span></code></a>(func, item_idx)</p></td>
+<td><p>Get a version of func that applies itself to only the item_idx-th element of the input, leaving the rest untouched.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.blind" title="lined.tools.blind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">blind</span></code></a>(x, output)</p></td>
+<td><p>Takes one argument, and returns it as is.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.call" title="lined.tools.call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">call</span></code></a>(func)</p></td>
+<td><p>Just call the input function with not arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.check_sorted_during_iteration" title="lined.tools.check_sorted_during_iteration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_sorted_during_iteration</span></code></a>(iterable[, ...])</p></td>
+<td><p>Wrap an iterable so that ordering of the elements is checked at runtime.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.consume_until_error" title="lined.tools.consume_until_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">consume_until_error</span></code></a>(iterable[, caught_errors])</p></td>
+<td><p>Iterable that will simply exit with out error if one of the caught errors occurs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.deiterize" title="lined.tools.deiterize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deiterize</span></code></a>(func)</p></td>
+<td><p>The inverse of iterize.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.del_fields" title="lined.tools.del_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">del_fields</span></code></a>(d, fields)</p></td>
+<td><p>Returns the same mapping, but with specified fields removed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.dictify" title="lined.tools.dictify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dictify</span></code></a>(func[, copy_dict, name])</p></td>
+<td><p>Makes a version of the input func that should be called on dictionaries and will return dictionaries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.enumerate_groups" title="lined.tools.enumerate_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enumerate_groups</span></code></a>(iterable[, key, start])</p></td>
+<td><p>Get enumeration of groups during a groupby call.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.expanded_args" title="lined.tools.expanded_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expanded_args</span></code></a>(func)</p></td>
+<td><p>Make's a func(*args) function out of a func(args) one.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">extra_wraps</span></code>(func[, name, doc_prefix])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.functioncaller" title="lined.tools.functioncaller"><code class="xref py py-obj docutils literal notranslate"><span class="pre">functioncaller</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Call a function given positional and keyword arguments.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.generator_version" title="lined.tools.generator_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generator_version</span></code></a>(func[, name])</p></td>
+<td><p>From an Input-&gt;Ouput function, makes a Iterator[Input]-&gt;Itertor[Output] Some call this &quot;vectorization&quot;, but it's not really a vector, but an iterable, thus the name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.identity" title="lined.tools.identity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">identity</span></code></a>(x)</p></td>
+<td><p>Takes one argument, and returns it as is</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.if_then_else" title="lined.tools.if_then_else"><code class="xref py py-obj docutils literal notranslate"><span class="pre">if_then_else</span></code></a>(x[, if_func, then_func, else_func])</p></td>
+<td><p>Implement the if-then-else logic as a function.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_a_str</span></code>(x)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_not_iterable_or_is_a_str</span></code>(x)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.items" title="lined.tools.items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code></a>(mapping)</p></td>
+<td><p>Get an items generator from a mapping</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.iterate" title="lined.tools.iterate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterate</span></code></a>(iterable)</p></td>
+<td><p>Just iterate through a iterable Use this to &quot;consume&quot; or &quot;run&quot; an iterator automatically.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.iterize" title="lined.tools.iterize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterize</span></code></a>(func[, name])</p></td>
+<td><p>From an Input-&gt;Ouput function, makes a Iterator[Input]-&gt;Itertor[Output] Some call this &quot;vectorization&quot;, but it's not really a vector, but an iterable, thus the name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.keys_extractor" title="lined.tools.keys_extractor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys_extractor</span></code></a>(keys)</p></td>
+<td><p>Deprecated: Use operator.itemgetter(*keys) instead.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_it_a_tuple</span></code>(x)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.map_star" title="lined.tools.map_star"><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_star</span></code></a>(func)</p></td>
+<td><p>Make a func(args) function out of a func(*args) o.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_filter</span></code>([filter_func])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mywraps</span></code>(func[, name, doc_prefix])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.negate" title="lined.tools.negate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">negate</span></code></a>(func)</p></td>
+<td><p>Get a negated version of a function</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.pairwise" title="lined.tools.pairwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise</span></code></a>(iterable)</p></td>
+<td><p>Yield sliding window pairs</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.raise_" title="lined.tools.raise_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raise_</span></code></a>(exception)</p></td>
+<td><p>raises the given exception (instance or callable that returns one) Meant to be hooked to the out put of a function that returns an exception or a command to raise one.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.raise_exception" title="lined.tools.raise_exception"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raise_exception</span></code></a>(exception, *args, **kwargs)</p></td>
+<td><p>Raise an exception (from an exception instance, or a callable that makes one</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.return_instead_of_raising_exceptions" title="lined.tools.return_instead_of_raising_exceptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_instead_of_raising_exceptions</span></code></a>([func, ...])</p></td>
+<td><p>Make a function return its exceptions instead of raising them.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.side_call" title="lined.tools.side_call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">side_call</span></code></a>(x, callback)</p></td>
+<td><p>Identity function that calls a callaback function before returning the input as is (unless the input is mutable and the callback changes it).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.singularize_arg_input" title="lined.tools.singularize_arg_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singularize_arg_input</span></code></a>(func)</p></td>
+<td><p>Make a func(args) function out of a func(*args) o.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.tail_io" title="lined.tools.tail_io"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tail_io</span></code></a>(func)</p></td>
+<td><p>Will apply function only to the tail of tuple inputs, still passing the header on.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.valmap" title="lined.tools.valmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">valmap</span></code></a>(d, func[, copy_dict])</p></td>
+<td><p>Apply func to the values of a shallow copy of d, unless copy_dict=False, in which case, it will be applied to the input dict itself.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.with_cursor" title="lined.tools.with_cursor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">with_cursor</span></code></a>(func[, start, step])</p></td>
+<td><p>Decorator a function so it enumerates the number of calls.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.wrap_first_arg_in_list" title="lined.tools.wrap_first_arg_in_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wrap_first_arg_in_list</span></code></a>(func)</p></td>
+<td><p>Takes a func(X,...) function and returns a func([X],...) function.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.Command" title="lined.tools.Command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Command</span></code></a>(func, *args, **kwargs)</p></td>
+<td><p>Make a no-input callable that will execute a specific function call.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.tools.CommandIter" title="lined.tools.CommandIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CommandIter</span></code></a>(func, *args, **kwargs)</p></td>
+<td><p>An infinite iterator that returns the results of a Command called repeatedly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.Enumerate" title="lined.tools.Enumerate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Enumerate</span></code></a>(func[, start, step])</p></td>
+<td><p>Decorator a function so it enumerates the number of calls.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Exceptions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.tools.ItemsNotSorted" title="lined.tools.ItemsNotSorted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ItemsNotSorted</span></code></a></p></td>
+<td><p>Use to indicate that two consecutive items where not in the expected order</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.tools.Command">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">Command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#Command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.Command" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Make a no-input callable that will execute a specific function call.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">Command</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">()</span>
+</span><span data-line="3"><span class="go">6</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">Command</span><span class="p">(</span><span class="nb">print</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'world'</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">', '</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">()</span>
+</span><span data-line="6"><span class="go">hello, world</span>
+</span></pre></div>
+</div>
+<p>Note that the same can be achieved with
+<code class="code docutils literal notranslate"><span class="pre">partial(func,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">methodcaller</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">mk_command</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">methodcaller</span><span class="p">(</span><span class="s1">'__call__'</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">func</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">mk_command</span><span class="p">(</span><span class="nb">print</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'world'</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">', '</span><span class="p">)</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">()</span>
+</span><span data-line="7"><span class="go">hello, world</span>
+</span></pre></div>
+</div>
+<p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Command_pattern">https://en.wikipedia.org/wiki/Command_pattern</a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.tools.CommandIter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">CommandIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#CommandIter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.CommandIter" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lined.tools.Command" title="lined.tools.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code></a></p>
+<p>An infinite iterator that returns the results of a Command called repeatedly.</p>
+<p>Might become deprecated:
+Use <code class="code docutils literal notranslate"><span class="pre">iter(partial(func,</span> <span class="pre">*args,</span> <span class="pre">**kwargs),</span> <span class="pre">object())</span></code> instead.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">uniform</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">it</span> <span class="o">=</span> <span class="n">CommandIter</span><span class="p">(</span><span class="n">uniform</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">rand_nums</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rand_nums</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">rand_nums</span>
+</span><span data-line="7"><span class="go">[4.48171445690221, 7.466083642212892, 0.24120342781796422, 3.694956861724484]</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.tools.Enumerate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">Enumerate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#Enumerate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.Enumerate" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Decorator a function so it enumerates the number of calls.
+Or in general, returns (cursor, func(x)) instead of just func(x),
+where the start and step of the cursor can
+be defined (default is start=0 and step=1)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="2"><span class="gp">... </span>   <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span> <span class="o">=</span> <span class="n">Enumerate</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span><span class="p">(</span><span class="s1">'ha'</span><span class="p">)</span>
+</span><span data-line="5"><span class="go">(0, 'haha')</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span><span class="p">(</span><span class="s1">'ho'</span><span class="p">)</span>
+</span><span data-line="7"><span class="go">(1, 'hoho')</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">enum_foo_with_step</span> <span class="o">=</span> <span class="n">Enumerate</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">enum_foo_with_step</span><span class="p">(</span><span class="s1">'z'</span><span class="p">)</span>
+</span><span data-line="10"><span class="go">(3, 'zz')</span>
+</span><span data-line="11"><span class="gp">&gt;&gt;&gt; </span><span class="n">enum_foo_with_step</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+</span><span data-line="12"><span class="go">(10, 22)</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="lined.tools.ItemsNotSorted">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">ItemsNotSorted</span></span><a class="reference internal" href="../_modules/lined/tools.html#ItemsNotSorted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.ItemsNotSorted" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></p>
+<p>Use to indicate that two consecutive items where not in the expected
+order</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.append_output_to_input">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">append_output_to_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appender</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#append_output_to_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.append_output_to_input" title="Link to this definition">#</a></dt>
+<dd><p>Decorator that makes the function into a function returning its input with output</p>
+<p>┌─────────────┐
+│    input    │
+└─────────────┘</p>
+<blockquote>
+<div><p>│
+▼</p>
+</div></blockquote>
+<p>┌─────────────┐
+│    func     │
+└─────────────┘</p>
+<blockquote>
+<div><p>│
+▼</p>
+</div></blockquote>
+<p>┌─────────────────┐
+│ (input, output) │
+└─────────────────┘</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="s1">'world'</span><span class="p">)</span>
+</span><span data-line="3"><span class="go">'hello world'</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_func</span> <span class="o">=</span> <span class="n">append_output_to_input</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_func</span><span class="p">(</span><span class="s1">'world'</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">('world', 'hello world')</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.apply_to_single_item">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">apply_to_single_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#apply_to_single_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.apply_to_single_item" title="Link to this definition">#</a></dt>
+<dd><p>Get a version of func that applies itself to only the item_idx-th
+element of the input,
+leaving the rest untouched.</p>
+<p>That is, apply_to_single_item(func, 2), for example, is a new_func such that</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">new_func([a, b, c, d, e]) == [a, b, func(c), d, e]
+</span></pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a></span>) – A function to apply to a single element of an iterable (that
+has a […])</p></li>
+<li><p><strong>item_idx</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The particular item index to apply function to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">apply_to_second_item</span> <span class="o">=</span> <span class="n">apply_to_single_item</span><span class="p">(</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">item_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">apply_to_second_item</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</span><span data-line="4"><span class="go">(1, 20, 2, 3, 4)</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.blind">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">blind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#blind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.blind" title="Link to this definition">#</a></dt>
+<dd><p>Takes one argument, and returns it as is.
+The output is meant to be bound by currying (functools.partial)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">true_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">false_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">true_no_matter_what</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span data-line="4"><span class="go">True</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">false_no_matter_what</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">False</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.call">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.call" title="Link to this definition">#</a></dt>
+<dd><p>Just call the input function with not arguments.</p>
+<p>Equivalent to <code class="code docutils literal notranslate"><span class="pre">functioncaller()</span></code></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">partial</span><span class="p">(</span><span class="nb">print</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">x</span><span class="o">*</span><span class="mi">3</span><span class="si">=}</span><span class="s2">"</span><span class="p">),</span> <span class="n">call</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">line</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">x*3=42</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.cast_to_tuple_if_non_iterable_or_a_string">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">cast_to_tuple_if_non_iterable_or_a_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">is_not_iterable_or_is_a_str&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">then_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">make_it_a_tuple&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">else_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">identity&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.cast_to_tuple_if_non_iterable_or_a_string" title="Link to this definition">#</a></dt>
+<dd><p>Implement the if-then-else logic as a function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">if_then_else</span><span class="p">(</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="3"><span class="gp">... </span>    <span class="n">if_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="n">then_func</span><span class="o">=</span><span class="s2">"hello </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">,</span>
+</span><span data-line="5"><span class="gp">... </span>    <span class="n">else_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">'hello world'</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="n">if_then_else</span><span class="p">(</span><span class="s1">'bora'</span><span class="p">,</span> <span class="n">if_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="8"><span class="gp">... </span><span class="n">then_func</span><span class="o">=</span><span class="s2">"hello</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">else_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</span><span data-line="9"><span class="go">'borabora'</span>
+</span></pre></div>
+</div>
+<p>Really, it’s meant to be curried to make functional components.
+For example, to make a function that ensures that a string is
+encapsulated in a tuple, we could do this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">is_a_str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">make_it_a_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+</span><span data-line="5"><span class="gp">... </span>    <span class="n">if_then_else</span><span class="p">,</span>
+</span><span data-line="6"><span class="gp">... </span>    <span class="n">if_func</span><span class="o">=</span><span class="n">is_a_str</span><span class="p">,</span>
+</span><span data-line="7"><span class="gp">... </span>    <span class="n">then_func</span><span class="o">=</span><span class="n">make_it_a_tuple</span>
+</span><span data-line="8"><span class="gp">... </span><span class="p">)</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span><span class="p">(</span><span class="s1">'a string'</span><span class="p">)</span>
+</span><span data-line="10"><span class="go">('a string',)</span>
+</span><span data-line="11"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'list'</span><span class="p">])</span>  <span class="c1"># not a string so returned as is</span>
+</span><span data-line="12"><span class="go">['a', 'list']</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.cast_to_tuple_if_string">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">cast_to_tuple_if_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">is_a_str&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">then_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">make_it_a_tuple&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">else_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">identity&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.cast_to_tuple_if_string" title="Link to this definition">#</a></dt>
+<dd><p>Implement the if-then-else logic as a function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">if_then_else</span><span class="p">(</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="3"><span class="gp">... </span>    <span class="n">if_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="n">then_func</span><span class="o">=</span><span class="s2">"hello </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">,</span>
+</span><span data-line="5"><span class="gp">... </span>    <span class="n">else_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">'hello world'</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="n">if_then_else</span><span class="p">(</span><span class="s1">'bora'</span><span class="p">,</span> <span class="n">if_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="8"><span class="gp">... </span><span class="n">then_func</span><span class="o">=</span><span class="s2">"hello</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">else_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</span><span data-line="9"><span class="go">'borabora'</span>
+</span></pre></div>
+</div>
+<p>Really, it’s meant to be curried to make functional components.
+For example, to make a function that ensures that a string is
+encapsulated in a tuple, we could do this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">is_a_str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">make_it_a_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+</span><span data-line="5"><span class="gp">... </span>    <span class="n">if_then_else</span><span class="p">,</span>
+</span><span data-line="6"><span class="gp">... </span>    <span class="n">if_func</span><span class="o">=</span><span class="n">is_a_str</span><span class="p">,</span>
+</span><span data-line="7"><span class="gp">... </span>    <span class="n">then_func</span><span class="o">=</span><span class="n">make_it_a_tuple</span>
+</span><span data-line="8"><span class="gp">... </span><span class="p">)</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span><span class="p">(</span><span class="s1">'a string'</span><span class="p">)</span>
+</span><span data-line="10"><span class="go">('a string',)</span>
+</span><span data-line="11"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'list'</span><span class="p">])</span>  <span class="c1"># not a string so returned as is</span>
+</span><span data-line="12"><span class="go">['a', 'list']</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.check_sorted_during_iteration">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">check_sorted_during_iteration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">le&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_sorted_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;lined.tools.Command</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#check_sorted_during_iteration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.check_sorted_during_iteration" title="Link to this definition">#</a></dt>
+<dd><p>Wrap an iterable so that ordering of the elements is checked at runtime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterable</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a></span>) – Iterable to consume</p></li>
+<li><p><strong>key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</span>) – The function that defines what it means to be sorted.
+Could be a Any-&gt;bool function, which will act like the key argument
+of builtin sorted for example.
+Could also be an explicit (element, next_element)-&gt;bool function that
+returns True iff in the right order</p></li>
+<li><p><strong>not_sorted_callback</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#BaseException" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseException</span></code></a></span>) – <p>The function to call when two consecutive
+elements are not sorted. For example:</p>
+<ul>
+<li><p>raising an error (the default)</p></li>
+<li><p>logging the information, and skiping the offending element (or not)</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Generator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A generator consuming the input iterable</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">check_sorted_during_iteration</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])))</span>
+</span><span data-line="2"><span class="go">[1, 2, 3, 4]</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+</span><span data-line="3"><span class="gp">... </span>            <span class="n">check_sorted_during_iteration</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]),</span> <span class="mi">1</span><span class="p">):</span>
+</span><span data-line="4"><span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">... </span><span class="k">except</span> <span class="n">ItemsNotSorted</span><span class="p">:</span>
+</span><span data-line="6"><span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span>
+</span><span data-line="7"><span class="gp">... </span>        <span class="sa">f</span><span class="s2">"ItemsNotSorted after </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> element (whose value was </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</span><span data-line="8"><span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span>
+</span><span data-line="9"><span class="gp">... </span>        <span class="s2">"----&gt; Normally, here, you'd put exception handling code"</span><span class="p">)</span>
+</span><span data-line="10"><span class="gp">...</span>
+</span><span data-line="11"><span class="go">2</span>
+</span><span data-line="12"><span class="go">4</span>
+</span><span data-line="13"><span class="go">ItemsNotSorted after 2 element (whose value was 4)</span>
+</span><span data-line="14"><span class="go">----&gt; Normally, here, you'd put exception handling code</span>
+</span></pre></div>
+</div>
+<p>Now, mind you, you have total control over what sorted means.
+For example, to define it as strict</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span>  <span class="c1"># in real life, use operator.gt</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">check_sorted_during_iteration</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">key</span><span class="o">=</span><span class="n">comp</span><span class="p">))</span>
+</span><span data-line="3"><span class="go">[4, 3, 2, 1]</span>
+</span></pre></div>
+</div>
+<p>Now for a more complex example.
+First we’ll define a function that will consume the iterable until an
+error occurs, returning the elements consumed.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">consume_until_error</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined.simple</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">consume</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">check_sorted_during_iteration</span><span class="p">,</span> <span class="n">consume_until_error</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">iterable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'ba'</span><span class="p">,</span> <span class="s1">'cba'</span><span class="p">,</span> <span class="s1">'cba'</span><span class="p">,</span> <span class="s1">'back'</span><span class="p">,</span> <span class="s1">'bacca'</span><span class="p">]</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">consume</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># compare with strict &lt;</span>
+</span><span data-line="3"><span class="go">['a', 'ba', 'cba']</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">consume</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="nb">len</span><span class="p">)</span>  <span class="c1"># compare based on the length</span>
+</span><span data-line="5"><span class="go">['a', 'ba', 'cba', 'cba', 'back', 'bacca']</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">consume</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># compare based on first letter only</span>
+</span><span data-line="7"><span class="go">['a', 'ba', 'cba', 'cba']</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="c1"># compare based on whether the previous element is a subset of the next:</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">consume</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+</span><span data-line="10"><span class="go">['a', 'ba', 'cba', 'cba', 'back']</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.consume_until_error">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">consume_until_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caught_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(&lt;class</span> <span class="pre">'Exception'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#consume_until_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.consume_until_error" title="Link to this definition">#</a></dt>
+<dd><p>Iterable that will simply exit with out error if one of the caught
+errors occurs.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">consume_until_error</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+</span><span data-line="2"><span class="go">[0.25, 0.5, 1.0]</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.deiterize">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">deiterize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#deiterize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.deiterize" title="Link to this definition">#</a></dt>
+<dd><p>The inverse of iterize.
+Takes an “iterized” (a.k.a. “vectorized”) function (i.e. a function that
+works on iterables), and
+That is, takes a func(X,…) function and returns a next(iter(func([X],
+…))) function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.del_fields">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">del_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#del_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.del_fields" title="Link to this definition">#</a></dt>
+<dd><p>Returns the same mapping, but with specified fields removed.
+Intended to be applied to a stream of Mappings, using partial to fix fields</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">:</span> <span class="mi">3</span><span class="p">}]</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">del_fields</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]),</span> <span class="n">d</span><span class="p">))</span>
+</span><span data-line="3"><span class="go">[{'b': 2}, {'c': 3}]</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.dictify">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">dictify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#dictify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.dictify" title="Link to this definition">#</a></dt>
+<dd><p>Makes a version of the input func that should be called on dictionaries and will
+return dictionaries. The function will be applied to the values of a shallow
+copy of the dict, unless copy_dict=False, in which case,
+it will be applied to the input dict itself.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">dictify</span></code> is a partial of <code class="code docutils literal notranslate"><span class="pre">valmap</span></code></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">mult_by_10</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">dictify</span><span class="p">(</span><span class="n">mult_by_10</span><span class="p">)</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</span><span data-line="5"><span class="go">{'a': 20, 'b': 30}</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># see that d unchanged</span>
+</span><span data-line="7"><span class="go">{'a': 2, 'b': 3}</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">dictify</span><span class="p">(</span><span class="n">mult_by_10</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># but if we ask for it</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</span><span data-line="10"><span class="go">{'a': 20, 'b': 30}</span>
+</span><span data-line="11"><span class="gp">&gt;&gt;&gt; </span><span class="c1"># we still get a (transformed) dict in the output, but it's the same dict changed</span>
+</span><span data-line="12"><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># now d itself changed</span>
+</span><span data-line="13"><span class="go">{'a': 20, 'b': 30}</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.enumerate_groups">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">enumerate_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#enumerate_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.enumerate_groups" title="Link to this definition">#</a></dt>
+<dd><p>Get enumeration of groups during a groupby call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterable</strong> – An iterable</p></li>
+<li><p><strong>key</strong> – The key to use in the groupby logic</p></li>
+<li><p><strong>start</strong> – Where to start the enumeration (default is 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A generator of (group_idx, group, item) triples</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">iterable</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">enumerate_groups</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="p">[</span>
+</span><span data-line="3"><span class="gp">... </span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+</span><span data-line="4"><span class="gp">... </span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+</span><span data-line="5"><span class="gp">... </span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+</span><span data-line="6"><span class="gp">... </span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+</span><span data-line="7"><span class="gp">... </span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+</span><span data-line="8"><span class="gp">... </span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+</span><span data-line="9"><span class="gp">... </span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+</span><span data-line="10"><span class="gp">... </span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+</span><span data-line="11"><span class="gp">... </span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+</span><span data-line="12"><span class="gp">... </span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
+</span><span data-line="13"><span class="gp">... </span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+</span><span data-line="14"><span class="gp">... </span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span data-line="15"><span class="gp">... </span> <span class="p">]</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.expanded_args">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">expanded_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#expanded_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.expanded_args" title="Link to this definition">#</a></dt>
+<dd><p>Make’s a func(*args) function out of a func(args) one.
+In a way, the opposite of map_star.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</span><span data-line="2"><span class="go">10</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">mysum</span> <span class="o">=</span> <span class="n">expanded_args</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">mysum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</span><span data-line="5"><span class="go">10</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.false_no_matter_what">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">false_no_matter_what</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.false_no_matter_what" title="Link to this definition">#</a></dt>
+<dd><p>Takes one argument, and returns it as is.
+The output is meant to be bound by currying (functools.partial)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">true_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">false_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">true_no_matter_what</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span data-line="4"><span class="go">True</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">false_no_matter_what</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">False</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.functioncaller">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">functioncaller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#functioncaller"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.functioncaller" title="Link to this definition">#</a></dt>
+<dd><p>Call a function given positional and keyword arguments.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span data-line="5"><span class="gp">... </span>    <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">operator</span><span class="p">),</span>  <span class="c1"># get an operator func by name</span>
+</span><span data-line="6"><span class="gp">... </span>    <span class="n">functioncaller</span><span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>  <span class="c1"># apply it to 49 and 7</span>
+</span><span data-line="7"><span class="gp">... </span><span class="p">)</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">'add'</span><span class="p">)</span>
+</span><span data-line="9"><span class="go">56</span>
+</span><span data-line="10"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">'sub'</span><span class="p">)</span>
+</span><span data-line="11"><span class="go">42</span>
+</span></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>functioncaller just returns</p>
+<p><code class="code docutils literal notranslate"><span class="pre">operator.methodcaller('__call__',</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.generator_version">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">generator_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.generator_version" title="Link to this definition">#</a></dt>
+<dd><p>From an Input-&gt;Ouput function, makes a Iterator[Input]-&gt;Itertor[Output]
+Some call this “vectorization”, but it’s not really a vector, but an
+iterable, thus the name.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">iterize</span></code> is a partial of <code class="code docutils literal notranslate"><span class="pre">map</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span data-line="3"><span class="go">20</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">iterized_f</span> <span class="o">=</span> <span class="n">iterize</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterized_f</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
+</span><span data-line="6"><span class="go">[10, 20, 30]</span>
+</span></pre></div>
+</div>
+<p>Consider the following pipeline:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+</span><span data-line="4"><span class="gp">... </span>                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">'hello 2'</span>
+</span></pre></div>
+</div>
+<p>But what if you wanted to use the pipeline on a “stream” of data. The
+following wouldn’t work:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="n">pipe</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+</span><span data-line="3"><span class="gp">... </span><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">...</span>
+</span><span data-line="6"><span class="gp">...</span>
+</span><span data-line="7"><span class="go">TypeError: unsupported operand type(s) for *: 'list_iterator' and 'int'</span>
+</span></pre></div>
+</div>
+<p>Remember that error: You’ll surely encounter it at some point.</p>
+<p>The solution to it is (often): <code class="docutils literal notranslate"><span class="pre">iterize</span></code>,
+which transforms a function that is meant to be applied to a single object,
+into a function that is meant to be applied to an array, or any iterable
+of such objects.
+(You might be familiar (if you use <code class="code docutils literal notranslate"><span class="pre">numpy</span></code> for example) with the related
+concept of “vectorization”,
+or <a class="reference external" href="https://en.wikipedia.org/wiki/Array_programming">array programming</a>.)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span><span class="p">,</span> <span class="n">iterize</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+</span><span data-line="5"><span class="gp">... </span>                <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">iterable</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see that the result is an iterable</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>  <span class="c1"># consume the iterable and gather it's items</span>
+</span><span data-line="10"><span class="go">['hello 2', 'hello 4', 'hello 6']</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.identity">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.identity" title="Link to this definition">#</a></dt>
+<dd><p>Takes one argument, and returns it as is</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.if_then_else">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">if_then_else</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">functools.partial(&lt;function</span> <span class="pre">blind&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">then_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">identity&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">else_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">identity&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#if_then_else"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.if_then_else" title="Link to this definition">#</a></dt>
+<dd><p>Implement the if-then-else logic as a function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">if_then_else</span><span class="p">(</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="3"><span class="gp">... </span>    <span class="n">if_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="n">then_func</span><span class="o">=</span><span class="s2">"hello </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">,</span>
+</span><span data-line="5"><span class="gp">... </span>    <span class="n">else_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">'hello world'</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="n">if_then_else</span><span class="p">(</span><span class="s1">'bora'</span><span class="p">,</span> <span class="n">if_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">'world'</span><span class="p">,</span>
+</span><span data-line="8"><span class="gp">... </span><span class="n">then_func</span><span class="o">=</span><span class="s2">"hello</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">else_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</span><span data-line="9"><span class="go">'borabora'</span>
+</span></pre></div>
+</div>
+<p>Really, it’s meant to be curried to make functional components.
+For example, to make a function that ensures that a string is
+encapsulated in a tuple, we could do this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">is_a_str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">make_it_a_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+</span><span data-line="5"><span class="gp">... </span>    <span class="n">if_then_else</span><span class="p">,</span>
+</span><span data-line="6"><span class="gp">... </span>    <span class="n">if_func</span><span class="o">=</span><span class="n">is_a_str</span><span class="p">,</span>
+</span><span data-line="7"><span class="gp">... </span>    <span class="n">then_func</span><span class="o">=</span><span class="n">make_it_a_tuple</span>
+</span><span data-line="8"><span class="gp">... </span><span class="p">)</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span><span class="p">(</span><span class="s1">'a string'</span><span class="p">)</span>
+</span><span data-line="10"><span class="go">('a string',)</span>
+</span><span data-line="11"><span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_tuple_if_string</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'list'</span><span class="p">])</span>  <span class="c1"># not a string so returned as is</span>
+</span><span data-line="12"><span class="go">['a', 'list']</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.items">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.items" title="Link to this definition">#</a></dt>
+<dd><p>Get an items generator from a mapping</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.iterate">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">iterate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#iterate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.iterate" title="Link to this definition">#</a></dt>
+<dd><p>Just iterate through a iterable
+Use this to “consume” or “run” an iterator automatically.</p>
+<p>For example, consider the following:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span><span class="p">,</span> <span class="n">iterize</span><span class="p">,</span> <span class="n">iterate</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span data-line="3"><span class="gp">... </span>    <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
+</span><span data-line="5"><span class="gp">... </span><span class="p">)</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]):</span>
+</span><span data-line="8"><span class="gp">... </span>    <span class="k">pass</span>
+</span><span data-line="9"><span class="go">hello 2</span>
+</span><span data-line="10"><span class="go">hello 4</span>
+</span><span data-line="11"><span class="go">hello 6</span>
+</span></pre></div>
+</div>
+<p>It could be a bit awkward to have to “consume” the iterable to have it
+take effect.
+Just calling  <code class="docutils literal notranslate"><span class="pre">pipe([1,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> to get those prints seems like a more
+natural way.
+This is where you can use <code class="code docutils literal notranslate"><span class="pre">iterate</span></code>. It basically “launches” that
+consuming loop for you.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+</span><span data-line="3"><span class="gp">... </span>    <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="n">iterate</span>
+</span><span data-line="5"><span class="gp">... </span><span class="p">)</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span><span data-line="8"><span class="go">hello 2</span>
+</span><span data-line="9"><span class="go">hello 4</span>
+</span><span data-line="10"><span class="go">hello 6</span>
+</span></pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.iterize">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">iterize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#iterize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.iterize" title="Link to this definition">#</a></dt>
+<dd><p>From an Input-&gt;Ouput function, makes a Iterator[Input]-&gt;Itertor[Output]
+Some call this “vectorization”, but it’s not really a vector, but an
+iterable, thus the name.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">iterize</span></code> is a partial of <code class="code docutils literal notranslate"><span class="pre">map</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span data-line="3"><span class="go">20</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">iterized_f</span> <span class="o">=</span> <span class="n">iterize</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterized_f</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
+</span><span data-line="6"><span class="go">[10, 20, 30]</span>
+</span></pre></div>
+</div>
+<p>Consider the following pipeline:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+</span><span data-line="4"><span class="gp">... </span>                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">'hello 2'</span>
+</span></pre></div>
+</div>
+<p>But what if you wanted to use the pipeline on a “stream” of data. The
+following wouldn’t work:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="n">pipe</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+</span><span data-line="3"><span class="gp">... </span><span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">...</span>
+</span><span data-line="6"><span class="gp">...</span>
+</span><span data-line="7"><span class="go">TypeError: unsupported operand type(s) for *: 'list_iterator' and 'int'</span>
+</span></pre></div>
+</div>
+<p>Remember that error: You’ll surely encounter it at some point.</p>
+<p>The solution to it is (often): <code class="docutils literal notranslate"><span class="pre">iterize</span></code>,
+which transforms a function that is meant to be applied to a single object,
+into a function that is meant to be applied to an array, or any iterable
+of such objects.
+(You might be familiar (if you use <code class="code docutils literal notranslate"><span class="pre">numpy</span></code> for example) with the related
+concept of “vectorization”,
+or <a class="reference external" href="https://en.wikipedia.org/wiki/Array_programming">array programming</a>.)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span><span class="p">,</span> <span class="n">iterize</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+</span><span data-line="5"><span class="gp">... </span>                <span class="n">iterize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"hello </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">iterable</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see that the result is an iterable</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>  <span class="c1"># consume the iterable and gather it's items</span>
+</span><span data-line="10"><span class="go">['hello 2', 'hello 4', 'hello 6']</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.keys_extractor">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">keys_extractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#keys_extractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.keys_extractor" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated: Use operator.itemgetter(*keys) instead.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.map_star">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">map_star</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#map_star"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.map_star" title="Link to this definition">#</a></dt>
+<dd><p>Make a func(args) function out of a func(*args) o.
+Also known as singularize_arg_input.
+In a way, the opposite of map_starexpanded_args.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">singularized_foo</span> <span class="o">=</span> <span class="n">map_star</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">singularized_foo</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</span><span data-line="5"><span class="go">5</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">singularized_foo</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">==</span> <span class="n">singularized_foo</span><span class="p">({</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">})</span> <span class="o">==</span> <span class="n">foo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.negate">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">negate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#negate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.negate" title="Link to this definition">#</a></dt>
+<dd><p>Get a negated version of a function</p>
+<p>Will return a function with
+the same signature, but whose output is negated (that is, it calls the original
+function getting the <code class="code docutils literal notranslate"><span class="pre">output</span></code> but instead of returning it,
+it returns <code class="code docutils literal notranslate"><span class="pre">not</span> <span class="pre">output</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span><span data-line="2"><span class="go">6</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</span><span data-line="4"><span class="go">0</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">sum_is_zero</span> <span class="o">=</span> <span class="n">negate</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">sum_is_zero</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</span><span data-line="7"><span class="go">False</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">sum_is_zero</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</span><span data-line="9"><span class="go">True</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.pairwise">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">pairwise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#pairwise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.pairwise" title="Link to this definition">#</a></dt>
+<dd><p>Yield sliding window pairs</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">pairwise</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span>
+</span><span data-line="2"><span class="go">[(1, 2), (2, 3), (3, 4)]</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.print_and_pass_on">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">print_and_pass_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">print&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.print_and_pass_on" title="Link to this definition">#</a></dt>
+<dd><p>Passes input through to output, but prints before outputing</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.raise_">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">raise_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#raise_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.raise_" title="Link to this definition">#</a></dt>
+<dd><p>raises the given exception (instance or callable that returns one)
+Meant to be hooked to the out put of a function that returns an exception or a
+command to raise one.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.raise_exception">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">raise_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#raise_exception"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.raise_exception" title="Link to this definition">#</a></dt>
+<dd><p>Raise an exception (from an exception instance, or a callable that
+makes one</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.return_instead_of_raising_exceptions">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">return_instead_of_raising_exceptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exceptions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(&lt;class</span> <span class="pre">'Exception'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#return_instead_of_raising_exceptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.return_instead_of_raising_exceptions" title="Link to this definition">#</a></dt>
+<dd><p>Make a function return its exceptions instead of raising them.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">return_instead_of_raising_exceptions</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span data-line="5"><span class="go">3.0</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># note that this doesn't raise, but returns the exception (instance)</span>
+</span><span data-line="7"><span class="go">ZeroDivisionError('division by zero')</span>
+</span></pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – The function to transform.</p></li>
+<li><p><strong>exceptions</strong> – The exceptions to handle
+Default is Exception (letting other BaseException instances like
+KeyboardInterrupt still be raised). If you need more exceptions, or less
+exceptions to be handled, enter them here.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.side_call">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">side_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#side_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.side_call" title="Link to this definition">#</a></dt>
+<dd><p>Identity function that calls a callaback function before returning the
+input as is (unless the input is mutable and the callback changes it).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">lined</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">add2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">add2</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+</span><span data-line="4"><span class="go">42</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">side_call</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"input is </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="n">logged_add2</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">add2</span><span class="p">)</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">logged_add2</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+</span><span data-line="9"><span class="go">input is 40</span>
+</span><span data-line="10"><span class="go">42</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.singularize_arg_input">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">singularize_arg_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.singularize_arg_input" title="Link to this definition">#</a></dt>
+<dd><p>Make a func(args) function out of a func(*args) o.
+Also known as singularize_arg_input.
+In a way, the opposite of map_starexpanded_args.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">singularized_foo</span> <span class="o">=</span> <span class="n">map_star</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">singularized_foo</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</span><span data-line="5"><span class="go">5</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">singularized_foo</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">==</span> <span class="n">singularized_foo</span><span class="p">({</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">})</span> <span class="o">==</span> <span class="n">foo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.tail_io">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">tail_io</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#tail_io"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.tail_io" title="Link to this definition">#</a></dt>
+<dd><p>Will apply function only to the tail of tuple inputs, still passing
+the header on.
+That is, from a <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">-&gt;</span> <span class="pre">func(x)</span></code> function, you get a <code class="docutils literal notranslate"><span class="pre">(\*header,</span> <span class="pre">x)</span> <span class="pre">-&gt;</span> <span class="pre">(</span>
+<span class="pre">\*header,</span> <span class="pre">func(x))</span></code> function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="2"><span class="gp">... </span>   <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span><span class="p">(</span><span class="s1">'boo'</span><span class="p">)</span>
+</span><span data-line="5"><span class="go">'booboo'</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span> <span class="o">=</span> <span class="n">tail_io</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="s1">'boo'</span><span class="p">))</span>
+</span><span data-line="8"><span class="go">(7, 'booboo')</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span><span class="p">((</span><span class="s1">'all'</span><span class="p">,</span> <span class="s1">'items'</span><span class="p">,</span> <span class="s1">'but'</span><span class="p">,</span> <span class="s1">'the'</span><span class="p">,</span> <span class="s1">'last'</span><span class="p">,</span> <span class="s1">'are'</span><span class="p">,</span> <span class="s1">'just'</span><span class="p">,</span>
+</span><span data-line="10"><span class="gp">... </span>         <span class="s1">'passed'</span><span class="p">,</span> <span class="s1">'on'</span><span class="p">,</span> <span class="s1">'boo'</span><span class="p">))</span>
+</span><span data-line="11"><span class="go">('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on', 'booboo')</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.true_no_matter_what">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">true_no_matter_what</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lined.tools.true_no_matter_what" title="Link to this definition">#</a></dt>
+<dd><p>Takes one argument, and returns it as is.
+The output is meant to be bound by currying (functools.partial)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">true_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">false_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">true_no_matter_what</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span data-line="4"><span class="go">True</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">false_no_matter_what</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">False</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.valmap">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">valmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#valmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.valmap" title="Link to this definition">#</a></dt>
+<dd><p>Apply func to the values of a shallow copy of d, unless copy_dict=False,
+in which case, it will be applied to the input dict itself.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">valmap</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+</span><span data-line="3"><span class="go">{'a': 20, 'b': 30}</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># see that d unchanged</span>
+</span><span data-line="5"><span class="go">{'a': 2, 'b': 3}</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">valmap</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># but if we ask for it</span>
+</span><span data-line="7"><span class="go">{'a': 20, 'b': 30}</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="c1"># we still get a (transformed) dict in the output, but it's the same dict changed</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>  <span class="c1"># now d itself changed</span>
+</span><span data-line="10"><span class="go">{'a': 20, 'b': 30}</span>
+</span></pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.with_cursor">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">with_cursor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#with_cursor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.with_cursor" title="Link to this definition">#</a></dt>
+<dd><p>Decorator a function so it enumerates the number of calls.
+Or in general, returns (cursor, func(x)) instead of just func(x),
+where the start and step of the cursor can
+be defined (default is start=0 and step=1)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="2"><span class="gp">... </span>   <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span> <span class="o">=</span> <span class="n">with_cursor</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span><span class="p">(</span><span class="s1">'ha'</span><span class="p">)</span>
+</span><span data-line="5"><span class="go">(0, 'haha')</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">new_foo</span><span class="p">(</span><span class="s1">'ho'</span><span class="p">)</span>
+</span><span data-line="7"><span class="go">(1, 'hoho')</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">enum_foo_with_step</span> <span class="o">=</span> <span class="n">with_cursor</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="n">enum_foo_with_step</span><span class="p">(</span><span class="s1">'z'</span><span class="p">)</span>
+</span><span data-line="10"><span class="go">(3, 'zz')</span>
+</span><span data-line="11"><span class="gp">&gt;&gt;&gt; </span><span class="n">enum_foo_with_step</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+</span><span data-line="12"><span class="go">(10, 22)</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.tools.wrap_first_arg_in_list">
+<span class="sig-prename descclassname"><span class="pre">lined.tools.</span></span><span class="sig-name descname"><span class="pre">wrap_first_arg_in_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/tools.html#wrap_first_arg_in_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.tools.wrap_first_arg_in_list" title="Link to this definition">#</a></dt>
+<dd><p>Takes a func(X,…) function and returns a func([X],…) function.</p>
+</dd></dl>
+
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="lined.simple.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">lined.simple</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="lined.util.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">lined.util</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=ebdbb45b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=fd10adb8"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

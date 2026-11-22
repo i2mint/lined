@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>lined.base - lined</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="lined.recipes" href="lined.recipes.html" /><link rel="prev" title="lined" href="lined.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="lined.base"/>
+    <meta name="twitter:card" content="summary"/>
+  
+<link rel="alternate" type="text/markdown" href="lined.base.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+</head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>lined</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="lined.html">lined</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lined.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lined.recipes.html">lined.recipes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lined.simple.html">lined.simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lined.tools.html">lined.tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lined.util.html">lined.util</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#lined.base.Configs"><code class="docutils literal notranslate"><span class="pre">Configs</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.Digraph"><code class="docutils literal notranslate"><span class="pre">Digraph</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.Fnode"><code class="docutils literal notranslate"><span class="pre">Fnode</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.LineParametrized"><code class="docutils literal notranslate"><span class="pre">LineParametrized</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.LineSentineled"><code class="docutils literal notranslate"><span class="pre">LineSentineled</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.Sentinel"><code class="docutils literal notranslate"><span class="pre">Sentinel</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.SentineledPipeline"><code class="docutils literal notranslate"><span class="pre">SentineledPipeline</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.log_calls"><code class="docutils literal notranslate"><span class="pre">log_calls()</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.name_with_varkind_and_default_marker"><code class="docutils literal notranslate"><span class="pre">name_with_varkind_and_default_marker()</span></code></a></li>
+<li><a class="reference internal" href="#lined.base.uniquize_funcs_names"><code class="docutils literal notranslate"><span class="pre">uniquize_funcs_names()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">lined</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../api.html"><span itemprop="name">API reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="lined.html"><span itemprop="name">lined</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">lined.base</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <section id="module-lined.base">
+<span id="lined-base"></span><h1>lined.base<a class="headerlink" href="#module-lined.base" title="Link to this heading">#</a></h1>
+<p>The base objects of lined.</p>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fnode</span></code>(func[, name, first_arg_position_only])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_names_if_missing</span></code>(funcs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.base.log_calls" title="lined.base.log_calls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_calls</span></code></a>(line[, logger, what_to_log])</p></td>
+<td><p>Log the calls of every step of a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.base.name_with_varkind_and_default_marker" title="lined.base.name_with_varkind_and_default_marker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name_with_varkind_and_default_marker</span></code></a>(param)</p></td>
+<td><p>Returns a string representation for the Parameter object</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_func</span></code>(func)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack</span></code>(*funcs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.base.uniquize_funcs_names" title="lined.base.uniquize_funcs_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uniquize_funcs_names</span></code></a>(...[, suffic_counter_start])</p></td>
+<td><p>Check and make sure that the functions names are all different.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Conditions</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.base.Configs" title="lined.base.Configs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Configs</span></code></a></p></td>
+<td><p>A dict, whose keys can be access as if they were attributes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.base.Digraph" title="lined.base.Digraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Digraph</span></code></a>([nodes_adjacent_to])</p></td>
+<td><p>This class is experiemental and will probably move to meshed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.base.Fnode" title="lined.base.Fnode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Fnode</span></code></a>(func[, name, first_arg_position_only])</p></td>
+<td><p>A function wrapper to be used in pipelines.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LayeredPipeline</span></code>(*funcs[, pipeline_name])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Line</span></code>(*funcs[, pipeline_name, input_name, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.base.LineParametrized" title="lined.base.LineParametrized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineParametrized</span></code></a>(default_conflict_method, ...)</p></td>
+<td><p>A pipeline that exposes all inputs of all the functions of the pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.base.LineSentineled" title="lined.base.LineSentineled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineSentineled</span></code></a>(*funcs[, pipeline_name, ...])</p></td>
+<td><p>A pipeline that can be interrupted by a sentinel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoSuchConfig</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pipeline</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lined.base.Sentinel" title="lined.base.Sentinel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sentinel</span></code></a>([val])</p></td>
+<td><p>To make sentinels holding an optional value</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lined.base.SentineledPipeline" title="lined.base.SentineledPipeline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SentineledPipeline</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.base.Configs">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">Configs</span></span><a class="reference internal" href="../_modules/lined/base.html#Configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.Configs" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<p>A dict, whose keys can be access as if they were attributes.
+Also defaults to sentinel _default when</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Configs</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<p>Write it as you do with attributes or dict keys,
+get it as an attribute and a dict keys.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="s1">'bar'</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">foo</span> <span class="o">==</span> <span class="s1">'bar'</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="p">[</span><span class="s1">'foo'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'bar'</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">'hello'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'world'</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">hello</span> <span class="o">==</span> <span class="s1">'world'</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="p">[</span><span class="s1">'hello'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'world'</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">)</span>
+</span><span data-line="8"><span class="go">True</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">'does not exist'</span><span class="p">]</span>
+</span><span data-line="2"><span class="go">no_such_config</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.base.Digraph">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">Digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes_adjacent_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#Digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.Digraph" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class is experiemental and will probably move to meshed.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.base.Fnode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">Fnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_arg_position_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#Fnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.Fnode" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A function wrapper to be used in pipelines.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt;</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">Sig</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">)</span>
+</span><span data-line="4"><span class="go">&lt;Sig (obj, protocol=None, *, fix_imports=True, buffer_callback=None)&gt;</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">fn</span> <span class="o">=</span> <span class="n">Fnode</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">)</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">Sig</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+</span><span data-line="7"><span class="go">&lt;Sig (obj, protocol=None, *, fix_imports=True, buffer_callback=None)&gt;</span>
+</span></pre></div>
+</div>
+<p>The <code class="code docutils literal notranslate"><span class="pre">first_arg_position_only=True</span></code> flag will set the first argument of the
+Fnode instance signature to be POSITION_ONLY.
+This is a useful normalization for inner nodes of a pipeline.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">fn</span> <span class="o">=</span> <span class="n">Fnode</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'my_pickler'</span><span class="p">,</span> <span class="n">first_arg_position_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">Sig</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+</span><span data-line="3"><span class="go">&lt;Sig (obj, /, protocol=None, *, fix_imports=True, buffer_callback=None)&gt;</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">unpickled_fn</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">fn</span><span class="p">))</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">unpickled_fn</span>
+</span><span data-line="2"><span class="go">my_pickler(obj, /, protocol=None, *, fix_imports=True, buffer_callback=None)</span>
+</span></pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.base.LineParametrized">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">LineParametrized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_conflict_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">funcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#LineParametrized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.LineParametrized" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></p>
+<p>A pipeline that exposes all inputs of all the functions of the pipeline.</p>
+<p>For example, say you have two functions <code class="code docutils literal notranslate"><span class="pre">f(a,</span> <span class="pre">b=1)</span></code> and <code class="code docutils literal notranslate"><span class="pre">g(x,</span> <span class="pre">y=2)</span></code>.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">Line(f,</span> <span class="pre">g)</span></code> would be a function with <code class="code docutils literal notranslate"><span class="pre">a</span></code> and <code class="code docutils literal notranslate"><span class="pre">b</span></code> as your inputs.</p>
+<p>On the other hand, <code class="code docutils literal notranslate"><span class="pre">LineParametrized(f,</span> <span class="pre">g)</span></code> will give you control over <code class="code docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">times</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">exp</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>  <span class="k">return</span> <span class="n">r</span> <span class="o">**</span> <span class="n">e</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">LineParametrized</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">exp</span><span class="p">)</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">64</span>  <span class="c1"># as before</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1000</span>  <span class="c1"># as before, but now you can do this...</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">125</span>  <span class="c1"># ((2 + 3) * 1) ** 3 == 125</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span>  <span class="c1"># ((2 + 3) * 2) ** 1 == 10</span>
+</span><span data-line="9"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">15</span>  <span class="c1"># ((2 + 3) * 3) ** 1 == 15</span>
+</span><span data-line="10"><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">20</span>  <span class="c1"># (skipping b here! using default b=0) ((2 + 0) * 10) ** 1 == 20</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">inspect</span><span class="w"> </span><span class="kn">import</span> <span class="n">signature</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">signature</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</span><span data-line="3"><span class="go">&lt;Sig (a, b=0, *, y=2, e=3)&gt;</span>
+</span></pre></div>
+</div>
+<p>Note that <code class="code docutils literal notranslate"><span class="pre">y</span></code> and <code class="code docutils literal notranslate"><span class="pre">e</span></code> are keyword-only arguments.
+All arguments that are not from the first function will be keyword only
+(except for the first argument of these functions, which do not appear at all
+since they’re used as the “connecting arguments”).</p>
+<p>Note in the above signature, that <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">r</span></code> are missing.
+That’s because these are “connecting” arguments.
+‘x’ comes from <code class="code docutils literal notranslate"><span class="pre">add</span></code> and is fed to <code class="code docutils literal notranslate"><span class="pre">times</span></code>.
+<code class="code docutils literal notranslate"><span class="pre">r</span></code> comes from <code class="code docutils literal notranslate"><span class="pre">times</span></code> and is fed to <code class="code docutils literal notranslate"><span class="pre">exp</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">dot_digraph_ascii</span><span class="p">())</span>
+</span><span data-line="2"><span class="go">        ┌─────┐  x   ┌───────┐  r   ┌─────┐</span>
+</span><span data-line="3"><span class="go"> a  ──▶ │ add │ ───▶ │ times │ ───▶ │ exp │ ──▶  output</span>
+</span><span data-line="4"><span class="go">        └─────┘      └───────┘      └─────┘</span>
+</span><span data-line="5"><span class="go">          ▲            ▲              ▲</span>
+</span><span data-line="6"><span class="go">          │            │              │</span>
+</span><span data-line="7"><span class="go">          │            │              │</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="go">          b=            y=            e=</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">dot_digraph_ascii</span><span class="p">(</span><span class="n">edge_kind</span><span class="o">=</span><span class="s1">'simple'</span><span class="p">))</span>
+</span><span data-line="2"><span class="go">        ┌─────┐     ┌───────┐     ┌─────┐</span>
+</span><span data-line="3"><span class="go"> a  ──▶ │ add │ ──▶ │ times │ ──▶ │ exp │ ──▶  output</span>
+</span><span data-line="4"><span class="go">        └─────┘     └───────┘     └─────┘</span>
+</span><span data-line="5"><span class="go">          ▲</span>
+</span><span data-line="6"><span class="go">          │</span>
+</span><span data-line="7"><span class="go">          │</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="go">          b=</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">dot_digraph_ascii</span><span class="p">(</span><span class="n">edge_kind</span><span class="o">=</span><span class="s1">'simple_on_edge'</span><span class="p">))</span>
+</span><span data-line="2"><span class="go">        ┌─────┐  x   ┌───────┐  r   ┌─────┐</span>
+</span><span data-line="3"><span class="go"> a  ──▶ │ add │ ───▶ │ times │ ───▶ │ exp │ ──▶  output</span>
+</span><span data-line="4"><span class="go">        └─────┘      └───────┘      └─────┘</span>
+</span><span data-line="5"><span class="go">          ▲</span>
+</span><span data-line="6"><span class="go">          │</span>
+</span><span data-line="7"><span class="go">          │</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="go">          b=</span>
+</span></pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">dot_digraph_ascii</span><span class="p">(</span><span class="n">edge_kind</span><span class="o">=</span><span class="s1">'to_args'</span><span class="p">))</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="go">                        x            r</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="go">                      │             │</span>
+</span><span data-line="6"><span class="go">                      │             │</span>
+</span><span data-line="7"><span class="go">                      ▼             ▼</span>
+</span><span data-line="8"><span class="go">        ┌─────┐     ┌───────┐     ┌─────┐</span>
+</span><span data-line="9"><span class="go"> a  ──▶ │ add │ ──▶ │ times │ ──▶ │ exp │ ──▶  output</span>
+</span><span data-line="10"><span class="go">        └─────┘     └───────┘     └─────┘</span>
+</span><span data-line="11"><span class="go">          ▲           ▲             ▲</span>
+</span><span data-line="12"><span class="go">          │           │             │</span>
+</span><span data-line="13"><span class="go">          │           │             │</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="go">          b=           y=           e=</span>
+</span></pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.base.LineSentineled">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">LineSentineled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">funcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#LineSentineled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.LineSentineled" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></p>
+<p>A pipeline that can be interrupted by a sentinel.</p>
+<p>Sentinels are useful to interrupt the pipeline computation.</p>
+<p>Say, for example, you know if the length of an input iterable divided by three is
+1 or 2.
+You wouldn’t want to divide by 0 or have a loop choke on an input that doesn’t
+have a length.</p>
+<p>So you do this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">LineSentineled</span><span class="p">(</span>
+</span><span data-line="2"><span class="gp">... </span>    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">'__len__'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="p">)</span> <span class="ow">or</span> <span class="n">Sentinel</span><span class="p">(</span><span class="s1">'no length'</span><span class="p">),</span> <span class="c1"># returns x if it has a length, and None if not</span>
+</span><span data-line="3"><span class="gp">... </span>    <span class="nb">len</span><span class="p">,</span>
+</span><span data-line="4"><span class="gp">... </span>    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span><span class="p">,</span>
+</span><span data-line="5"><span class="gp">... </span><span class="p">)</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</span><span data-line="7"><span class="go">1</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="9"><span class="go">Sentinel(val='no length')</span>
+</span><span data-line="10"><span class="gp">&gt;&gt;&gt; </span><span class="c1"># which allows us to do things like:</span>
+</span><span data-line="11"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">Sentinel</span><span class="o">.</span><span class="n">this_is_not</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]])))</span>
+</span><span data-line="12"><span class="go">[1, 0]</span>
+</span></pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lined.base.Sentinel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">Sentinel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#Sentinel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.Sentinel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>To make sentinels holding an optional value</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lined.base.SentineledPipeline">
+<span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">SentineledPipeline</span></span><a class="headerlink" href="#lined.base.SentineledPipeline" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#lined.base.LineSentineled" title="lined.base.LineSentineled"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineSentineled</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.base.log_calls">
+<span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">log_calls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">print&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what_to_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">_call_signature&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#log_calls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.log_calls" title="Link to this definition">#</a></dt>
+<dd><p>Log the calls of every step of a pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>line</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></span>) – A Line object</p></li>
+<li><p><strong>logger</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a></span>) – A callable that will be called on the output of what_to_log.
+Default is print.</p></li>
+<li><p><strong>what_to_log</strong> – A callable that will be called on (func, args, kwargs) to
+produce the data that will be pased on to logger.
+By default it will produce a string representation of the call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pipeline that will log the calls made at every step</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">log2</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="n">log2</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">logged_pipe</span> <span class="o">=</span> <span class="n">log_calls</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">logged_pipe</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</span><span data-line="5"><span class="go">sum([1, 3, 4], )</span>
+</span><span data-line="6"><span class="go">log2(8, )</span>
+</span><span data-line="7"><span class="go">str(3.0, )</span>
+</span><span data-line="8"><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+</span><span data-line="9"><span class="go">'3.0'</span>
+</span></pre></div>
+</div>
+<p>We’re using the <code class="docutils literal notranslate"><span class="pre">(logger=print,</span> <span class="pre">what_to_log=_call_signature)</span></code> default here,
+but other pair can be useful in some situations.</p>
+<p>For example, some of these calls may involve objects whose string representation
+is no informative, or two large to be useful.
+In this case, one could instead set <code class="docutils literal notranslate"><span class="pre">(logger,</span> <span class="pre">what_to_log)</span></code> to serialize the
+calls and save in a DB or pickle files that could then be studied.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function logs all the calls.</p>
+</div>
+<p>If you want to log only some calls, you might want to use lined.tools.side_call
+or <code class="docutils literal notranslate"><span class="pre">lined.tools.print_and_pass_on</span></code>.
+You can also provide a custome <code class="docutils literal notranslate"><span class="pre">(logger,</span> <span class="pre">what_to_log)</span></code> pair that will do something
+special according to the function (namely, log the call or not).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.base.name_with_varkind_and_default_marker">
+<span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">name_with_varkind_and_default_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#name_with_varkind_and_default_marker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.name_with_varkind_and_default_marker" title="Link to this definition">#</a></dt>
+<dd><p>Returns a string representation for the Parameter object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lined.base.uniquize_funcs_names">
+<span class="sig-prename descclassname"><span class="pre">lined.base.</span></span><span class="sig-name descname"><span class="pre">uniquize_funcs_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">named_funcs_obtained_from_funcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffic_counter_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lined/base.html#uniquize_funcs_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lined.base.uniquize_funcs_names" title="Link to this definition">#</a></dt>
+<dd><p>Check and make sure that the functions names are all different. This is achieved by adding a suffix to
+the duplicate names</p>
+</dd></dl>
+
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="lined.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">lined</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="lined.recipes.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">lined.recipes</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=ebdbb45b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=fd10adb8"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

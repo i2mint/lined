@@ -1,0 +1,31 @@
+lined.util
+==========
+
+.. automodule:: lined.util
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      clean
+      dot_to_ascii
+      ensure_numerical_keys
+      func_name
+      incremental_str_maker
+      make_method
+      mro_items
+      n_required_args
+      name_to_id
+      param_is_required
+      partial_plus
+      signature_from_first_and_last_func
+      unnamed_func_name
+      unnamed_pipeline
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CachedInstancePartial
+   

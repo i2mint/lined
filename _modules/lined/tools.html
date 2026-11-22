@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>lined.tools - lined</title><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="lined.tools"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      
+      
+      <strong>lined</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../_autosummary/lined.html">lined</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/lined.base.html">lined.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/lined.recipes.html">lined.recipes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/lined.simple.html">lined.simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/lined.tools.html">lined.tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/lined.util.html">lined.util</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">lined</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">lined.tools</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <h1>Source code for lined.tools</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">"""</span>
+</span><span data-line="2"><span class="sd">All kinds of useful tools to use in pipelines.</span>
+</span><span data-line="3"><span class="sd">"""</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">wraps</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">not_</span><span class="p">,</span> <span class="n">methodcaller</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">lined.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">partial_plus</span><span class="p">,</span> <span class="n">n_required_args</span>
+</span><span data-line="10"><span class="kn">from</span><span class="w"> </span><span class="nn">lined.simple</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span data-line="11">
+</span><span data-line="12">
+<div class="viewcode-block" id="negate">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.negate">[docs]</a>
+</span><span data-line="13"><span class="k">def</span><span class="w"> </span><span class="nf">negate</span><span class="p">(</span>
+</span><span data-line="14">    <span class="n">func</span><span class="p">,</span>
+</span><span data-line="15"><span class="p">):</span>  <span class="c1"># TODO: Do we want to use wraps(func) to get more than just signature?</span>
+</span><span data-line="16"><span class="w">    </span><span class="sd">"""Get a negated version of a function</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="sd">    Will return a function with</span>
+</span><span data-line="19"><span class="sd">    the same signature, but whose output is negated (that is, it calls the original</span>
+</span><span data-line="20"><span class="sd">    function getting the `output` but instead of returning it,</span>
+</span><span data-line="21"><span class="sd">    it returns `not output`.</span>
+</span><span data-line="22">
+</span><span data-line="23"><span class="sd">    &gt;&gt;&gt; sum([1, 2, 3])</span>
+</span><span data-line="24"><span class="sd">    6</span>
+</span><span data-line="25"><span class="sd">    &gt;&gt;&gt; sum([-2, 2])</span>
+</span><span data-line="26"><span class="sd">    0</span>
+</span><span data-line="27"><span class="sd">    &gt;&gt;&gt; sum_is_zero = negate(sum)</span>
+</span><span data-line="28"><span class="sd">    &gt;&gt;&gt; sum_is_zero([1, 2, 3])</span>
+</span><span data-line="29"><span class="sd">    False</span>
+</span><span data-line="30"><span class="sd">    &gt;&gt;&gt; sum_is_zero([-2, 2])</span>
+</span><span data-line="31"><span class="sd">    True</span>
+</span><span data-line="32"><span class="sd">    """</span>
+</span><span data-line="33">    <span class="k">return</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">not_</span><span class="p">)</span></div>
+
+</span><span data-line="34">
+</span><span data-line="35">
+<div class="viewcode-block" id="identity">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.identity">[docs]</a>
+</span><span data-line="36"><span class="k">def</span><span class="w"> </span><span class="nf">identity</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="37"><span class="w">    </span><span class="sd">"""Takes one argument, and returns it as is"""</span>
+</span><span data-line="38">    <span class="k">return</span> <span class="n">x</span></div>
+
+</span><span data-line="39">
+</span><span data-line="40">
+<div class="viewcode-block" id="blind">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.blind">[docs]</a>
+</span><span data-line="41"><span class="k">def</span><span class="w"> </span><span class="nf">blind</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+</span><span data-line="42"><span class="w">    </span><span class="sd">"""Takes one argument, and returns it as is.</span>
+</span><span data-line="43"><span class="sd">    The output is meant to be bound by currying (functools.partial)</span>
+</span><span data-line="44">
+</span><span data-line="45"><span class="sd">    &gt;&gt;&gt; true_no_matter_what = partial(blind, output=True)</span>
+</span><span data-line="46"><span class="sd">    &gt;&gt;&gt; false_no_matter_what = partial(blind, output=False)</span>
+</span><span data-line="47"><span class="sd">    &gt;&gt;&gt; true_no_matter_what(42)</span>
+</span><span data-line="48"><span class="sd">    True</span>
+</span><span data-line="49"><span class="sd">    &gt;&gt;&gt; false_no_matter_what(42)</span>
+</span><span data-line="50"><span class="sd">    False</span>
+</span><span data-line="51"><span class="sd">    """</span>
+</span><span data-line="52">    <span class="k">return</span> <span class="n">output</span></div>
+
+</span><span data-line="53">
+</span><span data-line="54">
+</span><span data-line="55"><span class="n">true_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="56"><span class="n">false_no_matter_what</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">blind</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="57">
+</span><span data-line="58">
+</span><span data-line="59"><span class="k">def</span><span class="w"> </span><span class="nf">_extract_first_argument</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span data-line="60"><span class="w">    </span><span class="sd">"""</span>
+</span><span data-line="61"><span class="sd">    Returns the tuple (X, _args, _kwargs) where X is the first argument (</span>
+</span><span data-line="62"><span class="sd">    found in either args or kwargs), and _args, _kwargs are the same (with X</span>
+</span><span data-line="63"><span class="sd">    removed)</span>
+</span><span data-line="64">
+</span><span data-line="65"><span class="sd">    &gt;&gt;&gt; _extract_first_argument((1,2,3), {'d': 4})</span>
+</span><span data-line="66"><span class="sd">    (1, [2, 3], {'d': 4})</span>
+</span><span data-line="67"><span class="sd">    &gt;&gt;&gt; _extract_first_argument((), {'d': 4, 'e': 5})</span>
+</span><span data-line="68"><span class="sd">    (4, [], {'e': 5})</span>
+</span><span data-line="69">
+</span><span data-line="70"><span class="sd">    """</span>
+</span><span data-line="71">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span data-line="72">        <span class="n">first_arg_val</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span> <span class="o">=</span> <span class="n">args</span>
+</span><span data-line="73">        <span class="k">return</span> <span class="n">first_arg_val</span><span class="p">,</span> <span class="n">_args</span><span class="p">,</span> <span class="n">kwargs</span>
+</span><span data-line="74">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="75">        <span class="n">first_arg_name</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">kwargs</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="76">        <span class="k">if</span> <span class="n">first_arg_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="77">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span data-line="78">                <span class="s2">"You need to have at least one argument (the data (aka 'X'))"</span>
+</span><span data-line="79">            <span class="p">)</span>
+</span><span data-line="80">        <span class="n">first_arg_val</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">first_arg_name</span><span class="p">)</span>
+</span><span data-line="81">        <span class="k">return</span> <span class="n">first_arg_val</span><span class="p">,</span> <span class="p">[],</span> <span class="n">kwargs</span>
+</span><span data-line="82">
+</span><span data-line="83">
+</span><span data-line="84"><span class="c1"># ------------------------------------------------------------------------------</span>
+</span><span data-line="85">
+</span><span data-line="86"><span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">le</span>
+</span><span data-line="87"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+</span><span data-line="88"><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span>
+</span><span data-line="89"><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">tee</span>
+</span><span data-line="90">
+</span><span data-line="91">
+<div class="viewcode-block" id="if_then_else">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.if_then_else">[docs]</a>
+</span><span data-line="92"><span class="k">def</span><span class="w"> </span><span class="nf">if_then_else</span><span class="p">(</span>
+</span><span data-line="93">    <span class="n">x</span><span class="p">,</span> <span class="n">if_func</span><span class="o">=</span><span class="n">true_no_matter_what</span><span class="p">,</span> <span class="n">then_func</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span> <span class="n">else_func</span><span class="o">=</span><span class="n">identity</span>
+</span><span data-line="94"><span class="p">):</span>
+</span><span data-line="95"><span class="w">    </span><span class="sd">"""Implement the if-then-else logic as a function.</span>
+</span><span data-line="96">
+</span><span data-line="97"><span class="sd">    &gt;&gt;&gt; if_then_else(</span>
+</span><span data-line="98"><span class="sd">    ...     'world',</span>
+</span><span data-line="99"><span class="sd">    ...     if_func=lambda x: x == 'world',</span>
+</span><span data-line="100"><span class="sd">    ...     then_func="hello {}".format,</span>
+</span><span data-line="101"><span class="sd">    ...     else_func=lambda x: x * 2)</span>
+</span><span data-line="102"><span class="sd">    'hello world'</span>
+</span><span data-line="103"><span class="sd">    &gt;&gt;&gt; if_then_else('bora', if_func=lambda x: x == 'world',</span>
+</span><span data-line="104"><span class="sd">    ... then_func="hello{}".format, else_func=lambda x: x * 2)</span>
+</span><span data-line="105"><span class="sd">    'borabora'</span>
+</span><span data-line="106">
+</span><span data-line="107"><span class="sd">    Really, it's meant to be curried to make functional components.</span>
+</span><span data-line="108"><span class="sd">    For example, to make a function that ensures that a string is</span>
+</span><span data-line="109"><span class="sd">    encapsulated in a tuple, we could do this:</span>
+</span><span data-line="110">
+</span><span data-line="111"><span class="sd">    &gt;&gt;&gt; def is_a_str(x): return isinstance(x, str)</span>
+</span><span data-line="112"><span class="sd">    &gt;&gt;&gt; def make_it_a_tuple(x): return tuple([x])</span>
+</span><span data-line="113"><span class="sd">    &gt;&gt;&gt;</span>
+</span><span data-line="114"><span class="sd">    &gt;&gt;&gt; ensure_tuple_if_string = partial(</span>
+</span><span data-line="115"><span class="sd">    ...     if_then_else,</span>
+</span><span data-line="116"><span class="sd">    ...     if_func=is_a_str,</span>
+</span><span data-line="117"><span class="sd">    ...     then_func=make_it_a_tuple</span>
+</span><span data-line="118"><span class="sd">    ... )</span>
+</span><span data-line="119"><span class="sd">    &gt;&gt;&gt; ensure_tuple_if_string('a string')</span>
+</span><span data-line="120"><span class="sd">    ('a string',)</span>
+</span><span data-line="121"><span class="sd">    &gt;&gt;&gt; ensure_tuple_if_string(['a', 'list'])  # not a string so returned as is</span>
+</span><span data-line="122"><span class="sd">    ['a', 'list']</span>
+</span><span data-line="123"><span class="sd">    """</span>
+</span><span data-line="124">    <span class="k">if</span> <span class="n">if_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="125">        <span class="k">return</span> <span class="n">then_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span data-line="126">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="127">        <span class="k">return</span> <span class="n">else_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+</span><span data-line="128">
+</span><span data-line="129">
+</span><span data-line="130"><span class="k">def</span><span class="w"> </span><span class="nf">make_it_a_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="131">    <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+</span><span data-line="132">
+</span><span data-line="133">
+</span><span data-line="134"><span class="k">def</span><span class="w"> </span><span class="nf">is_a_str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="135">    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</span><span data-line="136">
+</span><span data-line="137">
+</span><span data-line="138"><span class="n">cast_to_tuple_if_string</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+</span><span data-line="139">    <span class="n">if_then_else</span><span class="p">,</span> <span class="n">if_func</span><span class="o">=</span><span class="n">is_a_str</span><span class="p">,</span> <span class="n">then_func</span><span class="o">=</span><span class="n">make_it_a_tuple</span>
+</span><span data-line="140"><span class="p">)</span>
+</span><span data-line="141">
+</span><span data-line="142">
+</span><span data-line="143"><span class="k">def</span><span class="w"> </span><span class="nf">is_not_iterable_or_is_a_str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="144">    <span class="k">return</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</span><span data-line="145">
+</span><span data-line="146">
+</span><span data-line="147"><span class="n">cast_to_tuple_if_non_iterable_or_a_string</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+</span><span data-line="148">    <span class="n">if_then_else</span><span class="p">,</span> <span class="n">if_func</span><span class="o">=</span><span class="n">is_not_iterable_or_is_a_str</span><span class="p">,</span> <span class="n">then_func</span><span class="o">=</span><span class="n">make_it_a_tuple</span>
+</span><span data-line="149"><span class="p">)</span>
+</span><span data-line="150">
+</span><span data-line="151">
+</span><span data-line="152"><span class="c1"># ------------ Tools for iterables ---------------------------------------------</span>
+</span><span data-line="153">
+</span><span data-line="154">
+<div class="viewcode-block" id="Command">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.Command">[docs]</a>
+</span><span data-line="155"><span class="k">class</span><span class="w"> </span><span class="nc">Command</span><span class="p">:</span>
+</span><span data-line="156"><span class="w">    </span><span class="sd">"""Make a no-input callable that will execute a specific function call.</span>
+</span><span data-line="157">
+</span><span data-line="158"><span class="sd">    &gt;&gt;&gt; command = Command(sum, [1, 2, 3])</span>
+</span><span data-line="159"><span class="sd">    &gt;&gt;&gt; command()</span>
+</span><span data-line="160"><span class="sd">    6</span>
+</span><span data-line="161"><span class="sd">    &gt;&gt;&gt; command = Command(print, 'hello', 'world', sep=', ')</span>
+</span><span data-line="162"><span class="sd">    &gt;&gt;&gt; command()</span>
+</span><span data-line="163"><span class="sd">    hello, world</span>
+</span><span data-line="164">
+</span><span data-line="165"><span class="sd">    Note that the same can be achieved with</span>
+</span><span data-line="166"><span class="sd">    `partial(func, *args, **kwargs)`.</span>
+</span><span data-line="167">
+</span><span data-line="168"><span class="sd">    &gt;&gt;&gt; from operator import methodcaller</span>
+</span><span data-line="169"><span class="sd">    &gt;&gt;&gt; from functools import partial</span>
+</span><span data-line="170"><span class="sd">    &gt;&gt;&gt; def mk_command(func, *args, **kwargs):</span>
+</span><span data-line="171"><span class="sd">    ...     return partial(methodcaller('__call__', *args, **kwargs), func)</span>
+</span><span data-line="172"><span class="sd">    &gt;&gt;&gt; command = mk_command(print, 'hello', 'world', sep=', ')</span>
+</span><span data-line="173"><span class="sd">    &gt;&gt;&gt; command()</span>
+</span><span data-line="174"><span class="sd">    hello, world</span>
+</span><span data-line="175">
+</span><span data-line="176"><span class="sd">    See: https://en.wikipedia.org/wiki/Command_pattern</span>
+</span><span data-line="177">
+</span><span data-line="178"><span class="sd">    """</span>
+</span><span data-line="179">
+</span><span data-line="180">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="181">        <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span>
+</span><span data-line="182">
+</span><span data-line="183">    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="184">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="185">
+</span><span data-line="186">
+<div class="viewcode-block" id="CommandIter">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.CommandIter">[docs]</a>
+</span><span data-line="187"><span class="k">class</span><span class="w"> </span><span class="nc">CommandIter</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+</span><span data-line="188"><span class="w">    </span><span class="sd">"""An infinite iterator that returns the results of a Command called repeatedly.</span>
+</span><span data-line="189">
+</span><span data-line="190"><span class="sd">    Might become deprecated:</span>
+</span><span data-line="191"><span class="sd">    Use `iter(partial(func, *args, **kwargs), object())` instead.</span>
+</span><span data-line="192">
+</span><span data-line="193"><span class="sd">    &gt;&gt;&gt; from random import uniform</span>
+</span><span data-line="194"><span class="sd">    &gt;&gt;&gt; from itertools import islice</span>
+</span><span data-line="195"><span class="sd">    &gt;&gt;&gt; it = CommandIter(uniform, 0, 10)</span>
+</span><span data-line="196"><span class="sd">    &gt;&gt;&gt; rand_nums = list(islice(it, 4))</span>
+</span><span data-line="197"><span class="sd">    &gt;&gt;&gt; assert len(rand_nums) == 4</span>
+</span><span data-line="198"><span class="sd">    &gt;&gt;&gt; rand_nums  # doctest: +SKIP</span>
+</span><span data-line="199"><span class="sd">    [4.48171445690221, 7.466083642212892, 0.24120342781796422, 3.694956861724484]</span>
+</span><span data-line="200"><span class="sd">    """</span>
+</span><span data-line="201">
+</span><span data-line="202">    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="203">        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span data-line="204">            <span class="k">yield</span> <span class="bp">self</span><span class="p">()</span></div>
+
+</span><span data-line="205">
+</span><span data-line="206">
+<div class="viewcode-block" id="functioncaller">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.functioncaller">[docs]</a>
+</span><span data-line="207"><span class="k">def</span><span class="w"> </span><span class="nf">functioncaller</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="208"><span class="w">    </span><span class="sd">"""Call a function given positional and keyword arguments.</span>
+</span><span data-line="209">
+</span><span data-line="210">
+</span><span data-line="211"><span class="sd">    &gt;&gt;&gt; import operator</span>
+</span><span data-line="212"><span class="sd">    &gt;&gt;&gt; import functools</span>
+</span><span data-line="213"><span class="sd">    &gt;&gt;&gt; from lined import Pipe</span>
+</span><span data-line="214"><span class="sd">    &gt;&gt;&gt; f = Pipe(</span>
+</span><span data-line="215"><span class="sd">    ...     functools.partial(getattr, operator),  # get an operator func by name</span>
+</span><span data-line="216"><span class="sd">    ...     functioncaller(49, 7)  # apply it to 49 and 7</span>
+</span><span data-line="217"><span class="sd">    ... )</span>
+</span><span data-line="218"><span class="sd">    &gt;&gt;&gt; f('add')</span>
+</span><span data-line="219"><span class="sd">    56</span>
+</span><span data-line="220"><span class="sd">    &gt;&gt;&gt; f('sub')</span>
+</span><span data-line="221"><span class="sd">    42</span>
+</span><span data-line="222">
+</span><span data-line="223"><span class="sd">    Note: functioncaller just returns</span>
+</span><span data-line="224"><span class="sd">     `operator.methodcaller('__call__', *args, **kwargs)`.</span>
+</span><span data-line="225">
+</span><span data-line="226"><span class="sd">    """</span>
+</span><span data-line="227">    <span class="k">return</span> <span class="n">methodcaller</span><span class="p">(</span><span class="s2">"__call__"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="228">
+</span><span data-line="229">
+<div class="viewcode-block" id="call">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.call">[docs]</a>
+</span><span data-line="230"><span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="231"><span class="w">    </span><span class="sd">"""Just call the input function with not arguments.</span>
+</span><span data-line="232">
+</span><span data-line="233"><span class="sd">    Equivalent to `functioncaller()`</span>
+</span><span data-line="234">
+</span><span data-line="235"><span class="sd">    &gt;&gt;&gt; from lined import Line</span>
+</span><span data-line="236"><span class="sd">    &gt;&gt;&gt; from functools import partial</span>
+</span><span data-line="237"><span class="sd">    &gt;&gt;&gt;</span>
+</span><span data-line="238"><span class="sd">    &gt;&gt;&gt; line = Line(lambda x: partial(print, f"{x*3=}"), call)</span>
+</span><span data-line="239"><span class="sd">    &gt;&gt;&gt; line(14)</span>
+</span><span data-line="240"><span class="sd">    x*3=42</span>
+</span><span data-line="241">
+</span><span data-line="242"><span class="sd">    """</span>
+</span><span data-line="243">    <span class="k">return</span> <span class="n">func</span><span class="p">()</span></div>
+
+</span><span data-line="244">
+</span><span data-line="245">
+<div class="viewcode-block" id="ItemsNotSorted">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.ItemsNotSorted">[docs]</a>
+</span><span data-line="246"><span class="k">class</span><span class="w"> </span><span class="nc">ItemsNotSorted</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+</span><span data-line="247"><span class="w">    </span><span class="sd">"""Use to indicate that two consecutive items where not in the expected</span>
+</span><span data-line="248"><span class="sd">    order"""</span></div>
+
+</span><span data-line="249">
+</span><span data-line="250">
+<div class="viewcode-block" id="return_instead_of_raising_exceptions">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.return_instead_of_raising_exceptions">[docs]</a>
+</span><span data-line="251"><span class="k">def</span><span class="w"> </span><span class="nf">return_instead_of_raising_exceptions</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">=</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,)):</span>
+</span><span data-line="252"><span class="w">    </span><span class="sd">"""Make a function return its exceptions instead of raising them.</span>
+</span><span data-line="253">
+</span><span data-line="254"><span class="sd">    &gt;&gt;&gt; def foo(x, y):</span>
+</span><span data-line="255"><span class="sd">    ...     return x / y</span>
+</span><span data-line="256"><span class="sd">    &gt;&gt;&gt; f = return_instead_of_raising_exceptions(foo)</span>
+</span><span data-line="257"><span class="sd">    &gt;&gt;&gt; f(6, 2)</span>
+</span><span data-line="258"><span class="sd">    3.0</span>
+</span><span data-line="259"><span class="sd">    &gt;&gt;&gt; f(1,0)  # note that this doesn't raise, but returns the exception (instance)</span>
+</span><span data-line="260"><span class="sd">    ZeroDivisionError('division by zero')</span>
+</span><span data-line="261">
+</span><span data-line="262"><span class="sd">    :param func: The function to transform.</span>
+</span><span data-line="263"><span class="sd">    :param exceptions: The exceptions to handle</span>
+</span><span data-line="264"><span class="sd">        Default is Exception (letting other BaseException instances like</span>
+</span><span data-line="265"><span class="sd">        KeyboardInterrupt still be raised). If you need more exceptions, or less</span>
+</span><span data-line="266"><span class="sd">        exceptions to be handled, enter them here.</span>
+</span><span data-line="267"><span class="sd">    :return:</span>
+</span><span data-line="268"><span class="sd">    """</span>
+</span><span data-line="269">
+</span><span data-line="270">    <span class="k">def</span><span class="w"> </span><span class="nf">_process_exceptions</span><span class="p">(</span><span class="n">exceptions</span><span class="p">):</span>
+</span><span data-line="271">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exceptions</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">exceptions</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">):</span>
+</span><span data-line="272">            <span class="k">return</span> <span class="p">(</span><span class="n">exceptions</span><span class="p">,)</span>  <span class="c1"># needs to be a tuple</span>
+</span><span data-line="273">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exceptions</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+</span><span data-line="274">            <span class="n">exceptions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">exceptions</span><span class="p">)</span>
+</span><span data-line="275">            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="p">),</span> <span class="p">(</span>
+</span><span data-line="276">                <span class="s2">"All elements of exceptions must be subclasses of BaseException: "</span>
+</span><span data-line="277">                <span class="s2">"Was </span><span class="si">{exceptions}</span><span class="s2">"</span>
+</span><span data-line="278">            <span class="p">)</span>
+</span><span data-line="279">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="280">            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+</span><span data-line="281">                <span class="sa">f</span><span class="s2">"exceptions must be a BaseException subclass or iterable thereof: "</span>
+</span><span data-line="282">                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">exceptions</span><span class="si">}</span><span class="s2">"</span>
+</span><span data-line="283">            <span class="p">)</span>
+</span><span data-line="284">        <span class="k">return</span> <span class="n">exceptions</span>
+</span><span data-line="285">
+</span><span data-line="286">    <span class="n">exceptions</span> <span class="o">=</span> <span class="n">_process_exceptions</span><span class="p">(</span><span class="n">exceptions</span><span class="p">)</span>
+</span><span data-line="287">
+</span><span data-line="288">    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="289">        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">return_instead_of_raising_exceptions</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">=</span><span class="n">exceptions</span><span class="p">)</span>
+</span><span data-line="290">
+</span><span data-line="291">    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="292">    <span class="k">def</span><span class="w"> </span><span class="nf">func_that_returns_instead_of_raising_exceptions</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="293">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="294">            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="295">        <span class="k">except</span> <span class="n">exceptions</span> <span class="k">as</span> <span class="n">exception_instance</span><span class="p">:</span>
+</span><span data-line="296">            <span class="k">return</span> <span class="n">exception_instance</span>
+</span><span data-line="297">
+</span><span data-line="298">    <span class="k">return</span> <span class="n">func_that_returns_instead_of_raising_exceptions</span></div>
+
+</span><span data-line="299">
+</span><span data-line="300">
+<div class="viewcode-block" id="raise_">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.raise_">[docs]</a>
+</span><span data-line="301"><span class="k">def</span><span class="w"> </span><span class="nf">raise_</span><span class="p">(</span><span class="n">exception</span><span class="p">):</span>
+</span><span data-line="302"><span class="w">    </span><span class="sd">"""raises the given exception (instance or callable that returns one)</span>
+</span><span data-line="303"><span class="sd">    Meant to be hooked to the out put of a function that returns an exception or a</span>
+</span><span data-line="304"><span class="sd">    command to raise one.</span>
+</span><span data-line="305">
+</span><span data-line="306"><span class="sd">    """</span>
+</span><span data-line="307">    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">):</span>
+</span><span data-line="308">        <span class="k">raise</span> <span class="n">exception</span>
+</span><span data-line="309">    <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">exception</span><span class="p">):</span>
+</span><span data-line="310">        <span class="k">raise</span> <span class="n">exception</span><span class="p">()</span>
+</span><span data-line="311">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="312">        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+</span><span data-line="313">            <span class="sa">f</span><span class="s2">"exception must be an BaseException instance or a "</span>
+</span><span data-line="314">            <span class="sa">f</span><span class="s2">"callable that returns one. Was: </span><span class="si">{</span><span class="n">exception</span><span class="si">}</span><span class="s2">"</span>
+</span><span data-line="315">        <span class="p">)</span></div>
+
+</span><span data-line="316">
+</span><span data-line="317">
+</span><span data-line="318"><span class="n">raise_not_sorted_error</span> <span class="o">=</span> <span class="n">Command</span><span class="p">(</span><span class="n">raise_</span><span class="p">,</span> <span class="n">ItemsNotSorted</span><span class="p">)</span>
+</span><span data-line="319">
+</span><span data-line="320"><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">groupby</span>
+</span><span data-line="321">
+</span><span data-line="322">
+<div class="viewcode-block" id="enumerate_groups">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.enumerate_groups">[docs]</a>
+</span><span data-line="323"><span class="k">def</span><span class="w"> </span><span class="nf">enumerate_groups</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+</span><span data-line="324"><span class="w">    </span><span class="sd">"""Get enumeration of groups during a groupby call.</span>
+</span><span data-line="325">
+</span><span data-line="326"><span class="sd">    :param iterable: An iterable</span>
+</span><span data-line="327"><span class="sd">    :param key: The key to use in the groupby logic</span>
+</span><span data-line="328"><span class="sd">    :param start: Where to start the enumeration (default is 0)</span>
+</span><span data-line="329"><span class="sd">    :return: A generator of (group_idx, group, item) triples</span>
+</span><span data-line="330">
+</span><span data-line="331"><span class="sd">    &gt;&gt;&gt; iterable = [0, 0, 0, 2, 5, 7, 8, 0, 0, 9, 3, 1]</span>
+</span><span data-line="332"><span class="sd">    &gt;&gt;&gt; assert list(enumerate_groups(iterable, key=lambda x: x &gt; 0)) == [</span>
+</span><span data-line="333"><span class="sd">    ...  (0, False, 0),</span>
+</span><span data-line="334"><span class="sd">    ...  (0, False, 0),</span>
+</span><span data-line="335"><span class="sd">    ...  (0, False, 0),</span>
+</span><span data-line="336"><span class="sd">    ...  (1, True, 2),</span>
+</span><span data-line="337"><span class="sd">    ...  (1, True, 5),</span>
+</span><span data-line="338"><span class="sd">    ...  (1, True, 7),</span>
+</span><span data-line="339"><span class="sd">    ...  (1, True, 8),</span>
+</span><span data-line="340"><span class="sd">    ...  (2, False, 0),</span>
+</span><span data-line="341"><span class="sd">    ...  (2, False, 0),</span>
+</span><span data-line="342"><span class="sd">    ...  (3, True, 9),</span>
+</span><span data-line="343"><span class="sd">    ...  (3, True, 3),</span>
+</span><span data-line="344"><span class="sd">    ...  (3, True, 1),</span>
+</span><span data-line="345"><span class="sd">    ...  ]</span>
+</span><span data-line="346">
+</span><span data-line="347">
+</span><span data-line="348"><span class="sd">    """</span>
+</span><span data-line="349">    <span class="n">g</span> <span class="o">=</span> <span class="n">groupby</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</span><span data-line="350">    <span class="k">for</span> <span class="n">group_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">grouped_items</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+</span><span data-line="351">        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">grouped_items</span><span class="p">:</span>
+</span><span data-line="352">            <span class="k">yield</span> <span class="n">group_idx</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">item</span></div>
+
+</span><span data-line="353">
+</span><span data-line="354">
+<div class="viewcode-block" id="pairwise">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.pairwise">[docs]</a>
+</span><span data-line="355"><span class="k">def</span><span class="w"> </span><span class="nf">pairwise</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+</span><span data-line="356"><span class="w">    </span><span class="sd">"""Yield sliding window pairs</span>
+</span><span data-line="357">
+</span><span data-line="358"><span class="sd">    &gt;&gt;&gt; list(pairwise([1, 2, 3, 4]))</span>
+</span><span data-line="359"><span class="sd">    [(1, 2), (2, 3), (3, 4)]"""</span>
+</span><span data-line="360">    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">tee</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+</span><span data-line="361">    <span class="nb">next</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="362">    <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
+
+</span><span data-line="363">
+</span><span data-line="364">
+<div class="viewcode-block" id="raise_exception">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.raise_exception">[docs]</a>
+</span><span data-line="365"><span class="k">def</span><span class="w"> </span><span class="nf">raise_exception</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="ne">BaseException</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="366"><span class="w">    </span><span class="sd">"""Raise an exception (from an exception instance, or a callable that</span>
+</span><span data-line="367"><span class="sd">    makes one"""</span>
+</span><span data-line="368">    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">Callable</span><span class="p">):</span>
+</span><span data-line="369">        <span class="n">exception</span> <span class="o">=</span> <span class="n">exception</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="370">    <span class="k">raise</span> <span class="n">exception</span></div>
+
+</span><span data-line="371">
+</span><span data-line="372">
+<div class="viewcode-block" id="consume_until_error">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.consume_until_error">[docs]</a>
+</span><span data-line="373"><span class="k">def</span><span class="w"> </span><span class="nf">consume_until_error</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">caught_errors</span><span class="o">=</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,)):</span>
+</span><span data-line="374"><span class="w">    </span><span class="sd">"""Iterable that will simply exit with out error if one of the caught</span>
+</span><span data-line="375"><span class="sd">    errors occurs.</span>
+</span><span data-line="376">
+</span><span data-line="377"><span class="sd">    &gt;&gt;&gt; list(consume_until_error(map(lambda x: 1 / x, [4, 2, 1, 0, -1])))</span>
+</span><span data-line="378"><span class="sd">    [0.25, 0.5, 1.0]</span>
+</span><span data-line="379"><span class="sd">    """</span>
+</span><span data-line="380">    <span class="n">caught_errors</span> <span class="o">=</span> <span class="n">cast_to_tuple_if_non_iterable_or_a_string</span><span class="p">(</span><span class="n">caught_errors</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span>
+</span><span data-line="381">        <span class="ne">StopIteration</span><span class="p">,</span>
+</span><span data-line="382">    <span class="p">)</span>
+</span><span data-line="383">    <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+</span><span data-line="384">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span data-line="385">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="386">            <span class="k">yield</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+</span><span data-line="387">        <span class="k">except</span> <span class="n">caught_errors</span><span class="p">:</span>
+</span><span data-line="388">            <span class="k">break</span></div>
+
+</span><span data-line="389">
+</span><span data-line="390">
+</span><span data-line="391"><span class="k">def</span><span class="w"> </span><span class="nf">_validated_comparison_func</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+</span><span data-line="392">    <span class="n">n_required</span> <span class="o">=</span> <span class="n">n_required_args</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span data-line="393">    <span class="k">if</span> <span class="n">n_required</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span><span data-line="394">
+</span><span data-line="395">        <span class="k">def</span><span class="w"> </span><span class="nf">comp_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span><span data-line="396">            <span class="k">return</span> <span class="n">key</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">key</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</span><span data-line="397">
+</span><span data-line="398">        <span class="k">return</span> <span class="n">comp_func</span>
+</span><span data-line="399">    <span class="k">assert</span> <span class="n">n_required</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span>
+</span><span data-line="400">        <span class="sa">f</span><span class="s2">"key should be a callable with 1 or 2 required "</span> <span class="sa">f</span><span class="s2">"arguments"</span>
+</span><span data-line="401">    <span class="p">)</span>
+</span><span data-line="402">    <span class="k">return</span> <span class="n">key</span>
+</span><span data-line="403">
+</span><span data-line="404">
+<div class="viewcode-block" id="check_sorted_during_iteration">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.check_sorted_during_iteration">[docs]</a>
+</span><span data-line="405"><span class="k">def</span><span class="w"> </span><span class="nf">check_sorted_during_iteration</span><span class="p">(</span>
+</span><span data-line="406">    <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span>
+</span><span data-line="407">    <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">le</span><span class="p">,</span>
+</span><span data-line="408">    <span class="n">not_sorted_callback</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="ne">BaseException</span> <span class="o">=</span> <span class="n">raise_not_sorted_error</span><span class="p">,</span>
+</span><span data-line="409"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+</span><span data-line="410"><span class="w">    </span><span class="sa">r</span><span class="sd">"""Wrap an iterable so that ordering of the elements is checked at runtime.</span>
+</span><span data-line="411">
+</span><span data-line="412"><span class="sd">    :param iterable: Iterable to consume</span>
+</span><span data-line="413"><span class="sd">    :param key: The function that defines what it means to be sorted.</span>
+</span><span data-line="414"><span class="sd">        Could be a Any-&gt;bool function, which will act like the key argument</span>
+</span><span data-line="415"><span class="sd">        of builtin sorted for example.</span>
+</span><span data-line="416"><span class="sd">        Could also be an explicit (element, next_element)-&gt;bool function that</span>
+</span><span data-line="417"><span class="sd">        returns True iff in the right order</span>
+</span><span data-line="418"><span class="sd">    :param not_sorted_callback: The function to call when two consecutive</span>
+</span><span data-line="419"><span class="sd">    elements are not sorted. For example:</span>
+</span><span data-line="420"><span class="sd">        - raising an error (the default)</span>
+</span><span data-line="421"><span class="sd">        - logging the information, and skiping the offending element (or not)</span>
+</span><span data-line="422"><span class="sd">    :return: A generator consuming the input iterable</span>
+</span><span data-line="423">
+</span><span data-line="424"><span class="sd">    &gt;&gt;&gt; list(check_sorted_during_iteration(iter([1, 2, 3, 4])))</span>
+</span><span data-line="425"><span class="sd">    [1, 2, 3, 4]</span>
+</span><span data-line="426">
+</span><span data-line="427"><span class="sd">    &gt;&gt;&gt; try:</span>
+</span><span data-line="428"><span class="sd">    ...     for i, x in enumerate(</span>
+</span><span data-line="429"><span class="sd">    ...             check_sorted_during_iteration([2, 4, 3, 6]), 1):</span>
+</span><span data-line="430"><span class="sd">    ...         print(x)</span>
+</span><span data-line="431"><span class="sd">    ... except ItemsNotSorted:</span>
+</span><span data-line="432"><span class="sd">    ...     print(</span>
+</span><span data-line="433"><span class="sd">    ...         f"ItemsNotSorted after {i} element (whose value was {x})")</span>
+</span><span data-line="434"><span class="sd">    ...     print(</span>
+</span><span data-line="435"><span class="sd">    ...         "----&gt; Normally, here, you'd put exception handling code")</span>
+</span><span data-line="436"><span class="sd">    ...</span>
+</span><span data-line="437"><span class="sd">    2</span>
+</span><span data-line="438"><span class="sd">    4</span>
+</span><span data-line="439"><span class="sd">    ItemsNotSorted after 2 element (whose value was 4)</span>
+</span><span data-line="440"><span class="sd">    ----&gt; Normally, here, you'd put exception handling code</span>
+</span><span data-line="441">
+</span><span data-line="442"><span class="sd">    Now, mind you, you have total control over what sorted means.</span>
+</span><span data-line="443"><span class="sd">    For example, to define it as strict</span>
+</span><span data-line="444">
+</span><span data-line="445"><span class="sd">    &gt;&gt;&gt; comp = lambda x, y: x &gt; y  # in real life, use operator.gt</span>
+</span><span data-line="446"><span class="sd">    &gt;&gt;&gt; list(check_sorted_during_iteration(iter([4, 3, 2, 1]), key=comp))</span>
+</span><span data-line="447"><span class="sd">    [4, 3, 2, 1]</span>
+</span><span data-line="448">
+</span><span data-line="449"><span class="sd">    Now for a more complex example.</span>
+</span><span data-line="450"><span class="sd">    First we'll define a function that will consume the iterable until an</span>
+</span><span data-line="451"><span class="sd">    error occurs, returning the elements consumed.</span>
+</span><span data-line="452">
+</span><span data-line="453"><span class="sd">    &gt;&gt;&gt; from lined.tools import consume_until_error</span>
+</span><span data-line="454"><span class="sd">    &gt;&gt;&gt; from lined.simple import Pipe</span>
+</span><span data-line="455"><span class="sd">    &gt;&gt;&gt; consume = Pipe(check_sorted_during_iteration, consume_until_error, list)</span>
+</span><span data-line="456">
+</span><span data-line="457"><span class="sd">    &gt;&gt;&gt; iterable = ['a', 'ba', 'cba', 'cba', 'back', 'bacca']</span>
+</span><span data-line="458"><span class="sd">    &gt;&gt;&gt; consume(iterable, lambda x, y: x &lt; y)  # compare with strict &lt;</span>
+</span><span data-line="459"><span class="sd">    ['a', 'ba', 'cba']</span>
+</span><span data-line="460"><span class="sd">    &gt;&gt;&gt; consume(iterable, len)  # compare based on the length</span>
+</span><span data-line="461"><span class="sd">    ['a', 'ba', 'cba', 'cba', 'back', 'bacca']</span>
+</span><span data-line="462"><span class="sd">    &gt;&gt;&gt; consume(iterable, lambda x: x[0])  # compare based on first letter only</span>
+</span><span data-line="463"><span class="sd">    ['a', 'ba', 'cba', 'cba']</span>
+</span><span data-line="464"><span class="sd">    &gt;&gt;&gt; # compare based on whether the previous element is a subset of the next:</span>
+</span><span data-line="465"><span class="sd">    &gt;&gt;&gt; consume(iterable, lambda x, y: set(x).issubset(y))</span>
+</span><span data-line="466"><span class="sd">    ['a', 'ba', 'cba', 'cba', 'back']</span>
+</span><span data-line="467">
+</span><span data-line="468"><span class="sd">    """</span>
+</span><span data-line="469">
+</span><span data-line="470">    <span class="c1"># TODO: Optimization opportunity:</span>
+</span><span data-line="471">    <span class="c1">#   In this implementation, the key of an element is computed twice (once</span>
+</span><span data-line="472">    <span class="c1">#   when element, once when next_element)</span>
+</span><span data-line="473">    <span class="c1"># TODO: key could be generalized to being a Callable[[element,</span>
+</span><span data-line="474">    <span class="c1">#  next_element], bool].</span>
+</span><span data-line="475">    <span class="c1">#   Though note that it's only an interface flexibility since same could</span>
+</span><span data-line="476">    <span class="c1">#   (?) be acheived with a key returning an</span>
+</span><span data-line="477">    <span class="c1">#   instance of a class such that class.__le__(element, next_element) is</span>
+</span><span data-line="478">    <span class="c1">#   what is desired</span>
+</span><span data-line="479">    <span class="n">key</span> <span class="o">=</span> <span class="n">_validated_comparison_func</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span data-line="480">    <span class="k">for</span> <span class="n">element</span><span class="p">,</span> <span class="n">next_element</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+</span><span data-line="481">        <span class="k">yield</span> <span class="n">element</span>
+</span><span data-line="482">        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">next_element</span><span class="p">):</span>
+</span><span data-line="483">            <span class="n">not_sorted_callback</span><span class="p">()</span>
+</span><span data-line="484">    <span class="k">yield</span> <span class="n">next_element</span></div>
+
+</span><span data-line="485">
+</span><span data-line="486">
+</span><span data-line="487"><span class="c1"># ------------------------------------------------------------------------------</span>
+</span><span data-line="488">
+</span><span data-line="489">
+<div class="viewcode-block" id="del_fields">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.del_fields">[docs]</a>
+</span><span data-line="490"><span class="k">def</span><span class="w"> </span><span class="nf">del_fields</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+</span><span data-line="491"><span class="w">    </span><span class="sd">"""Returns the same mapping, but with specified fields removed.</span>
+</span><span data-line="492"><span class="sd">    Intended to be applied to a stream of Mappings, using partial to fix fields</span>
+</span><span data-line="493">
+</span><span data-line="494"><span class="sd">    &gt;&gt;&gt; d = [{'a': 1, 'b': 2}, {'a': 11, 'c': 3}]</span>
+</span><span data-line="495"><span class="sd">    &gt;&gt;&gt; list(map(partial(del_fields, fields=['a']), d))</span>
+</span><span data-line="496"><span class="sd">    [{'b': 2}, {'c': 3}]</span>
+</span><span data-line="497">
+</span><span data-line="498"><span class="sd">    """</span>
+</span><span data-line="499">    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+</span><span data-line="500">        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">fields</span><span class="p">]</span>
+</span><span data-line="501">    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+</span><span data-line="502">        <span class="n">d</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="503">    <span class="k">return</span> <span class="n">d</span></div>
+
+</span><span data-line="504">
+</span><span data-line="505">
+</span><span data-line="506"><span class="k">def</span><span class="w"> </span><span class="nf">add_name</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span data-line="507">    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="508">        <span class="n">name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+</span><span data-line="509">    <span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span>
+</span><span data-line="510">    <span class="k">return</span> <span class="n">obj</span>
+</span><span data-line="511">
+</span><span data-line="512">
+<div class="viewcode-block" id="keys_extractor">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.keys_extractor">[docs]</a>
+</span><span data-line="513"><span class="k">def</span><span class="w"> </span><span class="nf">keys_extractor</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
+</span><span data-line="514"><span class="w">    </span><span class="sd">"""Deprecated: Use operator.itemgetter(*keys) instead."""</span>
+</span><span data-line="515">
+</span><span data-line="516">    <span class="k">def</span><span class="w"> </span><span class="nf">extract</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="517">        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">)</span>
+</span><span data-line="518">
+</span><span data-line="519">    <span class="k">return</span> <span class="n">extract</span></div>
+
+</span><span data-line="520">
+</span><span data-line="521">
+<div class="viewcode-block" id="apply_to_single_item">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.apply_to_single_item">[docs]</a>
+</span><span data-line="522"><span class="k">def</span><span class="w"> </span><span class="nf">apply_to_single_item</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">item_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="523"><span class="w">    </span><span class="sd">"""Get a version of func that applies itself to only the item_idx-th</span>
+</span><span data-line="524"><span class="sd">    element of the input,</span>
+</span><span data-line="525"><span class="sd">    leaving the rest untouched.</span>
+</span><span data-line="526">
+</span><span data-line="527"><span class="sd">    That is, apply_to_single_item(func, 2), for example, is a new_func such that</span>
+</span><span data-line="528"><span class="sd">    ```</span>
+</span><span data-line="529"><span class="sd">        new_func([a, b, c, d, e]) == [a, b, func(c), d, e]</span>
+</span><span data-line="530"><span class="sd">    ```</span>
+</span><span data-line="531">
+</span><span data-line="532"><span class="sd">    :param func: A function to apply to a single element of an iterable (that</span>
+</span><span data-line="533"><span class="sd">    has a [...])</span>
+</span><span data-line="534"><span class="sd">    :param item_idx: The particular item index to apply function to</span>
+</span><span data-line="535"><span class="sd">    :return:</span>
+</span><span data-line="536">
+</span><span data-line="537"><span class="sd">    &gt;&gt;&gt; apply_to_second_item = apply_to_single_item(</span>
+</span><span data-line="538"><span class="sd">    ...     func=lambda x: x * 10, item_idx=1)</span>
+</span><span data-line="539"><span class="sd">    &gt;&gt;&gt; apply_to_second_item([1, 2, 3, 4])</span>
+</span><span data-line="540"><span class="sd">    (1, 20, 2, 3, 4)</span>
+</span><span data-line="541"><span class="sd">    """</span>
+</span><span data-line="542">
+</span><span data-line="543">    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="544">    <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span><span class="n">first_arg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="545">        <span class="n">val_to_apply_func_to</span> <span class="o">=</span> <span class="n">first_arg</span><span class="p">[</span><span class="n">item_idx</span><span class="p">]</span>
+</span><span data-line="546">        <span class="n">func_output</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">val_to_apply_func_to</span><span class="p">)</span>
+</span><span data-line="547">        <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="o">*</span><span class="n">first_arg</span><span class="p">[:</span><span class="n">item_idx</span><span class="p">],</span> <span class="n">func_output</span><span class="p">,</span> <span class="o">*</span><span class="n">first_arg</span><span class="p">[</span><span class="n">item_idx</span><span class="p">:]])</span>
+</span><span data-line="548">
+</span><span data-line="549">    <span class="k">return</span> <span class="n">wrapped</span></div>
+
+</span><span data-line="550">
+</span><span data-line="551">
+<div class="viewcode-block" id="items">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.items">[docs]</a>
+</span><span data-line="552"><span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="n">mapping</span><span class="p">):</span>
+</span><span data-line="553"><span class="w">    </span><span class="sd">"""Get an items generator from a mapping"""</span>
+</span><span data-line="554">    <span class="k">return</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
+
+</span><span data-line="555">
+</span><span data-line="556">
+<div class="viewcode-block" id="iterate">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.iterate">[docs]</a>
+</span><span data-line="557"><span class="k">def</span><span class="w"> </span><span class="nf">iterate</span><span class="p">(</span><span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">):</span>
+</span><span data-line="558"><span class="w">    </span><span class="sd">"""Just iterate through a iterable</span>
+</span><span data-line="559"><span class="sd">    Use this to "consume" or "run" an iterator automatically.</span>
+</span><span data-line="560">
+</span><span data-line="561"><span class="sd">    For example, consider the following:</span>
+</span><span data-line="562">
+</span><span data-line="563"><span class="sd">    &gt;&gt;&gt; from lined import Pipe, iterize, iterate</span>
+</span><span data-line="564"><span class="sd">    &gt;&gt;&gt; pipe = Pipe(</span>
+</span><span data-line="565"><span class="sd">    ...     iterize(lambda x: x * 2),</span>
+</span><span data-line="566"><span class="sd">    ...     iterize(lambda x: print(f"hello {x}")),</span>
+</span><span data-line="567"><span class="sd">    ... )</span>
+</span><span data-line="568"><span class="sd">    &gt;&gt;&gt;</span>
+</span><span data-line="569"><span class="sd">    &gt;&gt;&gt; for _ in pipe([1, 2, 3]):</span>
+</span><span data-line="570"><span class="sd">    ...     pass</span>
+</span><span data-line="571"><span class="sd">    hello 2</span>
+</span><span data-line="572"><span class="sd">    hello 4</span>
+</span><span data-line="573"><span class="sd">    hello 6</span>
+</span><span data-line="574">
+</span><span data-line="575"><span class="sd">    It could be a bit awkward to have to "consume" the iterable to have it</span>
+</span><span data-line="576"><span class="sd">    take effect.</span>
+</span><span data-line="577"><span class="sd">    Just calling  ``pipe([1, 2, 3])`` to get those prints seems like a more</span>
+</span><span data-line="578"><span class="sd">    natural way.</span>
+</span><span data-line="579"><span class="sd">    This is where you can use `iterate`. It basically "launches" that</span>
+</span><span data-line="580"><span class="sd">    consuming loop for you.</span>
+</span><span data-line="581">
+</span><span data-line="582"><span class="sd">    &gt;&gt;&gt; pipe = Pipe(</span>
+</span><span data-line="583"><span class="sd">    ...     iterize(lambda x: x * 2),</span>
+</span><span data-line="584"><span class="sd">    ...     iterize(lambda x: print(f"hello {x}")),</span>
+</span><span data-line="585"><span class="sd">    ...     iterate</span>
+</span><span data-line="586"><span class="sd">    ... )</span>
+</span><span data-line="587"><span class="sd">    &gt;&gt;&gt;</span>
+</span><span data-line="588"><span class="sd">    &gt;&gt;&gt; pipe([1, 2, 3])</span>
+</span><span data-line="589"><span class="sd">    hello 2</span>
+</span><span data-line="590"><span class="sd">    hello 4</span>
+</span><span data-line="591"><span class="sd">    hello 6</span>
+</span><span data-line="592">
+</span><span data-line="593"><span class="sd">    """</span>
+</span><span data-line="594">    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+</span><span data-line="595">        <span class="k">pass</span></div>
+
+</span><span data-line="596">
+</span><span data-line="597">
+<div class="viewcode-block" id="append_output_to_input">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.append_output_to_input">[docs]</a>
+</span><span data-line="598"><span class="k">def</span><span class="w"> </span><span class="nf">append_output_to_input</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">appender</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">output</span><span class="p">)):</span>
+</span><span data-line="599"><span class="w">    </span><span class="sd">"""Decorator that makes the function into a function returning its input with output</span>
+</span><span data-line="600">
+</span><span data-line="601"><span class="sd">    ┌─────────────┐</span>
+</span><span data-line="602"><span class="sd">    │    input    │</span>
+</span><span data-line="603"><span class="sd">    └─────────────┘</span>
+</span><span data-line="604"><span class="sd">         │</span>
+</span><span data-line="605"><span class="sd">         ▼</span>
+</span><span data-line="606"><span class="sd">    ┌─────────────┐</span>
+</span><span data-line="607"><span class="sd">    │    func     │</span>
+</span><span data-line="608"><span class="sd">    └─────────────┘</span>
+</span><span data-line="609"><span class="sd">         │</span>
+</span><span data-line="610"><span class="sd">         ▼</span>
+</span><span data-line="611"><span class="sd">    ┌─────────────────┐</span>
+</span><span data-line="612"><span class="sd">    │ (input, output) │</span>
+</span><span data-line="613"><span class="sd">    └─────────────────┘</span>
+</span><span data-line="614">
+</span><span data-line="615"><span class="sd">    &gt;&gt;&gt; func = lambda x: f"hello {x}"</span>
+</span><span data-line="616"><span class="sd">    &gt;&gt;&gt; func('world')</span>
+</span><span data-line="617"><span class="sd">    'hello world'</span>
+</span><span data-line="618"><span class="sd">    &gt;&gt;&gt; new_func = append_output_to_input(func)</span>
+</span><span data-line="619"><span class="sd">    &gt;&gt;&gt; new_func('world')</span>
+</span><span data-line="620"><span class="sd">    ('world', 'hello world')</span>
+</span><span data-line="621"><span class="sd">    """</span>
+</span><span data-line="622">    <span class="k">assert</span> <span class="n">n_required_args</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+</span><span data-line="623">
+</span><span data-line="624">    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="625">    <span class="k">def</span><span class="w"> </span><span class="nf">_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span data-line="626">        <span class="n">output</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span data-line="627">        <span class="k">return</span> <span class="n">appender</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+</span><span data-line="628">
+</span><span data-line="629">    <span class="k">return</span> <span class="n">_func</span></div>
+
+</span><span data-line="630">
+</span><span data-line="631">
+<div class="viewcode-block" id="side_call">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.side_call">[docs]</a>
+</span><span data-line="632"><span class="k">def</span><span class="w"> </span><span class="nf">side_call</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+</span><span data-line="633"><span class="w">    </span><span class="sd">"""Identity function that calls a callaback function before returning the</span>
+</span><span data-line="634"><span class="sd">    input as is (unless the input is mutable and the callback changes it).</span>
+</span><span data-line="635">
+</span><span data-line="636"><span class="sd">    &gt;&gt;&gt; from lined import Pipe</span>
+</span><span data-line="637"><span class="sd">    &gt;&gt;&gt; add2 = lambda x: x + 2</span>
+</span><span data-line="638"><span class="sd">    &gt;&gt;&gt; add2(40)</span>
+</span><span data-line="639"><span class="sd">    42</span>
+</span><span data-line="640"><span class="sd">    &gt;&gt;&gt; from functools import partial</span>
+</span><span data-line="641"><span class="sd">    &gt;&gt;&gt; logger = partial(side_call, callback=lambda x: print(f"input is {x}"))</span>
+</span><span data-line="642"><span class="sd">    &gt;&gt;&gt; logged_add2 = Pipe(logger, add2)</span>
+</span><span data-line="643"><span class="sd">    &gt;&gt;&gt; logged_add2(40)</span>
+</span><span data-line="644"><span class="sd">    input is 40</span>
+</span><span data-line="645"><span class="sd">    42</span>
+</span><span data-line="646"><span class="sd">    """</span>
+</span><span data-line="647">    <span class="n">callback</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span data-line="648">    <span class="k">return</span> <span class="n">x</span></div>
+
+</span><span data-line="649">
+</span><span data-line="650">
+</span><span data-line="651"><span class="n">print_and_pass_on</span> <span class="o">=</span> <span class="n">partial_plus</span><span class="p">(</span>
+</span><span data-line="652">    <span class="n">side_call</span><span class="p">,</span>
+</span><span data-line="653">    <span class="n">callback</span><span class="o">=</span><span class="nb">print</span><span class="p">,</span>
+</span><span data-line="654">    <span class="vm">__name__</span><span class="o">=</span><span class="s2">"print_and_pass_on"</span><span class="p">,</span>
+</span><span data-line="655">    <span class="vm">__doc__</span><span class="o">=</span><span class="s2">"Passes input through to output, but prints before outputing"</span><span class="p">,</span>
+</span><span data-line="656"><span class="p">)</span>
+</span><span data-line="657">
+</span><span data-line="658"><span class="c1"># Function transformers</span>
+</span><span data-line="659"><span class="c1"># ###################################################################</span>
+</span><span data-line="660">
+</span><span data-line="661">
+</span><span data-line="662"><span class="k">def</span><span class="w"> </span><span class="nf">extra_wraps</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
+</span><span data-line="663">    <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="664">    <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">doc_prefix</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">"__name__"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+</span><span data-line="665">    <span class="k">return</span> <span class="n">func</span>
+</span><span data-line="666">
+</span><span data-line="667">
+</span><span data-line="668"><span class="k">def</span><span class="w"> </span><span class="nf">mywraps</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
+</span><span data-line="669">    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="n">wrapped</span><span class="p">):</span>
+</span><span data-line="670">        <span class="k">return</span> <span class="n">extra_wraps</span><span class="p">(</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)(</span><span class="n">wrapped</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="n">doc_prefix</span><span class="p">)</span>
+</span><span data-line="671">
+</span><span data-line="672">    <span class="k">return</span> <span class="n">wrapper</span>
+</span><span data-line="673">
+</span><span data-line="674">
+<div class="viewcode-block" id="tail_io">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.tail_io">[docs]</a>
+</span><span data-line="675"><span class="k">def</span><span class="w"> </span><span class="nf">tail_io</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="676"><span class="w">    </span><span class="sd">"""Will apply function only to the tail of tuple inputs, still passing</span>
+</span><span data-line="677"><span class="sd">    the header on.</span>
+</span><span data-line="678"><span class="sd">    That is, from a ``x -&gt; func(x)`` function, you get a ``(*header, x) -&gt; (</span>
+</span><span data-line="679"><span class="sd">    *header, func(x))`` function.</span>
+</span><span data-line="680">
+</span><span data-line="681"><span class="sd">    &gt;&gt;&gt; def foo(x):</span>
+</span><span data-line="682"><span class="sd">    ...    return x * 2</span>
+</span><span data-line="683"><span class="sd">    &gt;&gt;&gt;</span>
+</span><span data-line="684"><span class="sd">    &gt;&gt;&gt; foo('boo')</span>
+</span><span data-line="685"><span class="sd">    'booboo'</span>
+</span><span data-line="686"><span class="sd">    &gt;&gt;&gt; new_foo = tail_io(foo)</span>
+</span><span data-line="687"><span class="sd">    &gt;&gt;&gt; new_foo((7, 'boo'))</span>
+</span><span data-line="688"><span class="sd">    (7, 'booboo')</span>
+</span><span data-line="689"><span class="sd">    &gt;&gt;&gt; new_foo(('all', 'items', 'but', 'the', 'last', 'are', 'just',</span>
+</span><span data-line="690"><span class="sd">    ...          'passed', 'on', 'boo'))</span>
+</span><span data-line="691"><span class="sd">    ('all', 'items', 'but', 'the', 'last', 'are', 'just', 'passed', 'on', 'booboo')</span>
+</span><span data-line="692">
+</span><span data-line="693"><span class="sd">    """</span>
+</span><span data-line="694">
+</span><span data-line="695">    <span class="nd">@mywraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="696">    <span class="k">def</span><span class="w"> </span><span class="nf">_func</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+</span><span data-line="697">        <span class="o">*</span><span class="n">header</span><span class="p">,</span> <span class="n">real_input</span> <span class="o">=</span> <span class="nb">input</span>
+</span><span data-line="698">        <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">real_input</span><span class="p">)</span>
+</span><span data-line="699">        <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">header</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+</span><span data-line="700">
+</span><span data-line="701">    <span class="k">return</span> <span class="n">_func</span></div>
+
+</span><span data-line="702">
+</span><span data-line="703">
+<div class="viewcode-block" id="iterize">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.iterize">[docs]</a>
+</span><span data-line="704"><span class="k">def</span><span class="w"> </span><span class="nf">iterize</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span data-line="705"><span class="w">    </span><span class="sd">"""From an Input-&gt;Ouput function, makes a Iterator[Input]-&gt;Itertor[Output]</span>
+</span><span data-line="706"><span class="sd">    Some call this "vectorization", but it's not really a vector, but an</span>
+</span><span data-line="707"><span class="sd">    iterable, thus the name.</span>
+</span><span data-line="708">
+</span><span data-line="709"><span class="sd">    `iterize` is a partial of `map`.</span>
+</span><span data-line="710">
+</span><span data-line="711"><span class="sd">    &gt;&gt;&gt; f = lambda x: x * 10</span>
+</span><span data-line="712"><span class="sd">    &gt;&gt;&gt; f(2)</span>
+</span><span data-line="713"><span class="sd">    20</span>
+</span><span data-line="714"><span class="sd">    &gt;&gt;&gt; iterized_f = iterize(f)</span>
+</span><span data-line="715"><span class="sd">    &gt;&gt;&gt; list(iterized_f(iter([1,2,3])))</span>
+</span><span data-line="716"><span class="sd">    [10, 20, 30]</span>
+</span><span data-line="717">
+</span><span data-line="718"><span class="sd">    Consider the following pipeline:</span>
+</span><span data-line="719">
+</span><span data-line="720"><span class="sd">    &gt;&gt;&gt; from lined import Pipe</span>
+</span><span data-line="721"><span class="sd">    &gt;&gt;&gt;</span>
+</span><span data-line="722"><span class="sd">    &gt;&gt;&gt; pipe = Pipe(lambda x: x * 2,</span>
+</span><span data-line="723"><span class="sd">    ...                 lambda x: f"hello {x}")</span>
+</span><span data-line="724"><span class="sd">    &gt;&gt;&gt; pipe(1)</span>
+</span><span data-line="725"><span class="sd">    'hello 2'</span>
+</span><span data-line="726">
+</span><span data-line="727"><span class="sd">    But what if you wanted to use the pipeline on a "stream" of data. The</span>
+</span><span data-line="728"><span class="sd">    following wouldn't work:</span>
+</span><span data-line="729">
+</span><span data-line="730"><span class="sd">    &gt;&gt;&gt; try:</span>
+</span><span data-line="731"><span class="sd">    ...     pipe(iter([1,2,3]))</span>
+</span><span data-line="732"><span class="sd">    ... except TypeError as e:</span>
+</span><span data-line="733"><span class="sd">    ...     print(f"{type(e).__name__}: {e}")</span>
+</span><span data-line="734"><span class="sd">    ...</span>
+</span><span data-line="735"><span class="sd">    ...</span>
+</span><span data-line="736"><span class="sd">    TypeError: unsupported operand type(s) for *: 'list_iterator' and 'int'</span>
+</span><span data-line="737">
+</span><span data-line="738"><span class="sd">    Remember that error: You'll surely encounter it at some point.</span>
+</span><span data-line="739">
+</span><span data-line="740"><span class="sd">    The solution to it is (often): ``iterize``,</span>
+</span><span data-line="741"><span class="sd">    which transforms a function that is meant to be applied to a single object,</span>
+</span><span data-line="742"><span class="sd">    into a function that is meant to be applied to an array, or any iterable</span>
+</span><span data-line="743"><span class="sd">    of such objects.</span>
+</span><span data-line="744"><span class="sd">    (You might be familiar (if you use `numpy` for example) with the related</span>
+</span><span data-line="745"><span class="sd">    concept of "vectorization",</span>
+</span><span data-line="746"><span class="sd">    or [array programming](https://en.wikipedia.org/wiki/Array_programming).)</span>
+</span><span data-line="747">
+</span><span data-line="748">
+</span><span data-line="749"><span class="sd">    &gt;&gt;&gt; from lined import Pipe, iterize</span>
+</span><span data-line="750"><span class="sd">    &gt;&gt;&gt; from typing import Iterable</span>
+</span><span data-line="751"><span class="sd">    &gt;&gt;&gt;</span>
+</span><span data-line="752"><span class="sd">    &gt;&gt;&gt; pipe = Pipe(iterize(lambda x: x * 2),</span>
+</span><span data-line="753"><span class="sd">    ...                 iterize(lambda x: f"hello {x}"))</span>
+</span><span data-line="754"><span class="sd">    &gt;&gt;&gt; iterable = pipe([1, 2, 3])</span>
+</span><span data-line="755"><span class="sd">    &gt;&gt;&gt; # see that the result is an iterable</span>
+</span><span data-line="756"><span class="sd">    &gt;&gt;&gt; assert isinstance(iterable, Iterable)</span>
+</span><span data-line="757"><span class="sd">    &gt;&gt;&gt; list(iterable)  # consume the iterable and gather it's items</span>
+</span><span data-line="758"><span class="sd">    ['hello 2', 'hello 4', 'hello 6']</span>
+</span><span data-line="759"><span class="sd">    """</span>
+</span><span data-line="760">    <span class="c1"># # TODO: Try replacing with partial_plus instead</span>
+</span><span data-line="761">    <span class="c1"># wrapper = mywraps(</span>
+</span><span data-line="762">    <span class="c1">#     func, name=name, doc_prefix=f"generator version of {func_name(func)}:\n"</span>
+</span><span data-line="763">    <span class="c1"># )</span>
+</span><span data-line="764">    <span class="c1">#</span>
+</span><span data-line="765">    <span class="c1"># _func = partial(map, func)</span>
+</span><span data-line="766">    <span class="c1"># new_sig = Sig(map).normalize_kind(kind=Parameter.POSITIONAL_ONLY)</span>
+</span><span data-line="767">    <span class="c1">#</span>
+</span><span data-line="768">    <span class="c1"># @wrapper</span>
+</span><span data-line="769">    <span class="c1"># @new_sig</span>
+</span><span data-line="770">    <span class="c1"># def __func(*args):</span>
+</span><span data-line="771">    <span class="c1">#     return _func(*args)</span>
+</span><span data-line="772">    <span class="c1">#</span>
+</span><span data-line="773">    <span class="c1"># __func._iterized = True</span>
+</span><span data-line="774">    <span class="c1"># return __func</span>
+</span><span data-line="775">
+</span><span data-line="776">    <span class="c1"># the simpler earlier version has problems with LineParametrized</span>
+</span><span data-line="777">    <span class="c1">#   TypeError: map() takes no keyword arguments</span>
+</span><span data-line="778">    <span class="c1"># because</span>
+</span><span data-line="779">    <span class="c1">#   args, kwargs = Sig(func).source_args_and_kwargs(*args, **kwargs)</span>
+</span><span data-line="780">    <span class="c1"># made kwargs that made map partial choke.</span>
+</span><span data-line="781">
+</span><span data-line="782">    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">mywraps</span><span class="p">(</span>
+</span><span data-line="783">        <span class="n">func</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">"generator version of </span><span class="si">{</span><span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">"</span>
+</span><span data-line="784">    <span class="p">)</span>
+</span><span data-line="785">    <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="n">func</span><span class="p">))</span></div>
+
+</span><span data-line="786">
+</span><span data-line="787">
+<div class="viewcode-block" id="valmap">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.valmap">[docs]</a>
+</span><span data-line="788"><span class="k">def</span><span class="w"> </span><span class="nf">valmap</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">copy_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+</span><span data-line="789"><span class="w">    </span><span class="sd">"""Apply func to the values of a shallow copy of d, unless copy_dict=False,</span>
+</span><span data-line="790"><span class="sd">    in which case, it will be applied to the input dict itself.</span>
+</span><span data-line="791">
+</span><span data-line="792"><span class="sd">    &gt;&gt;&gt; d = {'a': 2, 'b': 3}</span>
+</span><span data-line="793"><span class="sd">    &gt;&gt;&gt; valmap(d, lambda x: x * 10)</span>
+</span><span data-line="794"><span class="sd">    {'a': 20, 'b': 30}</span>
+</span><span data-line="795"><span class="sd">    &gt;&gt;&gt; d  # see that d unchanged</span>
+</span><span data-line="796"><span class="sd">    {'a': 2, 'b': 3}</span>
+</span><span data-line="797"><span class="sd">    &gt;&gt;&gt; valmap(d, lambda x: x * 10, copy_dict=False)  # but if we ask for it</span>
+</span><span data-line="798"><span class="sd">    {'a': 20, 'b': 30}</span>
+</span><span data-line="799"><span class="sd">    &gt;&gt;&gt; # we still get a (transformed) dict in the output, but it's the same dict changed</span>
+</span><span data-line="800"><span class="sd">    &gt;&gt;&gt; d  # now d itself changed</span>
+</span><span data-line="801"><span class="sd">    {'a': 20, 'b': 30}</span>
+</span><span data-line="802">
+</span><span data-line="803"><span class="sd">    """</span>
+</span><span data-line="804">    <span class="k">if</span> <span class="n">copy_dict</span><span class="p">:</span>
+</span><span data-line="805">        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+</span><span data-line="806">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="807">        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+</span><span data-line="808">            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span>
+</span><span data-line="809">                <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+</span><span data-line="810">            <span class="p">)</span>  <span class="c1"># pylint: disable (mapping needs to also be mutable here!)</span>
+</span><span data-line="811">        <span class="k">return</span> <span class="n">d</span></div>
+
+</span><span data-line="812">
+</span><span data-line="813">
+<div class="viewcode-block" id="dictify">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.dictify">[docs]</a>
+</span><span data-line="814"><span class="k">def</span><span class="w"> </span><span class="nf">dictify</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span data-line="815"><span class="w">    </span><span class="sd">"""Makes a version of the input func that should be called on dictionaries and will</span>
+</span><span data-line="816"><span class="sd">    return dictionaries. The function will be applied to the values of a shallow</span>
+</span><span data-line="817"><span class="sd">    copy of the dict, unless copy_dict=False, in which case,</span>
+</span><span data-line="818"><span class="sd">    it will be applied to the input dict itself.</span>
+</span><span data-line="819">
+</span><span data-line="820"><span class="sd">    `dictify` is a partial of `valmap`</span>
+</span><span data-line="821">
+</span><span data-line="822"><span class="sd">    &gt;&gt;&gt; mult_by_10 = lambda x: x * 10</span>
+</span><span data-line="823"><span class="sd">    &gt;&gt;&gt; f = dictify(mult_by_10)</span>
+</span><span data-line="824"><span class="sd">    &gt;&gt;&gt; d = {'a': 2, 'b': 3}</span>
+</span><span data-line="825"><span class="sd">    &gt;&gt;&gt; f(d)</span>
+</span><span data-line="826"><span class="sd">    {'a': 20, 'b': 30}</span>
+</span><span data-line="827"><span class="sd">    &gt;&gt;&gt; d  # see that d unchanged</span>
+</span><span data-line="828"><span class="sd">    {'a': 2, 'b': 3}</span>
+</span><span data-line="829"><span class="sd">    &gt;&gt;&gt; f = dictify(mult_by_10, copy_dict=False)  # but if we ask for it</span>
+</span><span data-line="830"><span class="sd">    &gt;&gt;&gt; f(d)</span>
+</span><span data-line="831"><span class="sd">    {'a': 20, 'b': 30}</span>
+</span><span data-line="832"><span class="sd">    &gt;&gt;&gt; # we still get a (transformed) dict in the output, but it's the same dict changed</span>
+</span><span data-line="833"><span class="sd">    &gt;&gt;&gt; d  # now d itself changed</span>
+</span><span data-line="834"><span class="sd">    {'a': 20, 'b': 30}</span>
+</span><span data-line="835">
+</span><span data-line="836"><span class="sd">    """</span>
+</span><span data-line="837">    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">mywraps</span><span class="p">(</span>
+</span><span data-line="838">        <span class="n">func</span><span class="p">,</span>
+</span><span data-line="839">        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+</span><span data-line="840">        <span class="n">doc_prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">"version of </span><span class="si">{</span><span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2"> that should be called on dictionaries"</span>
+</span><span data-line="841">        <span class="sa">f</span><span class="s2">"and will return dictionaries. The function will be applied to "</span>
+</span><span data-line="842">        <span class="sa">f</span><span class="s2">"the values of a shallow copy of the dict, unless copy_dict=False, "</span>
+</span><span data-line="843">        <span class="sa">f</span><span class="s2">" in which case, it will be applied to the input dict itself:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+</span><span data-line="844">    <span class="p">)</span>
+</span><span data-line="845">    <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">valmap</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="n">copy_dict</span><span class="o">=</span><span class="n">copy_dict</span><span class="p">))</span></div>
+
+</span><span data-line="846">
+</span><span data-line="847">
+<div class="viewcode-block" id="wrap_first_arg_in_list">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.wrap_first_arg_in_list">[docs]</a>
+</span><span data-line="848"><span class="k">def</span><span class="w"> </span><span class="nf">wrap_first_arg_in_list</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="849"><span class="w">    </span><span class="sd">"""Takes a func(X,...) function and returns a func([X],...) function."""</span>
+</span><span data-line="850">
+</span><span data-line="851">    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="852">    <span class="k">def</span><span class="w"> </span><span class="nf">_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="853">        <span class="n">first_arg_val</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_extract_first_argument</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="854">        <span class="k">return</span> <span class="n">func</span><span class="p">([</span><span class="n">first_arg_val</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="855">
+</span><span data-line="856">    <span class="k">return</span> <span class="n">_func</span></div>
+
+</span><span data-line="857">
+</span><span data-line="858">
+<div class="viewcode-block" id="deiterize">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.deiterize">[docs]</a>
+</span><span data-line="859"><span class="k">def</span><span class="w"> </span><span class="nf">deiterize</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="860"><span class="w">    </span><span class="sd">"""The inverse of iterize.</span>
+</span><span data-line="861"><span class="sd">    Takes an "iterized" (a.k.a. "vectorized") function (i.e. a function that</span>
+</span><span data-line="862"><span class="sd">    works on iterables), and</span>
+</span><span data-line="863"><span class="sd">    That is, takes a func(X,...) function and returns a next(iter(func([X],</span>
+</span><span data-line="864"><span class="sd">    ...))) function."""</span>
+</span><span data-line="865">    <span class="k">return</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">wrap_first_arg_in_list</span><span class="p">(</span><span class="n">func</span><span class="p">),</span> <span class="nb">iter</span><span class="p">,</span> <span class="nb">next</span><span class="p">)</span></div>
+
+</span><span data-line="866">
+</span><span data-line="867">
+</span><span data-line="868"><span class="n">generator_version</span> <span class="o">=</span> <span class="n">iterize</span>  <span class="c1"># back compatibility alias</span>
+</span><span data-line="869">
+</span><span data-line="870">
+</span><span data-line="871"><span class="k">def</span><span class="w"> </span><span class="nf">mk_filter</span><span class="p">(</span><span class="n">filter_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span data-line="872">    <span class="k">return</span> <span class="n">partial_plus</span><span class="p">(</span>
+</span><span data-line="873">        <span class="nb">filter</span><span class="p">,</span>
+</span><span data-line="874">        <span class="n">filter_func</span><span class="p">,</span>
+</span><span data-line="875">        <span class="vm">__name__</span><span class="o">=</span><span class="s2">"mk_filter"</span><span class="p">,</span>
+</span><span data-line="876">        <span class="vm">__doc__</span><span class="o">=</span><span class="s2">"Makes a filter with a fixed filt func."</span><span class="p">,</span>
+</span><span data-line="877">    <span class="p">)</span>
+</span><span data-line="878">
+</span><span data-line="879">
+<div class="viewcode-block" id="map_star">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.map_star">[docs]</a>
+</span><span data-line="880"><span class="k">def</span><span class="w"> </span><span class="nf">map_star</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="881"><span class="w">    </span><span class="sd">"""Make a func(args) function out of a func(*args) o.</span>
+</span><span data-line="882"><span class="sd">    Also known as singularize_arg_input.</span>
+</span><span data-line="883"><span class="sd">    In a way, the opposite of map_starexpanded_args.</span>
+</span><span data-line="884">
+</span><span data-line="885"><span class="sd">    &gt;&gt;&gt; def foo(a, b):</span>
+</span><span data-line="886"><span class="sd">    ...     return a + b</span>
+</span><span data-line="887"><span class="sd">    &gt;&gt;&gt; singularized_foo = map_star(foo)</span>
+</span><span data-line="888"><span class="sd">    &gt;&gt;&gt; singularized_foo((2, 3))</span>
+</span><span data-line="889"><span class="sd">    5</span>
+</span><span data-line="890"><span class="sd">    &gt;&gt;&gt; assert singularized_foo([2, 3]) == singularized_foo({2, 3}) == foo(2, 3)</span>
+</span><span data-line="891"><span class="sd">    """</span>
+</span><span data-line="892">
+</span><span data-line="893">    <span class="nd">@mywraps</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">"map_star version of </span><span class="si">{</span><span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span data-line="894">    <span class="k">def</span><span class="w"> </span><span class="nf">func_with_single_arg_input</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+</span><span data-line="895">        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span data-line="896">
+</span><span data-line="897">    <span class="k">return</span> <span class="n">func_with_single_arg_input</span></div>
+
+</span><span data-line="898">
+</span><span data-line="899">
+</span><span data-line="900"><span class="n">singularize_arg_input</span> <span class="o">=</span> <span class="n">map_star</span>  <span class="c1"># alias</span>
+</span><span data-line="901">
+</span><span data-line="902">
+<div class="viewcode-block" id="expanded_args">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.expanded_args">[docs]</a>
+</span><span data-line="903"><span class="k">def</span><span class="w"> </span><span class="nf">expanded_args</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="904"><span class="w">    </span><span class="sd">"""Make's a func(*args) function out of a func(args) one.</span>
+</span><span data-line="905"><span class="sd">    In a way, the opposite of map_star.</span>
+</span><span data-line="906">
+</span><span data-line="907"><span class="sd">    &gt;&gt;&gt; sum([1,2,3,4])</span>
+</span><span data-line="908"><span class="sd">    10</span>
+</span><span data-line="909"><span class="sd">    &gt;&gt;&gt; mysum = expanded_args(sum)</span>
+</span><span data-line="910"><span class="sd">    &gt;&gt;&gt; mysum(1, 2, 3, 4)</span>
+</span><span data-line="911"><span class="sd">    10</span>
+</span><span data-line="912">
+</span><span data-line="913"><span class="sd">    """</span>
+</span><span data-line="914">
+</span><span data-line="915">    <span class="nd">@mywraps</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">"expanded_args version of </span><span class="si">{</span><span class="n">func_name</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span data-line="916">    <span class="k">def</span><span class="w"> </span><span class="nf">_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+</span><span data-line="917">        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span data-line="918">
+</span><span data-line="919">    <span class="k">return</span> <span class="n">_func</span></div>
+
+</span><span data-line="920">
+</span><span data-line="921">
+<div class="viewcode-block" id="Enumerate">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.Enumerate">[docs]</a>
+</span><span data-line="922"><span class="k">class</span><span class="w"> </span><span class="nc">Enumerate</span><span class="p">:</span>
+</span><span data-line="923"><span class="w">    </span><span class="sd">"""Decorator a function so it enumerates the number of calls.</span>
+</span><span data-line="924"><span class="sd">    Or in general, returns (cursor, func(x)) instead of just func(x),</span>
+</span><span data-line="925"><span class="sd">    where the start and step of the cursor can</span>
+</span><span data-line="926"><span class="sd">    be defined (default is start=0 and step=1)</span>
+</span><span data-line="927">
+</span><span data-line="928"><span class="sd">    &gt;&gt;&gt; def foo(x):</span>
+</span><span data-line="929"><span class="sd">    ...    return x * 2</span>
+</span><span data-line="930"><span class="sd">    &gt;&gt;&gt; new_foo = Enumerate(foo)</span>
+</span><span data-line="931"><span class="sd">    &gt;&gt;&gt; new_foo('ha')</span>
+</span><span data-line="932"><span class="sd">    (0, 'haha')</span>
+</span><span data-line="933"><span class="sd">    &gt;&gt;&gt; new_foo('ho')</span>
+</span><span data-line="934"><span class="sd">    (1, 'hoho')</span>
+</span><span data-line="935"><span class="sd">    &gt;&gt;&gt; enum_foo_with_step = Enumerate(foo, start=3, step=7)</span>
+</span><span data-line="936"><span class="sd">    &gt;&gt;&gt; enum_foo_with_step('z')</span>
+</span><span data-line="937"><span class="sd">    (3, 'zz')</span>
+</span><span data-line="938"><span class="sd">    &gt;&gt;&gt; enum_foo_with_step(11)</span>
+</span><span data-line="939"><span class="sd">    (10, 22)</span>
+</span><span data-line="940"><span class="sd">    """</span>
+</span><span data-line="941">
+</span><span data-line="942">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span data-line="943">        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+</span><span data-line="944">        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="n">start</span>
+</span><span data-line="945">        <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">step</span>
+</span><span data-line="946">
+</span><span data-line="947">    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="948">        <span class="n">current_cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span>
+</span><span data-line="949">        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="950">        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span>
+</span><span data-line="951">        <span class="k">return</span> <span class="n">current_cursor</span><span class="p">,</span> <span class="n">out</span></div>
+
+</span><span data-line="952">
+</span><span data-line="953">
+<div class="viewcode-block" id="with_cursor">
+<a class="viewcode-back" href="../../_autosummary/lined.tools.html#lined.tools.with_cursor">[docs]</a>
+</span><span data-line="954"><span class="k">def</span><span class="w"> </span><span class="nf">with_cursor</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span data-line="955"><span class="w">    </span><span class="sd">"""Decorator a function so it enumerates the number of calls.</span>
+</span><span data-line="956"><span class="sd">    Or in general, returns (cursor, func(x)) instead of just func(x),</span>
+</span><span data-line="957"><span class="sd">    where the start and step of the cursor can</span>
+</span><span data-line="958"><span class="sd">    be defined (default is start=0 and step=1)</span>
+</span><span data-line="959">
+</span><span data-line="960"><span class="sd">    &gt;&gt;&gt; def foo(x):</span>
+</span><span data-line="961"><span class="sd">    ...    return x * 2</span>
+</span><span data-line="962"><span class="sd">    &gt;&gt;&gt; new_foo = with_cursor(foo)</span>
+</span><span data-line="963"><span class="sd">    &gt;&gt;&gt; new_foo('ha')</span>
+</span><span data-line="964"><span class="sd">    (0, 'haha')</span>
+</span><span data-line="965"><span class="sd">    &gt;&gt;&gt; new_foo('ho')</span>
+</span><span data-line="966"><span class="sd">    (1, 'hoho')</span>
+</span><span data-line="967"><span class="sd">    &gt;&gt;&gt; enum_foo_with_step = with_cursor(foo, start=3, step=7)</span>
+</span><span data-line="968"><span class="sd">    &gt;&gt;&gt; enum_foo_with_step('z')</span>
+</span><span data-line="969"><span class="sd">    (3, 'zz')</span>
+</span><span data-line="970"><span class="sd">    &gt;&gt;&gt; enum_foo_with_step(11)</span>
+</span><span data-line="971"><span class="sd">    (10, 22)</span>
+</span><span data-line="972"><span class="sd">    """</span>
+</span><span data-line="973">
+</span><span data-line="974">    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="975">    <span class="k">def</span><span class="w"> </span><span class="nf">_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="976">        <span class="n">current_cursor</span> <span class="o">=</span> <span class="n">_func</span><span class="o">.</span><span class="n">cursor</span>
+</span><span data-line="977">        <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="978">        <span class="n">_func</span><span class="o">.</span><span class="n">cursor</span> <span class="o">+=</span> <span class="n">step</span>
+</span><span data-line="979">        <span class="k">return</span> <span class="n">current_cursor</span><span class="p">,</span> <span class="n">out</span>
+</span><span data-line="980">
+</span><span data-line="981">    <span class="n">_func</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="n">start</span>
+</span><span data-line="982">    <span class="k">return</span> <span class="n">_func</span></div>
+
+</span><span data-line="983">
+</span><span data-line="984">
+</span><span data-line="985"><span class="kn">from</span><span class="w"> </span><span class="nn">creek</span><span class="w"> </span><span class="kn">import</span> <span class="n">BufferStats</span><span class="p">,</span> <span class="n">Segmenter</span>
+</span><span data-line="986">
+</span><span data-line="987"><span class="n">_</span> <span class="o">=</span> <span class="p">(</span><span class="n">BufferStats</span><span class="p">,</span> <span class="n">Segmenter</span><span class="p">)</span>  <span class="c1"># to make sure imports are not greyed out and deleted</span>
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/i2mint/lined" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=ebdbb45b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+      <script src="../../_static/shibuya.js?v=50760d75"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script></body>
+</html>
