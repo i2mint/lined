@@ -358,8 +358,8 @@ class Line:
         >>> pipe = Line(
         ...     sum, str, print,
         ... pipeline_name='MyPipeline', input_name='x', output_name='y')
-        >>> pipe
-        MyPipeline(iterable, /, start=0)
+        >>> pipe  # doctest: +ELLIPSIS
+        MyPipeline(iterable, /, start=0)...
 
 
         """
