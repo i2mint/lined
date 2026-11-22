@@ -17,6 +17,7 @@ keywords = [
 ]
 authors = []
 dependencies = [
+    "requests",
     "i2",
     "creek",
 ]
